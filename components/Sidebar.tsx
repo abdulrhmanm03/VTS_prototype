@@ -2,19 +2,22 @@
 
 import { useState, useEffect } from "react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
-import { AlertCircle, Shield, Home, BarChart, Activity, Bug, Globe, Settings } from "lucide-react"
+import { AlertCircle, Shield, Home, BarChart, Activity, Bug, Swords, Globe, Settings, BadgeCheck} from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const navItems = [
+  { name: "Onboarding", icon: BadgeCheck, path: "/onboarding" },
   { name: "Dashboard", icon: Home, path: "/" },
   {
     name: "Threat Intelligence",
     icon: AlertCircle,
     path: "/threat-intelligence-hub",
     subItems: [
-      { name: "IOCs & Indicators", tab: "iocs" },
-      { name: "Report & Analytics", tab: "report" },
-      { name: "Global Heat Map", tab: "heatmap" },
+      { name: "Overview", tab: "overview" },
+      { name: "Threat Landscape", tab: "landscape" },
+      { name: "Threat Heat Map", tab: "heatmap" },
+      { name: "Enrichment", tab: "enrichment" },
+      { name: "Threat Actors", tab: "threat-actors" },
     ],
   },
   { name: "ASM", icon: Shield, path: "/attack-surface-management" },
@@ -22,6 +25,7 @@ const navItems = [
   { name: "Risk Management", icon: BarChart, path: "/risk-assessment-scores" },
   { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
   { name: "Vulnerabilities & Exploits", icon: Bug, path: "/vulnerabilities-exploits" },
+  { name: "Offensive Security", icon: Swords, path: "/offensive-security" },
 ]
 
 export default function Sidebar() {

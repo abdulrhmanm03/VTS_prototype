@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card"
 import {
   ResponsiveContainer,
   BarChart,
@@ -12,7 +12,7 @@ import {
   Pie,
   Cell,
 } from "recharts"
-import { AlertCircle, Shield, Database, Eye } from "lucide-react"
+import { AlertCircle, Shield, Database, Eye, Activity, ChartColumnStacked, ChartPie } from "lucide-react"
 import ThreatCategories from "@/components/ThreatCategories"
 import LiveThreatFeed from "@/components/ThreatFeed"
 import GlobalThreatHeatMap from "@/components/Heat_map"
@@ -126,7 +126,10 @@ export default function DashboardPage() {
     <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
     <div className="relative z-10">
       <CardHeader>
-        <CardTitle className="text-lg font-medium">Threat Activity (Last 7 Days)</CardTitle>
+        <CardTitle className="text-lg font-medium flex items-center gap-2 text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+          <ChartColumnStacked className="h-6 w-6 text-blue-400" />
+          Threat Activity (Last 7 Days)
+          </CardTitle>
         <p className="text-sm text-gray-400">Number of threats detected per day</p>
       </CardHeader>
       <CardContent className="h-64">
@@ -151,7 +154,10 @@ export default function DashboardPage() {
     <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
     <div className="relative z-10">
       <CardHeader>
-        <CardTitle className="text-lg font-medium">Risk Distribution</CardTitle>
+        <CardTitle className="text-lg font-medium flex items-center gap-2 text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+          <ChartPie className="h-6 w-6 text-blue-400" />
+          Risk Distribution
+        </CardTitle>
         <p className="text-sm text-gray-400">Current threat severity breakdown</p>
       </CardHeader>
       <CardContent className="h-64 flex items-center justify-center">
@@ -189,7 +195,10 @@ export default function DashboardPage() {
   <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
   <div className="relative z-10">
     <CardHeader>
-      <CardTitle className="text-lg font-medium">Recent Critical Alerts</CardTitle>
+      <CardTitle className="text-lg font-medium flex items-center gap-2 text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+        <Activity className="h-6 w-6 text-blue-400" />
+        Recent Critical Alerts
+        </CardTitle>
       <p className="text-sm text-gray-400">Latest high-priority threats requiring attention</p>
     </CardHeader>
     <CardContent className="space-y-4">

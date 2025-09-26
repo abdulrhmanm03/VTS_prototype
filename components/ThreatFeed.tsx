@@ -2,9 +2,15 @@
 
 import { FC } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Clock } from "lucide-react";
+import { Clock, Radio } from "lucide-react";
 
-const threatLevels = {
+const threatGradients = {
+  CRITICAL: "from-red-900/20 via-red-800/10 to-transparent",
+  HIGH: "from-orange-900/20 via-orange-800/10 to-transparent",
+  MEDIUM: "from-blue-900/20 via-blue-800/10 to-transparent",
+};
+
+const badgeColors = {
   CRITICAL: "bg-red-600 text-white",
   HIGH: "bg-orange-500 text-black",
   MEDIUM: "bg-blue-500 text-white",
@@ -25,43 +31,48 @@ const threats = [
 
 const LiveThreatFeed: FC = () => {
   return (
-    <Card className="bg-[#0e1321] border-none text-white h-[600px] overflow-y-auto hide-scrollbar">
+    <Card className="bg-[#0e1321] border-none text-white h-[600px] shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          Live Threat Feed 
+        <CardTitle className="text-lg font-semibold flex items-center gap-2 text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+          <Radio className="h-6 w-6 text-blue-400 animate-pulse" />
+          Live Threat Feed
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-2 overflow-y-auto hide-scrollbar">
         {threats.map((threat) => (
           <Card
             key={threat.id}
-            className="
-              w-full
-              h-24
-              bg-[#171e30]/70
-              border border-[#2a3145] 
-              p-3 
-              shadow-md
-              backdrop-blur-md
-              transition-all duration-300 
-              hover:bg-gradient-to-r hover:from-blue-400/20 hover:to-blue-600/20
-              hover:shadow-[0_0_20px_rgba(59,130,246,0.6)]
-              hover:-translate-y-1
-              overflow-hidden
-            "
+            className={`
+              relative border-none text-white overflow-hidden rounded-xl 
+              bg-white/5 shadow-md backdrop-blur-md 
+              hover:shadow-[0_0_16px_rgba(59,130,246,0.5)] transition-all duration-300
+              h-20 flex items-center
+            `}
           >
-            <div className="flex items-center justify-between">
-              <h3 className="text-white font-semibold text-sm truncate">{threat.title}</h3>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${threatLevels[threat.level as keyof typeof threatLevels]}`}>
-                {threat.level}
-              </span>
-            </div>
-            <div className="text-xs text-gray-400 mt-1 flex gap-2 items-center">
-              <span>{threat.region}</span>
-              <span>• {threat.confidence} confidence</span>
-            </div>
-            <div className="flex items-center text-xs text-gray-500 mt-1">
-              <Clock className="h-3 w-3 mr-1" /> {threat.time}
+            {/* Gradient Overlay */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${threatGradients[threat.level as keyof typeof threatGradients]} pointer-events-none`}
+            />
+            <div className="relative z-10 w-full px-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-white font-semibold text-xs truncate">
+                  {threat.title}
+                </h3>
+                <span
+                  className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                    badgeColors[threat.level as keyof typeof badgeColors]
+                  }`}
+                >
+                  {threat.level}
+                </span>
+              </div>
+              <div className="text-[11px] text-gray-400 mt-0.5 flex gap-2 items-center">
+                <span>{threat.region}</span>
+                <span>• {threat.confidence} confidence</span>
+              </div>
+              <div className="flex items-center text-[10px] text-gray-500 mt-0.5">
+                <Clock className="h-3 w-3 mr-1" /> {threat.time}
+              </div>
             </div>
           </Card>
         ))}
