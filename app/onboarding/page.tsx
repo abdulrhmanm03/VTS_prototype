@@ -10,7 +10,7 @@ export default function OnboardingPage() {
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-          Welcome to Your Cyber Security Dashboard
+          Welcome to Sentinel Sovereign
         </h1>
         <p className="text-gray-400 max-w-2xl mx-auto">
           Let’s get you started with managing and securing your attack surface in just a few steps.
