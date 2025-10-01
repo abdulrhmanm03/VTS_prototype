@@ -26,7 +26,14 @@ const uaeThreatData = [
   { lat: 23.405216, lng: 52.513643, color: "yellow" }, // Sharjah
 ];
 
-const MapUpdater = ({ center, zoom }) => {
+import type { LatLngTuple } from "leaflet";
+
+interface MapUpdaterProps {
+  center: LatLngTuple;
+  zoom: number;
+}
+
+const MapUpdater = ({ center, zoom }: MapUpdaterProps) => {
   const map = useMap();
   map.setView(center, zoom);
   return null;
@@ -37,8 +44,8 @@ const GlobalThreatHeatMap = () => {
 
   const mapConfig =
     mode === "global"
-      ? { center: [30, 40], zoom: 2, data: globalThreatData }
-      : { center: [24, 54.5], zoom: 7, data: uaeThreatData };
+      ? { center: [30, 40] as [number, number], zoom: 2, data: globalThreatData }
+      : { center: [24, 54.5] as [number, number], zoom: 7, data: uaeThreatData };
 
   return (
     <div
