@@ -57,6 +57,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     const current = sortedItems.find(item => pathname.startsWith(item.path))
     if (current) setActive(current.name)
     if (current?.subItems && activeTab) setOpenSubMenu(current.name)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, activeTab])
 
   const handleNavigation = (name: string, path: string, tab?: string) => {
