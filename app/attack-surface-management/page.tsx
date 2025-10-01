@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Search, AlertCircle, Globe, Shield } from "lucide-react"
+import ScanAndReport from "@/components/ScanAndReport"
 
 export default function AttackSurfacePage() {
   return (
@@ -109,7 +110,7 @@ export default function AttackSurfacePage() {
       <Tabs defaultValue="inventory" className="mt-4">
         <TabsList className="bg-white/10 p-1 rounded-lg">
           <TabsTrigger value="inventory">Asset Inventory</TabsTrigger>
-          <TabsTrigger value="vulns">Vulnerabilities</TabsTrigger>
+          <TabsTrigger value="scan">Scan and Report</TabsTrigger>
           <TabsTrigger value="exposure">External Exposure</TabsTrigger>
           <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
         </TabsList>
@@ -159,6 +160,9 @@ export default function AttackSurfacePage() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+        <TabsContent value="scan" className="space-y-4 mt-6">
+          <ScanAndReport />
         </TabsContent>
       </Tabs>
     </div>
