@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
-import GlobalThreatHeatMap from "@/components/Heat_map";
+import GlobalThreatHeatMap from "@/components/HeatMap";
 import { useSearchParams, useRouter } from "next/navigation";
 import DarkWebProfilePage from "@/components/ThreatActor";
 

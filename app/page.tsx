@@ -15,7 +15,7 @@ import {
 import { AlertCircle, Shield, Database, Eye, Activity, ChartColumnStacked, ChartPie } from "lucide-react"
 import ThreatCategories from "@/components/ThreatCategories"
 import LiveThreatFeed from "@/components/ThreatFeed"
-import GlobalThreatHeatMap from "@/components/Heat_map"
+import GlobalThreatHeatMap from "@/components/HeatMap"
 import MetricsBar from "@/components/MetricBar"
 
 const threatActivityData = [

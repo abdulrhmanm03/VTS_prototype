@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"; // shadcn Input
 import { useState } from "react";
 import ScanReport from "@/components/ScanReport";
-import GlobalThreatHeatMap from "@/components/Heat_map";
+import GlobalThreatHeatMap from "@/components/HeatMap";
 
 type Alert = {
   alert: string;
