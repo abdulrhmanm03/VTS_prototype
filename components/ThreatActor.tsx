@@ -22,7 +22,7 @@ type ThreatActorType = {
 const threatActors: Record<string, ThreatActorType> = {
   "black-cat": {
     name: "Black Cat Ransomware",
-    image: "/black_cat.png",
+    image: "/black_cat_2.png",
     motivation: "Financial Gain",
     countries: "Singapore, Taiwan, Thailand, United States",
     sectors: "Manufacturing, Financial Services, Healthcare",
@@ -35,7 +35,7 @@ const threatActors: Record<string, ThreatActorType> = {
   },
   "dire-wolf": {
     name: "Dire Wolf Ransomware",
-    image: "/dire_wolf.png",
+    image: "/dire_wolf_2.png",
     motivation: "Financial Gain",
     countries: "USA, Canada, UK",
     sectors: "Healthcare, Education, Retail",
