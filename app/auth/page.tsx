@@ -11,23 +11,18 @@ export default function AuthPage() {
   const [tab, setTab] = useState("login")
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 p-6 text-white">
-      {/* Logo / Title */}
-      <div className="flex items-center mb-10 space-x-3">
-        <Shield className="h-12 w-12 text-blue-400 drop-shadow-[0_0_8px_rgba(30,64,175,0.8)]" />
-        <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-          Sentinel Sovereign
-        </h1>
-      </div>
-
+    <div className="flex flex-col items-center justify-center from-gray-900 via-black to-gray-800 p-6 text-white">
       {/* Auth Card */}
-      <Card className="relative w-full max-w-md border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md">
+      <Card className="relative w-full max-w-md border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md mt-10 ">
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/10 to-transparent pointer-events-none" />
         <div className="relative z-10">
           <CardHeader className="pb-0">
-            <CardTitle className="text-2xl font-semibold text-center text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.9)]">
-              Welcome
+            <CardTitle className="text-2xl font-semibold text-center text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.9)] flex items-center mb-6 space-x-3">
+        <Shield className="h-12 w-12 text-blue-400 drop-shadow-[0_0_8px_rgba(30,64,175,0.8)]" />
+        <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+          Sentinel Sovereign
+        </h1>
             </CardTitle>
             <p className="text-center text-sm text-gray-400">
               Sign in to continue or create a new account
