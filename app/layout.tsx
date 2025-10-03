@@ -1,7 +1,7 @@
 // RootLayout.tsx
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import "@/app/globals.css"
 import Sidebar from "@/components/Sidebar"
 import Topbar from "@/components/Topbar"
@@ -13,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark">
       <body className="relative min-h-screen">
+        <Suspense fallback={<div>Loading...</div>}>
         {/* Background */}
         <div className="fixed inset-0 bg-gradient-to-br from-blue-950 via-black to-blue-900/20 -z-10" />
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         {/* Floating Chatbot */}
         <Chatbot />
+        </Suspense>
       </body>
     </html>
   )
