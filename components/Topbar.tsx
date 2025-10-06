@@ -1,10 +1,10 @@
 // Topbar.tsx
 "use client"
 
-import { Search, Bell, Globe, Zap, Menu } from "lucide-react"
+import { Search, Bell, Globe, Zap, Menu, User } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import UserAvatar from "./UserAvatar"
 
 interface TopbarProps {
   collapsed: boolean
@@ -52,10 +52,7 @@ export default function Topbar({ collapsed, toggleSidebar }: TopbarProps) {
         <Button variant="ghost" size="icon" className="text-white hover:text-blue-400 transition">
           <Globe className="h-5 w-5" />
         </Button>
-        <Avatar>
-          <AvatarImage src="" alt="User" />
-          <AvatarFallback>SS</AvatarFallback>
-        </Avatar>
+        <UserAvatar />
       </div>
     </header>
   )
