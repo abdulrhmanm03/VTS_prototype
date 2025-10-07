@@ -30,10 +30,10 @@ export default function Sidebar({ collapsed }: SidebarProps) {
   const activeTab = searchParams.get("tab")
 
   const navItems = [
-    { name: "Org onboarding", icon: BadgeCheck, path: "/onboarding" },
-    { name: "Dashboard", icon: Home, path: "/" },
+    { name: "Access Gate", icon: BadgeCheck, path: "/onboarding" },
+    { name: "Command Nexus", icon: Home, path: "/" },
     {
-      name: "Threat Intelligence",
+      name: "IntelliSphere",
       icon: AlertCircle,
       path: "/threat-intelligence-hub",
       subItems: [
@@ -44,12 +44,12 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         { name: "Threat Actors", tab: "threat-actors" },
       ],
     },
-    { name: "ASM", icon: Shield, path: "/attack-surface-management" },
-    { name: "Digital Risk Protection", icon: Activity, path: "/digital-risk-protection" },
+    { name: "Surface Sentinel", icon: Shield, path: "/attack-surface-management" },
+    { name: "Deep Guard", icon: Activity, path: "/digital-risk-protection" },
     { name: "Risk Management", icon: BarChart, path: "/risk-assessment-scores" },
-    { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
-    { name: "Vulnerabilities & Exploits", icon: Bug, path: "/vulnerabilities-exploits" },
-    { name: "Offensive Security", icon: Swords, path: "/offensive-security" },
+    // { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
+    { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
+    { name: "Red Shift", icon: Swords, path: "/offensive-security" },
   ]
 
   useEffect(() => {

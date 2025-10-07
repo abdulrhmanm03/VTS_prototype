@@ -52,6 +52,12 @@ export default function AuthPage() {
             sameSite: "strict",
             path: "/",
           })
+
+          try {
+            localStorage.setItem("token", data.token)
+          } catch (err) {
+            console.error("Failed to save token in localStorage:", err)
+          }
         }
 
         // Clear input fields
