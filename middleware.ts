@@ -1,5 +1,5 @@
 // import { NextResponse } from "next/server";
-// import type { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 // import { jwtVerify } from "jose";
 
 // const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
@@ -32,3 +32,4 @@
 // export const config = {
 //   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)", "/api/:path*"],
 // };
+export async function middleware(req: NextRequest) {}
