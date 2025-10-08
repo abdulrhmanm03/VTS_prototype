@@ -23,20 +23,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ detail: "Invalid credentials" }, { status: 401 });
     }
 
-    // 3. Generate JWT token using jose
-    const token = await new jose.SignJWT({ id: user.id, email: user.email })
+    // 3. Generate JWT token including username (fullName)
+    const token = await new jose.SignJWT({
+      id: user.id,
+      email: user.email,
+      username: user.fullName, // include username in token
+    })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("7d")
       .sign(new TextEncoder().encode(JWT_SECRET));
 
-    // 4. Create response and set cookie
+    // 4. Create response with token and user info
     const response = NextResponse.json({
       message: "Login successful",
-      user: { id: user.id, email: user.email, fullName: user.fullName },
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+      },
     });
 
+    // 5. Set token as cookie for secure backend usage
     response.cookies.set("token", token, {
-      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
       maxAge: 60 * 60 * 24 * 7, // 7 days

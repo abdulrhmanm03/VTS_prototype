@@ -28,27 +28,26 @@ export async function POST(req: Request) {
       data: { fullName: full_name, email, hashedPassword },
     });
 
-    // Generate JWT using jose
-    const token = await new jose.SignJWT({ id: user.id, email: user.email })
+    // Generate JWT token with jose
+    const token = await new jose.SignJWT({
+      id: user.id,
+      email: user.email,
+      username: user.fullName,
+    })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("7d")
       .sign(new TextEncoder().encode(JWT_SECRET));
 
-    // Create response and set cookie
-    const response = NextResponse.json({
+    // Return token in response body instead of cookie
+    return NextResponse.json({
       message: "User created successfully",
-      user: { id: user.id, email: user.email, fullName: user.fullName },
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+      },
+      token, // ✅ include token in response
     });
-
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      sameSite: "lax",
-    });
-
-    return response;
   } catch (err) {
     console.error(err);
     return NextResponse.json({ detail: "Internal server error" }, { status: 500 });

@@ -8,6 +8,8 @@ import MetricsBar from "@/components/dashboard/MetricBar"
 import StatsCards from "@/components/dashboard/StatsCards"
 import DashboardCharts from "@/components/dashboard/Charts"
 import CriticalAlerts from "@/components/dashboard/CriticalAlerts"
+import AttackChainProgression from "@/components/dashboard/AttackChainProgression"
+import TrendingThreatActors from "@/components/dashboard/TrendingThreat"
 
 export default function DashboardPage() {
   return (
@@ -38,12 +40,15 @@ export default function DashboardPage() {
 
       <DashboardCharts />
 
-      <CriticalAlerts />
+      <AttackChainProgression />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ThreatCategories />
         <LiveThreatFeed />
+        <TrendingThreatActors />
       </div>
+
+      <CriticalAlerts />
 
     </div>
   )

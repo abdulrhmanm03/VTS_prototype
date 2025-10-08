@@ -11,7 +11,6 @@ import {
   Activity,
   Bug,
   Swords,
-  Globe,
   Settings,
   BadgeCheck
 } from "lucide-react"
@@ -46,7 +45,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     },
     { name: "Surface Sentinel", icon: Shield, path: "/attack-surface-management" },
     { name: "Deep Guard", icon: Activity, path: "/digital-risk-protection" },
-    { name: "Risk Management", icon: BarChart, path: "/risk-assessment-scores" },
+    { name: "Risk Matrix", icon: BarChart, path: "/risk-assessment-scores" },
     // { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
     { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
     { name: "Red Shift", icon: Swords, path: "/offensive-security" },

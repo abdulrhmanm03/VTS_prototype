@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode"
 
 interface DecodedToken {
   id?: string
-  fullName?: string
+  username?: string
   email?: string
   exp?: number
 }
@@ -57,14 +57,20 @@ export default function UserAvatar() {
   }, [])
 
   const handleSignOut = () => {
-    // Remove token from both cookies and localStorage
-    Cookies.remove("token")
-    localStorage.removeItem("token")
-    router.push("/auth")
+    try {
+      // Remove token from cookies and localStorage
+      Cookies.remove("token", { path: "/" }) // ✅ Important: match the same path
+      localStorage.removeItem("token")
+
+      // Redirect to auth page
+      router.push("/auth")
+    } catch (err) {
+      console.error("Error during sign out:", err)
+    }
   }
 
-  const initials = user?.fullName
-    ? user.fullName
+  const initials = user?.username
+    ? user.username
         .split(" ")
         .map((n) => n[0])
         .join("")
@@ -77,7 +83,7 @@ export default function UserAvatar() {
         className="cursor-pointer"
         onClick={() => setOpen((prev) => !prev)}
       >
-        <AvatarImage src="" alt={user?.fullName || "User"} />
+        <AvatarImage src="" alt={user?.username || "User"} />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
 
@@ -85,7 +91,7 @@ export default function UserAvatar() {
         <div className="absolute right-0 mt-2 w-52 bg-muted/20 backdrop-blur-md rounded-lg border border-blue-400/30 shadow-lg drop-shadow-[0_0_10px_rgba(59,130,246,0.6)] z-50 p-4">
           <div className="mb-3">
             <p className="text-sm font-medium text-white">
-              {user?.fullName || "Unknown User"}
+              {user?.username || "Unknown User"}
             </p>
             <p className="text-xs text-blue-200">
               {user?.email || "no-email@example.com"}

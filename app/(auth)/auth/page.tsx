@@ -46,6 +46,7 @@ export default function AuthPage() {
 
         // Save JWT token in a cookie
         if (data.token) {
+          console.log("Received token:", data.token)
           Cookies.set("token", data.token, {
             expires: 7,
             secure: true,
@@ -58,6 +59,8 @@ export default function AuthPage() {
           } catch (err) {
             console.error("Failed to save token in localStorage:", err)
           }
+        }else {
+          console.warn("No token received from server")
         }
 
         // Clear input fields
@@ -73,6 +76,7 @@ export default function AuthPage() {
       }
     } catch (err) {
       setMessage("Failed to connect to server")
+      console.error("Auth error:", err)
     } finally {
       setLoading(false)
     }

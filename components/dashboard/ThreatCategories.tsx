@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Folders, Shield, AlertCircle, Bug, Globe, Lock, Wifi, Cloud, Server, User } from "lucide-react";
+import { Radio, Shield, AlertCircle, Bug, Globe, Lock, Wifi, Cloud, Server, User, Folders } from "lucide-react";
 
 const threatCategories = [
   { name: 'APT Groups', active: 23, trend: -12, level: 'CRITICAL', icon: Shield },
@@ -34,7 +34,7 @@ const ThreatCategories: FC = () => {
     <Card className="bg-[#0e1321] border-none text-white h-[600px] shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex items-center gap-2 text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-          <Folders className="h-6 w-6 text-blue-400" />
+          <Radio className="h-6 w-6 text-blue-400" />
           Threat Categories
         </CardTitle>
       </CardHeader>
