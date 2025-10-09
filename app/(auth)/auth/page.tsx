@@ -15,7 +15,7 @@ export default function AuthPage() {
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const API_URL = "http://localhost:3000/api/auth"
+  const API_URL = "/api/auth"
 
   const handleSubmit = async () => {
     setLoading(true)
