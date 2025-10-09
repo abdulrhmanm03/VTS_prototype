@@ -1,10 +1,13 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Shield, Search, BarChart3, CheckCircle2, Zap, Bell } from "lucide-react"
 
 export default function OnboardingPage() {
+  const router = useRouter()
+
   return (
     <div className="flex flex-col gap-10 p-6 min-h-screen text-white">
       {/* Header */}
@@ -86,7 +89,9 @@ export default function OnboardingPage() {
             <CardContent className="p-6 text-center space-y-2">
               <Zap className="h-8 w-8 text-yellow-400 mx-auto drop-shadow" />
               <p className="text-gray-300">Run your first attack surface scan</p>
-              <Button className="bg-blue-500 hover:bg-blue-600">Start Scan</Button>
+              <Button className="bg-blue-500 hover:bg-blue-600" onClick={() => router.push("/attack-surface-management?tab=scan")}>
+                Start Scan
+              </Button>
             </CardContent>
           </Card>
           <Card className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow">
@@ -127,7 +132,11 @@ export default function OnboardingPage() {
 
       {/* CTA */}
       <div className="flex justify-center mt-6">
-        <Button size="lg" className="bg-blue-500 hover:bg-blue-600 shadow-lg px-8 py-6 rounded-xl text-lg">
+        <Button
+          size="lg"
+          className="bg-blue-500 hover:bg-blue-600 shadow-lg px-8 py-6 rounded-xl text-lg"
+          onClick={() => router.push("/")}
+        >
           Go to Dashboard
         </Button>
       </div>

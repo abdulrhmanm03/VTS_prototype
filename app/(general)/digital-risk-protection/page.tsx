@@ -4,8 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { Search, Filter, Shield, AlertCircle, FileText, User } from "lucide-react"
+import BrandProtection from "@/components/drp/BrandProtection"
+import ExecutiveProtection from "@/components/drp/ExecutiveProtection"
+import DataLeakDetection from "@/components/drp/DataLeakDetection"
+import MonitoringRules from "@/components/drp/MonitoringRules"
 
 export default function DigitalRiskPage() {
   return (
@@ -26,65 +29,10 @@ export default function DigitalRiskPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Brand Threats</CardTitle>
-              <FileText className="h-8 w-8 text-blue-400 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">23</div>
-              <p className="text-xs text-green-500">+3 new this week</p>
-            </CardContent>
-          </div>
-        </Card>
-
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-purple-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Executive Risks</CardTitle>
-              <User className="h-8 w-8 text-purple-400 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">7</div>
-              <p className="text-xs text-yellow-500">2 require attention</p>
-            </CardContent>
-          </div>
-        </Card>
-
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-red-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Data Leaks</CardTitle>
-              <AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">12</div>
-              <p className="text-xs text-green-500">-2 from last month</p>
-            </CardContent>
-          </div>
-        </Card>
-
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-yellow-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Monitoring Score</CardTitle>
-              <Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">85/100</div>
-              <p className="text-xs text-green-500">Excellent coverage</p>
-            </CardContent>
-          </div>
-        </Card>
+        <StatCard title="Brand Threats" value="23" change="+3 new this week" icon={<FileText className="h-8 w-8 text-blue-400 drop-shadow-md" />} gradient="from-blue-900/20 via-blue-800/10" />
+        <StatCard title="Executive Risks" value="7" change="2 require attention" icon={<User className="h-8 w-8 text-purple-400 drop-shadow-md" />} gradient="from-purple-900/20 via-purple-800/10" />
+        <StatCard title="Data Leaks" value="12" change="-2 from last month" icon={<AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />} gradient="from-red-900/20 via-red-800/10" />
+        <StatCard title="Monitoring Score" value="85/100" change="Excellent coverage" icon={<Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />} gradient="from-yellow-900/20 via-yellow-800/10" />
       </div>
 
       {/* Search + Actions */}
@@ -113,55 +61,29 @@ export default function DigitalRiskPage() {
           <TabsTrigger value="monitoring-rules">Monitoring Rules</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="brand-protection" className="space-y-4 mt-6">
-          <h2 className="text-lg font-semibold">Brand Protection Monitoring</h2>
-          <p className="text-sm text-gray-400">
-            Monitor for typosquatting, phishing, and brand abuse
-          </p>
-
-          {/* Threat Card 1 */}
-          <Card className="relative border-none rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow duration-300">
-            <CardContent className="flex items-center justify-between p-4">
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2">
-                  <Badge className="bg-orange-500 text-white hover:bg-orange-600">Typosquatting</Badge>
-                  <span className="font-medium">companyy.com</span>
-                  <Badge className="bg-red-500 text-white hover:bg-red-600">High Risk</Badge>
-                  <Badge variant="secondary">Active</Badge>
-                </div>
-                <p className="text-sm text-gray-400">
-                  Similarity: 95% · Detected: 2024-01-20 · Action: Takedown Requested
-                </p>
-              </div>
-              <div className="flex space-x-2">
-                <Button size="sm" variant="outline" className="bg-white/10 border-none">Investigate</Button>
-                <Button size="sm" className="bg-blue-500 hover:bg-blue-600">Takedown</Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Threat Card 2 */}
-          <Card className="relative border-none rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow duration-300">
-            <CardContent className="flex items-center justify-between p-4">
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2">
-                  <Badge className="bg-purple-500 text-white hover:bg-purple-600">Phishing</Badge>
-                  <span className="font-medium">company-secure.net</span>
-                  <Badge className="bg-red-700 text-white hover:bg-red-800">Critical Risk</Badge>
-                  <Badge variant="secondary">Active</Badge>
-                </div>
-                <p className="text-sm text-gray-400">
-                  Similarity: 98% · Detected: 2024-01-18 · Action: None
-                </p>
-              </div>
-              <div className="flex space-x-2">
-                <Button size="sm" variant="outline" className="bg-white/10 border-none">Investigate</Button>
-                <Button size="sm" className="bg-blue-500 hover:bg-blue-600">Takedown</Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        <TabsContent value="brand-protection"><BrandProtection /></TabsContent>
+        <TabsContent value="executive-protection"><ExecutiveProtection /></TabsContent>
+        <TabsContent value="data-leak-detection"><DataLeakDetection /></TabsContent>
+        <TabsContent value="monitoring-rules"><MonitoringRules /></TabsContent>
       </Tabs>
     </div>
+  )
+}
+
+function StatCard({ title, value, change, icon, gradient }: any) {
+  return (
+    <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} to-transparent pointer-events-none`} />
+      <div className="relative z-10">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium text-gray-400">{title}</CardTitle>
+          {icon}
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold drop-shadow-lg">{value}</div>
+          <p className="text-xs text-green-500">{change}</p>
+        </CardContent>
+      </div>
+    </Card>
   )
 }

@@ -1,14 +1,34 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { Search, AlertCircle, Globe, Shield } from "lucide-react"
 import ScanAndReport from "@/components/ScanAndReport"
+import AssetInventory from "@/components/asm/AssetInventory"
+import ExternalExposure from "@/components/asm/ExternalExposure"
+import Monitoring from "@/components/asm/Monitoring"
 
 export default function AttackSurfacePage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const tabParam = searchParams.get("tab") || "inventory"
+  const [activeTab, setActiveTab] = useState(tabParam)
+
+  useEffect(() => {
+    setActiveTab(tabParam)
+  }, [tabParam])
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value)
+    const params = new URLSearchParams(window.location.search)
+    params.set("tab", value)
+    router.replace(`?${params.toString()}`, { scroll: false })
+  }
+
   return (
     <div className="flex flex-col gap-6 p-6 min-h-screen text-white">
       {/* Header */}
@@ -27,7 +47,7 @@ export default function AttackSurfacePage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Card Template */}
+        {/* Total Assets */}
         <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
           hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
@@ -43,6 +63,7 @@ export default function AttackSurfacePage() {
           </div>
         </Card>
 
+        {/* Critical Vulnerabilities */}
         <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
           hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-red-800/10 to-transparent pointer-events-none" />
@@ -58,6 +79,7 @@ export default function AttackSurfacePage() {
           </div>
         </Card>
 
+        {/* Exposed Services */}
         <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
           hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 via-green-800/10 to-transparent pointer-events-none" />
@@ -73,6 +95,7 @@ export default function AttackSurfacePage() {
           </div>
         </Card>
 
+        {/* Risk Score */}
         <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
           hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-yellow-800/10 to-transparent pointer-events-none" />
@@ -89,7 +112,7 @@ export default function AttackSurfacePage() {
         </Card>
       </div>
 
-      {/* Search + Scan */}
+      {/* Search + Actions */}
       <div className="flex items-center space-x-2">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -107,7 +130,7 @@ export default function AttackSurfacePage() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="inventory" className="mt-4">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-4">
         <TabsList className="bg-white/10 p-1 rounded-lg">
           <TabsTrigger value="inventory">Asset Inventory</TabsTrigger>
           <TabsTrigger value="scan">Scan and Report</TabsTrigger>
@@ -115,54 +138,20 @@ export default function AttackSurfacePage() {
           <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="inventory" className="space-y-4 mt-6">
-          <h2 className="text-lg font-semibold">Discovered Assets</h2>
-          <p className="text-sm text-gray-400">
-            All assets discovered across your attack surface
-          </p>
-
-          {/* Asset Card 1 */}
-          <Card className="relative border-none rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow duration-300">
-            <CardContent className="flex items-center justify-between p-4">
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2">
-                  <Badge>Subdomain</Badge>
-                  <span className="font-medium">api.company.com</span>
-                  <Badge variant="secondary">Medium Risk</Badge>
-                </div>
-                <p className="text-sm text-gray-400">
-                  Last Scan: 2024-01-20 · Vulnerabilities: 3 · Services: HTTPS, SSH
-                </p>
-              </div>
-              <div className="flex space-x-2">
-                <Button size="sm" variant="outline" className="bg-white/10 border-none">Scan</Button>
-                <Button size="sm" className="bg-blue-500 hover:bg-blue-600">Details</Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Asset Card 2 */}
-          <Card className="relative border-none rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow duration-300">
-            <CardContent className="flex items-center justify-between p-4">
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2">
-                  <Badge>IP Address</Badge>
-                  <span className="font-medium">203.0.113.1</span>
-                  <Badge className="bg-red-500 text-white hover:bg-red-600">High Risk</Badge>
-                </div>
-                <p className="text-sm text-gray-400">
-                  Last Scan: 2024-01-18 · Vulnerabilities: 7 · Services: HTTP, FTP
-                </p>
-              </div>
-              <div className="flex space-x-2">
-                <Button size="sm" variant="outline" className="bg-white/10 border-none">Scan</Button>
-                <Button size="sm" className="bg-blue-500 hover:bg-blue-600">Details</Button>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="inventory" className="mt-6">
+          <AssetInventory />
         </TabsContent>
-        <TabsContent value="scan" className="space-y-4 mt-6">
+
+        <TabsContent value="scan" className="mt-6">
           <ScanAndReport />
+        </TabsContent>
+
+        <TabsContent value="exposure" className="mt-6">
+          <ExternalExposure />
+        </TabsContent>
+
+        <TabsContent value="monitoring" className="mt-6">
+          <Monitoring />
         </TabsContent>
       </Tabs>
     </div>
