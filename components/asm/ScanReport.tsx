@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, JSX } from "react";
 import {
   Card,
   CardContent,
@@ -45,7 +45,7 @@ const confColors: Record<string, string> = {
   low: "bg-blue-500 text-black",
 };
 
-const riskIcons: Record<string, any> = {
+const riskIcons: Record<string, JSX.Element> = {
   high: <AlertCircle className="w-8 h-8 text-red-500 mb-2" />,
   medium: <AlertTriangle className="w-8 h-8 text-yellow-400 mb-2" />,
   low: <CheckCircle className="w-8 h-8 text-blue-500 mb-2" />,
@@ -66,8 +66,10 @@ export default function ScanReport({ data }: Props) {
   const alertCounts = useMemo(() => {
     const counts = { high: 0, medium: 0, low: 0 };
     baseAlerts.forEach((a) => {
-      const r = a.risk.toLowerCase();
-      if (counts[r] !== undefined) counts[r] += 1;
+      const r = a.risk.toLowerCase() as "high" | "medium" | "low";
+      if (r === "high" || r === "medium" || r === "low") {
+        counts[r] += 1;
+      }
     });
     return counts;
   }, [baseAlerts]);
@@ -134,7 +136,7 @@ export default function ScanReport({ data }: Props) {
           </Card>
 
           {/* Risk Cards */}
-          {["high", "medium", "low"].map((risk) => (
+          {(["high", "medium", "low"] as const).map((risk) => (
             <Card
               key={risk}
               onClick={() => handleRiskCardClick(risk)}

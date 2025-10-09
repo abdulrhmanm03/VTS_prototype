@@ -9,6 +9,7 @@ import BrandProtection from "@/components/drp/BrandProtection"
 import ExecutiveProtection from "@/components/drp/ExecutiveProtection"
 import DataLeakDetection from "@/components/drp/DataLeakDetection"
 import MonitoringRules from "@/components/drp/MonitoringRules"
+import { ReactNode } from "react"
 
 export default function DigitalRiskPage() {
   return (
@@ -29,10 +30,34 @@ export default function DigitalRiskPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard title="Brand Threats" value="23" change="+3 new this week" icon={<FileText className="h-8 w-8 text-blue-400 drop-shadow-md" />} gradient="from-blue-900/20 via-blue-800/10" />
-        <StatCard title="Executive Risks" value="7" change="2 require attention" icon={<User className="h-8 w-8 text-purple-400 drop-shadow-md" />} gradient="from-purple-900/20 via-purple-800/10" />
-        <StatCard title="Data Leaks" value="12" change="-2 from last month" icon={<AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />} gradient="from-red-900/20 via-red-800/10" />
-        <StatCard title="Monitoring Score" value="85/100" change="Excellent coverage" icon={<Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />} gradient="from-yellow-900/20 via-yellow-800/10" />
+        <StatCard
+          title="Brand Threats"
+          value="23"
+          change="+3 new this week"
+          icon={<FileText className="h-8 w-8 text-blue-400 drop-shadow-md" />}
+          gradient="from-blue-900/20 via-blue-800/10"
+        />
+        <StatCard
+          title="Executive Risks"
+          value="7"
+          change="2 require attention"
+          icon={<User className="h-8 w-8 text-purple-400 drop-shadow-md" />}
+          gradient="from-purple-900/20 via-purple-800/10"
+        />
+        <StatCard
+          title="Data Leaks"
+          value="12"
+          change="-2 from last month"
+          icon={<AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />}
+          gradient="from-red-900/20 via-red-800/10"
+        />
+        <StatCard
+          title="Monitoring Score"
+          value="85/100"
+          change="Excellent coverage"
+          icon={<Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />}
+          gradient="from-yellow-900/20 via-yellow-800/10"
+        />
       </div>
 
       {/* Search + Actions */}
@@ -70,7 +95,15 @@ export default function DigitalRiskPage() {
   )
 }
 
-function StatCard({ title, value, change, icon, gradient }: any) {
+interface StatCardProps {
+  title: string
+  value: string
+  change: string
+  icon: ReactNode
+  gradient: string
+}
+
+function StatCard({ title, value, change, icon, gradient }: StatCardProps) {
   return (
     <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
       <div className={`absolute inset-0 bg-gradient-to-br ${gradient} to-transparent pointer-events-none`} />

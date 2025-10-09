@@ -1,17 +1,16 @@
 // Topbar.tsx
 "use client"
 
-import { Search, Bell, Globe, Zap, Menu, User } from "lucide-react"
+import { Search, Bell, Globe, Zap, Menu } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import UserAvatar from "./UserAvatar"
 
 interface TopbarProps {
-  collapsed: boolean
   toggleSidebar: () => void
 }
 
-export default function Topbar({ collapsed, toggleSidebar }: TopbarProps) {
+export default function Topbar({ toggleSidebar }: TopbarProps) {
   return (
     <header className="flex items-center justify-between px-6 py-3 border-b-0 bg-muted/20">
       {/* Left side: toggle + quick action */}
