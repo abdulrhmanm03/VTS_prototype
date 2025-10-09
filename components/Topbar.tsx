@@ -11,6 +11,7 @@ interface TopbarProps {
   toggleSidebar: () => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Topbar({ collapsed, toggleSidebar }: TopbarProps) {
   return (
     <header className="flex items-center justify-between px-6 py-3 border-b-0 bg-muted/20">
