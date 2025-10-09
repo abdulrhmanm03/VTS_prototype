@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Search, Filter, RefreshCcw } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Search, Filter, RefreshCcw } from "lucide-react";
 
-import RemediationPriorities from "@/components/riskMatrix/RemediationPriorities"
-import HistoricalTrends from "@/components/riskMatrix/HistoricalTrends"
-import Benchmarks from "@/components/riskMatrix/Benchmarks"
-import RiskReports from "@/components/riskMatrix/RiskReports"
+import RemediationPriorities from "@/components/riskMatrix/RemediationPriorities";
+import HistoricalTrends from "@/components/riskMatrix/HistoricalTrends";
+import Benchmarks from "@/components/riskMatrix/Benchmarks";
+import RiskReports from "@/components/riskMatrix/RiskReports";
 
 export default function RiskAssessmentPage() {
   return (
@@ -32,7 +32,10 @@ export default function RiskAssessmentPage() {
             className="pl-8 bg-white/10 border-none rounded-lg text-white placeholder-gray-400"
           />
         </div>
-        <Button variant="outline" className="bg-white/10 hover:bg-white/20 border-none">
+        <Button
+          variant="outline"
+          className="bg-white/10 hover:bg-white/20 border-none"
+        >
           <Filter className="h-4 w-4" />
         </Button>
         <Button className="bg-blue-500 hover:bg-blue-600 shadow-lg">
@@ -44,7 +47,9 @@ export default function RiskAssessmentPage() {
       {/* Tabs */}
       <Tabs defaultValue="remediation-priorities" className="mt-4">
         <TabsList className="bg-white/10 p-1 rounded-lg">
-          <TabsTrigger value="remediation-priorities">Remediation Priorities</TabsTrigger>
+          <TabsTrigger value="remediation-priorities">
+            Remediation Priorities
+          </TabsTrigger>
           <TabsTrigger value="historical-trends">Historical Trends</TabsTrigger>
           <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
           <TabsTrigger value="risk-reports">Risk Reports</TabsTrigger>
@@ -67,5 +72,5 @@ export default function RiskAssessmentPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

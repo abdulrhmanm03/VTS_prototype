@@ -1,17 +1,27 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
+import { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
 import {
   Shield,
   Activity,
@@ -19,14 +29,34 @@ import {
   Clock,
   Search,
   RefreshCw,
-} from "lucide-react"
+} from "lucide-react";
 
 const summaryStats = [
-  { name: "Active Monitors", value: 24, icon: <Shield className="w-10 h-10 text-green-400" />, color: "from-green-800/20 to-green-500/10 border-green-500/20" },
-  { name: "Detected Changes", value: 12, icon: <Activity className="w-10 h-10 text-yellow-400" />, color: "from-yellow-800/20 to-yellow-500/10 border-yellow-500/20" },
-  { name: "New Risks", value: 3, icon: <AlertTriangle className="w-10 h-10 text-red-400" />, color: "from-red-800/20 to-red-500/10 border-red-500/20" },
-  { name: "Average Scan Time", value: "18m", icon: <Clock className="w-10 h-10 text-blue-400" />, color: "from-blue-800/20 to-blue-500/10 border-blue-500/20" },
-]
+  {
+    name: "Active Monitors",
+    value: 24,
+    icon: <Shield className="w-10 h-10 text-green-400" />,
+    color: "from-green-800/20 to-green-500/10 border-green-500/20",
+  },
+  {
+    name: "Detected Changes",
+    value: 12,
+    icon: <Activity className="w-10 h-10 text-yellow-400" />,
+    color: "from-yellow-800/20 to-yellow-500/10 border-yellow-500/20",
+  },
+  {
+    name: "New Risks",
+    value: 3,
+    icon: <AlertTriangle className="w-10 h-10 text-red-400" />,
+    color: "from-red-800/20 to-red-500/10 border-red-500/20",
+  },
+  {
+    name: "Average Scan Time",
+    value: "18m",
+    icon: <Clock className="w-10 h-10 text-blue-400" />,
+    color: "from-blue-800/20 to-blue-500/10 border-blue-500/20",
+  },
+];
 
 const trendData = [
   { day: "Mon", detections: 2 },
@@ -36,25 +66,76 @@ const trendData = [
   { day: "Fri", detections: 5 },
   { day: "Sat", detections: 7 },
   { day: "Sun", detections: 3 },
-]
+];
 
 const timelineEvents = [
-  { date: "2025-10-07", event: "New vulnerability detected on portal.company.com", level: "High" },
-  { date: "2025-10-06", event: "Configuration drift detected on api.company.com", level: "Medium" },
-  { date: "2025-10-05", event: "Host 192.168.1.24 became unreachable", level: "Critical" },
-  { date: "2025-10-04", event: "SSL certificate renewed for cdn.company.com", level: "Low" },
-]
+  {
+    date: "2025-10-07",
+    event: "New vulnerability detected on portal.company.com",
+    level: "High",
+  },
+  {
+    date: "2025-10-06",
+    event: "Configuration drift detected on api.company.com",
+    level: "Medium",
+  },
+  {
+    date: "2025-10-05",
+    event: "Host 192.168.1.24 became unreachable",
+    level: "Critical",
+  },
+  {
+    date: "2025-10-04",
+    event: "SSL certificate renewed for cdn.company.com",
+    level: "Low",
+  },
+];
 
 const monitors = [
-  { id: 1, target: "api.company.com", type: "Web Monitor", status: "Active", lastScan: "1h ago", nextScan: "23h" },
-  { id: 2, target: "vpn.company.com", type: "Host Monitor", status: "Active", lastScan: "2h ago", nextScan: "22h" },
-  { id: 3, target: "staging.company.com", type: "Subdomain Monitor", status: "Paused", lastScan: "6h ago", nextScan: "—" },
-  { id: 4, target: "cdn.company.com", type: "Service Monitor", status: "Active", lastScan: "30m ago", nextScan: "23h" },
-  { id: 5, target: "portal.company.com", type: "App Monitor", status: "Active", lastScan: "3h ago", nextScan: "21h" },
-]
+  {
+    id: 1,
+    target: "api.company.com",
+    type: "Web Monitor",
+    status: "Active",
+    lastScan: "1h ago",
+    nextScan: "23h",
+  },
+  {
+    id: 2,
+    target: "vpn.company.com",
+    type: "Host Monitor",
+    status: "Active",
+    lastScan: "2h ago",
+    nextScan: "22h",
+  },
+  {
+    id: 3,
+    target: "staging.company.com",
+    type: "Subdomain Monitor",
+    status: "Paused",
+    lastScan: "6h ago",
+    nextScan: "—",
+  },
+  {
+    id: 4,
+    target: "cdn.company.com",
+    type: "Service Monitor",
+    status: "Active",
+    lastScan: "30m ago",
+    nextScan: "23h",
+  },
+  {
+    id: 5,
+    target: "portal.company.com",
+    type: "App Monitor",
+    status: "Active",
+    lastScan: "3h ago",
+    nextScan: "21h",
+  },
+];
 
 export default function Monitoring() {
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
   const filteredMonitors = useMemo(
     () =>
@@ -62,7 +143,7 @@ export default function Monitoring() {
         m.target.toLowerCase().includes(search.toLowerCase())
       ),
     [search]
-  )
+  );
 
   return (
     <div className="space-y-8 text-white">
@@ -70,7 +151,8 @@ export default function Monitoring() {
       <div>
         <h2 className="text-2xl font-bold">Continuous Monitoring</h2>
         <p className="text-gray-400">
-          Track changes, detect risks, and visualize monitoring activity in real-time.
+          Track changes, detect risks, and visualize monitoring activity in
+          real-time.
         </p>
       </div>
 
@@ -93,7 +175,9 @@ export default function Monitoring() {
       {/* Activity Trend Chart */}
       <Card className="bg-white/5 border-none backdrop-blur-xl rounded-2xl shadow-lg">
         <CardHeader>
-          <CardTitle className="text-center">Weekly Risk Detection Trend</CardTitle>
+          <CardTitle className="text-center">
+            Weekly Risk Detection Trend
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
@@ -168,7 +252,10 @@ export default function Monitoring() {
         <Card className="bg-white/5 border-none backdrop-blur-md rounded-2xl shadow-lg overflow-hidden">
           <CardHeader className="flex items-center justify-between">
             <CardTitle>Active Monitors</CardTitle>
-            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 flex items-center space-x-2">
+            <Button
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700 flex items-center space-x-2"
+            >
               <RefreshCw className="w-4 h-4" />
               <span>Refresh</span>
             </Button>
@@ -228,5 +315,5 @@ export default function Monitoring() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

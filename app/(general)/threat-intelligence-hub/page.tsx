@@ -37,19 +37,34 @@ export default function ThreatIntelPage() {
 
       <Tabs value={defaultTab} onValueChange={handleTabChange}>
         <TabsList className="relative flex space-x-2 bg-white/5 backdrop-blur-md rounded-2xl p-1 shadow-lg hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300 border-none">
-          <TabsTrigger value="overview" className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all">
+          <TabsTrigger
+            value="overview"
+            className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all"
+          >
             Overview
           </TabsTrigger>
-          <TabsTrigger value="landscape" className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all">
+          <TabsTrigger
+            value="landscape"
+            className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all"
+          >
             Threat Landscape
           </TabsTrigger>
-          <TabsTrigger value="heatmap" className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all">
+          <TabsTrigger
+            value="heatmap"
+            className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all"
+          >
             Threat Heat Map
           </TabsTrigger>
-          <TabsTrigger value="enrichment" className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all">
+          <TabsTrigger
+            value="enrichment"
+            className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all"
+          >
             Enrichment
           </TabsTrigger>
-          <TabsTrigger value="threat-actors" className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all">
+          <TabsTrigger
+            value="threat-actors"
+            className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all"
+          >
             Threat Actors
           </TabsTrigger>
         </TabsList>

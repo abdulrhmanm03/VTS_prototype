@@ -2,7 +2,13 @@
 "use client";
 
 import { useState } from "react";
-import { MapContainer, TileLayer, CircleMarker, Tooltip, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  CircleMarker,
+  Tooltip,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 const globalThreatData = [
@@ -44,8 +50,16 @@ const GlobalThreatHeatMap = () => {
 
   const mapConfig =
     mode === "global"
-      ? { center: [30, 40] as [number, number], zoom: 2, data: globalThreatData }
-      : { center: [24, 54.5] as [number, number], zoom: 7, data: uaeThreatData };
+      ? {
+          center: [30, 40] as [number, number],
+          zoom: 2,
+          data: globalThreatData,
+        }
+      : {
+          center: [24, 54.5] as [number, number],
+          zoom: 7,
+          data: uaeThreatData,
+        };
 
   return (
     <div
@@ -69,7 +83,9 @@ const GlobalThreatHeatMap = () => {
           <div className="flex space-x-2 bg-white/10 rounded-lg p-1">
             <button
               className={`px-3 py-1 rounded-md text-sm font-semibold transition ${
-                mode === "global" ? "bg-blue-500 text-white" : "text-blue-300 hover:bg-white/5"
+                mode === "global"
+                  ? "bg-blue-500 text-white"
+                  : "text-blue-300 hover:bg-white/5"
               }`}
               onClick={() => setMode("global")}
             >
@@ -77,7 +93,9 @@ const GlobalThreatHeatMap = () => {
             </button>
             <button
               className={`px-3 py-1 rounded-md text-sm font-semibold transition ${
-                mode === "uae" ? "bg-blue-500 text-white" : "text-blue-300 hover:bg-white/5"
+                mode === "uae"
+                  ? "bg-blue-500 text-white"
+                  : "text-blue-300 hover:bg-white/5"
               }`}
               onClick={() => setMode("uae")}
             >

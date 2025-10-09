@@ -1,15 +1,16 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { TrendingUp } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { TrendingUp } from "lucide-react";
 
 export default function RemediationPriorities() {
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold flex items-center text-white">
-        <TrendingUp className="h-5 w-5 mr-2 text-blue-400" /> Remediation Priority Matrix
+        <TrendingUp className="h-5 w-5 mr-2 text-blue-400" /> Remediation
+        Priority Matrix
       </h2>
       <p className="text-sm text-gray-400">
         High-impact improvements to boost your risk score
@@ -30,12 +31,23 @@ export default function RemediationPriorities() {
             <div className="flex-1">
               <p className="text-sm font-semibold mb-1">Progress to Target</p>
               <div className="h-2 bg-white/20 rounded-full">
-                <div className="h-full rounded-full bg-blue-500" style={{ width: "48%" }}></div>
+                <div
+                  className="h-full rounded-full bg-blue-500"
+                  style={{ width: "48%" }}
+                ></div>
               </div>
             </div>
             <span className="font-semibold">48%</span>
-            <Button variant="outline" size="sm" className="bg-white/10 border-none">Plan</Button>
-            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">Start</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white/10 border-none"
+            >
+              Plan
+            </Button>
+            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+              Start
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -55,15 +67,26 @@ export default function RemediationPriorities() {
             <div className="flex-1">
               <p className="text-sm font-semibold mb-1">Progress to Target</p>
               <div className="h-2 bg-white/20 rounded-full">
-                <div className="h-full rounded-full bg-blue-500" style={{ width: "60%" }}></div>
+                <div
+                  className="h-full rounded-full bg-blue-500"
+                  style={{ width: "60%" }}
+                ></div>
               </div>
             </div>
             <span className="font-semibold">60%</span>
-            <Button variant="outline" size="sm" className="bg-white/10 border-none">Plan</Button>
-            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">Start</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white/10 border-none"
+            >
+              Plan
+            </Button>
+            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+              Start
+            </Button>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

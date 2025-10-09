@@ -1,26 +1,33 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Search, Filter, Download, Settings, RefreshCw, Map } from "lucide-react"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import {
+  Search,
+  Filter,
+  Download,
+  Settings,
+  RefreshCw,
+  Map,
+} from "lucide-react";
 
 // Hardcoded data for the threat map visualization and the country cards
 const threatMapData = [
-  { country: 'USA', threats: 245, x: 20, y: 30 },
-  { country: 'Russia', threats: 156, x: 50, y: 20 },
-  { country: 'China', threats: 189, x: 60, y: 35 },
-  { country: 'N. Korea', threats: 89, x: 70, y: 40 },
+  { country: "USA", threats: 245, x: 20, y: 30 },
+  { country: "Russia", threats: 156, x: 50, y: 20 },
+  { country: "China", threats: 189, x: 60, y: 35 },
+  { country: "N. Korea", threats: 89, x: 70, y: 40 },
 ];
 
 const countryStatsData = [
-  { country: 'United States', threats: 245 },
-  { country: 'China', threats: 189 },
-  { country: 'Russia', threats: 156 },
-  { country: 'North Korea', threats: 89 },
-  { country: 'Iran', threats: 67 },
+  { country: "United States", threats: 245 },
+  { country: "China", threats: 189 },
+  { country: "Russia", threats: 156 },
+  { country: "North Korea", threats: 89 },
+  { country: "Iran", threats: 67 },
 ];
 
 // Helper function to determine badge color based on threat count
@@ -39,7 +46,8 @@ export default function AdvancedVisualizationsPage() {
       <div>
         <h1 className="text-2xl font-bold">Advanced Visualizations</h1>
         <p className="text-muted-foreground">
-          Interactive threat maps, correlation graphs, and customizable dashboards
+          Interactive threat maps, correlation graphs, and customizable
+          dashboards
         </p>
       </div>
 
@@ -47,7 +55,10 @@ export default function AdvancedVisualizationsPage() {
       <div className="flex items-center space-x-2">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search visualizations, data sources..." className="pl-8" />
+          <Input
+            placeholder="Search visualizations, data sources..."
+            className="pl-8"
+          />
         </div>
         <Button variant="outline" size="icon">
           <Filter className="h-4 w-4" />
@@ -64,8 +75,12 @@ export default function AdvancedVisualizationsPage() {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="interactive-threat-map">Interactive Threat Map</TabsTrigger>
-          <TabsTrigger value="ioc-correlation-graph">IOC Correlation Graph</TabsTrigger>
+          <TabsTrigger value="interactive-threat-map">
+            Interactive Threat Map
+          </TabsTrigger>
+          <TabsTrigger value="ioc-correlation-graph">
+            IOC Correlation Graph
+          </TabsTrigger>
           <TabsTrigger value="attack-timeline">Attack Timeline</TabsTrigger>
           <TabsTrigger value="custom-dashboards">Custom Dashboards</TabsTrigger>
         </TabsList>
@@ -84,15 +99,31 @@ export default function AdvancedVisualizationsPage() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-4">
-                Real-time visualization of global threat activity and attack origins
+                Real-time visualization of global threat activity and attack
+                origins
               </p>
               <div className="relative w-full h-[400px] bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center">
                 <div className="absolute inset-0">
                   {/* Placeholder for the background world map. A real implementation would use a library like react-simple-maps */}
-                  <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "url('/path/to/world-map-image.svg')", backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                  <div
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                      backgroundImage: "url('/path/to/world-map-image.svg')",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
                 </div>
                 {threatMapData.map((item, index) => (
-                  <div key={index} className="absolute text-center text-white p-2 rounded-md" style={{ top: `${item.y}%`, left: `${item.x}%`, transform: 'translate(-50%, -50%)' }}>
+                  <div
+                    key={index}
+                    className="absolute text-center text-white p-2 rounded-md"
+                    style={{
+                      top: `${item.y}%`,
+                      left: `${item.x}%`,
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
                     <p className="text-sm font-bold">{item.country}:</p>
                     <p className="text-sm">{item.threats} threats</p>
                   </div>
@@ -120,7 +151,9 @@ export default function AdvancedVisualizationsPage() {
                   <Card key={index} className="text-center p-2">
                     <CardContent className="p-0">
                       <div className="text-xl font-bold">{item.threats}</div>
-                      <div className="text-sm text-muted-foreground">{item.country}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {item.country}
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
@@ -130,5 +163,5 @@ export default function AdvancedVisualizationsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

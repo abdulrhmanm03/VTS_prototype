@@ -1,14 +1,14 @@
 // Topbar.tsx
-"use client"
+"use client";
 
-import { Search, Bell, Globe, Zap, Menu } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import UserAvatar from "./UserAvatar"
+import { Search, Bell, Globe, Zap, Menu } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import UserAvatar from "./UserAvatar";
 
 interface TopbarProps {
-  collapsed: boolean
-  toggleSidebar: () => void
+  collapsed: boolean;
+  toggleSidebar: () => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,14 +47,22 @@ export default function Topbar({ collapsed, toggleSidebar }: TopbarProps) {
 
       {/* Right side */}
       <div className="flex items-center space-x-4 ml-4">
-        <Button variant="ghost" size="icon" className="text-white hover:text-blue-400 transition">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-white hover:text-blue-400 transition"
+        >
           <Bell className="h-5 w-5" />
         </Button>
-        <Button variant="ghost" size="icon" className="text-white hover:text-blue-400 transition">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-white hover:text-blue-400 transition"
+        >
           <Globe className="h-5 w-5" />
         </Button>
         <UserAvatar />
       </div>
     </header>
-  )
+  );
 }

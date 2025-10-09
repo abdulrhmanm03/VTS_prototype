@@ -1,31 +1,34 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
+import { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
-  Globe,
-  Lock,
-  Server,
-  Cloud,
-  Search,
-} from "lucide-react"
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
+import { Globe, Lock, Server, Cloud, Search } from "lucide-react";
 
 const exposureStats = [
   { name: "Open Ports", value: 125 },
   { name: "Public Hosts", value: 25 },
   { name: "Exposed Web Apps", value: 14 },
   { name: "Detected Services", value: 38 },
-]
+];
 
 const exposureData = [
   { type: "HTTP", count: 18 },
@@ -33,18 +36,53 @@ const exposureData = [
   { type: "SSH", count: 20 },
   { type: "RDP", count: 10 },
   { type: "FTP", count: 5 },
-]
+];
 
 const exposedAssets = [
-  { id: 1, host: "api.company.com", ip: "45.32.12.10", ports: "80, 443", risk: "Medium", service: "HTTPS, HTTP" },
-  { id: 2, host: "staging.company.com", ip: "45.32.12.11", ports: "22, 443", risk: "High", service: "SSH, HTTPS" },
-  { id: 3, host: "vpn.company.com", ip: "45.32.12.9", ports: "443, 1194", risk: "Critical", service: "HTTPS, OpenVPN" },
-  { id: 4, host: "portal.company.com", ip: "45.32.12.13", ports: "443", risk: "Low", service: "HTTPS" },
-  { id: 5, host: "cdn.company.com", ip: "45.32.12.18", ports: "80, 443", risk: "Medium", service: "HTTP, HTTPS" },
-]
+  {
+    id: 1,
+    host: "api.company.com",
+    ip: "45.32.12.10",
+    ports: "80, 443",
+    risk: "Medium",
+    service: "HTTPS, HTTP",
+  },
+  {
+    id: 2,
+    host: "staging.company.com",
+    ip: "45.32.12.11",
+    ports: "22, 443",
+    risk: "High",
+    service: "SSH, HTTPS",
+  },
+  {
+    id: 3,
+    host: "vpn.company.com",
+    ip: "45.32.12.9",
+    ports: "443, 1194",
+    risk: "Critical",
+    service: "HTTPS, OpenVPN",
+  },
+  {
+    id: 4,
+    host: "portal.company.com",
+    ip: "45.32.12.13",
+    ports: "443",
+    risk: "Low",
+    service: "HTTPS",
+  },
+  {
+    id: 5,
+    host: "cdn.company.com",
+    ip: "45.32.12.18",
+    ports: "80, 443",
+    risk: "Medium",
+    service: "HTTP, HTTPS",
+  },
+];
 
 export default function ExternalExposure() {
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
   const filteredAssets = useMemo(
     () =>
@@ -54,7 +92,7 @@ export default function ExternalExposure() {
           asset.ip.includes(search)
       ),
     [search]
-  )
+  );
 
   return (
     <div className="space-y-8 text-white">
@@ -62,7 +100,8 @@ export default function ExternalExposure() {
       <div>
         <h2 className="text-2xl font-bold">External Exposure Overview</h2>
         <p className="text-gray-400">
-          Understand externally accessible assets, their open ports, and exposure risk.
+          Understand externally accessible assets, their open ports, and
+          exposure risk.
         </p>
       </div>
 
@@ -76,13 +115,18 @@ export default function ExternalExposure() {
               ? "from-green-800/20 to-green-500/10 border-green-500/20"
               : i === 2
               ? "from-yellow-800/20 to-yellow-500/10 border-yellow-500/20"
-              : "from-purple-800/20 to-purple-500/10 border-purple-500/20"
+              : "from-purple-800/20 to-purple-500/10 border-purple-500/20";
 
           const icon =
-            i === 0 ? <Server className="w-10 h-10 text-blue-400" /> :
-            i === 1 ? <Globe className="w-10 h-10 text-green-400" /> :
-            i === 2 ? <Cloud className="w-10 h-10 text-yellow-400" /> :
-            <Lock className="w-10 h-10 text-purple-400" />
+            i === 0 ? (
+              <Server className="w-10 h-10 text-blue-400" />
+            ) : i === 1 ? (
+              <Globe className="w-10 h-10 text-green-400" />
+            ) : i === 2 ? (
+              <Cloud className="w-10 h-10 text-yellow-400" />
+            ) : (
+              <Lock className="w-10 h-10 text-purple-400" />
+            );
 
           return (
             <Card
@@ -95,14 +139,16 @@ export default function ExternalExposure() {
                 <p className="text-3xl font-bold">{stat.value}</p>
               </CardContent>
             </Card>
-          )
+          );
         })}
       </div>
 
       {/* Exposure Distribution Chart */}
       <Card className="bg-white/5 border-none backdrop-blur-xl rounded-2xl shadow-lg">
         <CardHeader>
-          <CardTitle className="text-center">Exposure Type Distribution</CardTitle>
+          <CardTitle className="text-center">
+            Exposure Type Distribution
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
@@ -152,7 +198,10 @@ export default function ExternalExposure() {
               </TableHeader>
               <TableBody>
                 {filteredAssets.map((asset) => (
-                  <TableRow key={asset.id} className="hover:bg-white/10 transition">
+                  <TableRow
+                    key={asset.id}
+                    className="hover:bg-white/10 transition"
+                  >
                     <TableCell className="font-medium">{asset.host}</TableCell>
                     <TableCell>{asset.ip}</TableCell>
                     <TableCell>{asset.ports}</TableCell>
@@ -174,10 +223,17 @@ export default function ExternalExposure() {
                     </TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" className="bg-white/10 border-none">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="bg-white/10 border-none"
+                        >
                           Scan
                         </Button>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                        <Button
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700"
+                        >
                           Details
                         </Button>
                       </div>
@@ -190,5 +246,5 @@ export default function ExternalExposure() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

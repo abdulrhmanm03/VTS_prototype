@@ -1,12 +1,19 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Search, GitBranch, Terminal, ShieldAlert, Play } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Search, GitBranch, Terminal, ShieldAlert, Play } from "lucide-react";
 
 export default function OffensiveSecurityPage() {
   return (
@@ -19,17 +26,26 @@ export default function OffensiveSecurityPage() {
           </h1>
           <Badge className="bg-red-600 text-white">Pentest</Badge>
         </div>
-        <p className="text-gray-400 ml-1">Simulate attacks, run engagements, and validate defenses safely.</p>
+        <p className="text-gray-400 ml-1">
+          Simulate attacks, run engagements, and validate defenses safely.
+        </p>
       </div>
 
       {/* Controls */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search engagements, tools, exploits..." className="pl-8 bg-white/10 border-none rounded-lg text-white placeholder-gray-400" />
+          <Input
+            placeholder="Search engagements, tools, exploits..."
+            className="pl-8 bg-white/10 border-none rounded-lg text-white placeholder-gray-400"
+          />
         </div>
-        <Button variant="outline" className="bg-white/10 border-none">Filters</Button>
-        <Button className="bg-red-600 hover:bg-red-700 shadow-lg">New Engagement</Button>
+        <Button variant="outline" className="bg-white/10 border-none">
+          Filters
+        </Button>
+        <Button className="bg-red-600 hover:bg-red-700 shadow-lg">
+          New Engagement
+        </Button>
       </div>
 
       {/* Summary Cards */}
@@ -38,7 +54,9 @@ export default function OffensiveSecurityPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Active Engagements</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Active Engagements
+              </CardTitle>
               <GitBranch className="h-8 w-8 text-blue-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -52,7 +70,9 @@ export default function OffensiveSecurityPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-red-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Critical Findings</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Critical Findings
+              </CardTitle>
               <ShieldAlert className="h-8 w-8 text-red-500 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -66,7 +86,9 @@ export default function OffensiveSecurityPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 via-green-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Exploit Modules</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Exploit Modules
+              </CardTitle>
               <Terminal className="h-8 w-8 text-green-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -80,7 +102,9 @@ export default function OffensiveSecurityPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-yellow-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Simulations Run</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Simulations Run
+              </CardTitle>
               <Play className="h-8 w-8 text-yellow-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -102,7 +126,9 @@ export default function OffensiveSecurityPage() {
 
         <TabsContent value="engagements" className="space-y-4 mt-6">
           <h2 className="text-lg font-semibold">Active Engagements</h2>
-          <p className="text-sm text-gray-400">Manage ongoing tests and view recent activity.</p>
+          <p className="text-sm text-gray-400">
+            Manage ongoing tests and view recent activity.
+          </p>
 
           {/* Engagements Table */}
           <Card className="relative border-none rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-shadow duration-300">
@@ -121,12 +147,24 @@ export default function OffensiveSecurityPage() {
                   <TableRow>
                     <TableCell>Internal Red Team</TableCell>
                     <TableCell>10.0.0.0/24</TableCell>
-                    <TableCell><Badge className="bg-yellow-500 text-white">In Progress</Badge></TableCell>
+                    <TableCell>
+                      <Badge className="bg-yellow-500 text-white">
+                        In Progress
+                      </Badge>
+                    </TableCell>
                     <TableCell>4</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="bg-white/10 border-none">View</Button>
-                        <Button size="sm" className="bg-blue-500">Details</Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="bg-white/10 border-none"
+                        >
+                          View
+                        </Button>
+                        <Button size="sm" className="bg-blue-500">
+                          Details
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -134,12 +172,22 @@ export default function OffensiveSecurityPage() {
                   <TableRow>
                     <TableCell>Web App Pentest</TableCell>
                     <TableCell>app.corp.local</TableCell>
-                    <TableCell><Badge className="bg-red-600 text-white">Critical</Badge></TableCell>
+                    <TableCell>
+                      <Badge className="bg-red-600 text-white">Critical</Badge>
+                    </TableCell>
                     <TableCell>7</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="bg-white/10 border-none">View</Button>
-                        <Button size="sm" className="bg-blue-500">Details</Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="bg-white/10 border-none"
+                        >
+                          View
+                        </Button>
+                        <Button size="sm" className="bg-blue-500">
+                          Details
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -151,7 +199,9 @@ export default function OffensiveSecurityPage() {
 
         <TabsContent value="tools" className="space-y-4 mt-6">
           <h2 className="text-lg font-semibold">Toolbox</h2>
-          <p className="text-sm text-gray-400">Common offensive tools available in the lab.</p>
+          <p className="text-sm text-gray-400">
+            Common offensive tools available in the lab.
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg transition-shadow">
@@ -166,7 +216,9 @@ export default function OffensiveSecurityPage() {
               <CardContent className="p-6 text-center space-y-3">
                 <GitBranch className="h-8 w-8 text-blue-400 mx-auto drop-shadow" />
                 <div className="text-sm text-gray-300">Versioned Payloads</div>
-                <Button variant="outline" className="bg-white/10 border-none">Browse</Button>
+                <Button variant="outline" className="bg-white/10 border-none">
+                  Browse
+                </Button>
               </CardContent>
             </Card>
 
@@ -174,7 +226,9 @@ export default function OffensiveSecurityPage() {
               <CardContent className="p-6 text-center space-y-3">
                 <Play className="h-8 w-8 text-yellow-400 mx-auto drop-shadow" />
                 <div className="text-sm text-gray-300">Automation Runner</div>
-                <Button className="bg-blue-500 hover:bg-blue-600">Run Job</Button>
+                <Button className="bg-blue-500 hover:bg-blue-600">
+                  Run Job
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -182,7 +236,8 @@ export default function OffensiveSecurityPage() {
 
         <TabsContent value="exploits" className="space-y-4 mt-6">
           <h2 className="text-lg font-semibold">Exploit Library</h2>
-          <p className="text-sm text-gray-400">Community and curated modules.
+          <p className="text-sm text-gray-400">
+            Community and curated modules.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -190,8 +245,12 @@ export default function OffensiveSecurityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Remote Code Exec - CVE-2023-XXXX</div>
-                    <div className="text-xs text-gray-400">Web framework / unauthenticated</div>
+                    <div className="font-medium">
+                      Remote Code Exec - CVE-2023-XXXX
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      Web framework / unauthenticated
+                    </div>
                   </div>
                   <div className="text-sm text-gray-300">Module • 2024</div>
                 </div>
@@ -202,8 +261,12 @@ export default function OffensiveSecurityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">Privilege Escalation - Local</div>
-                    <div className="text-xs text-gray-400">Windows kernel / requires local access</div>
+                    <div className="font-medium">
+                      Privilege Escalation - Local
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      Windows kernel / requires local access
+                    </div>
                   </div>
                   <div className="text-sm text-gray-300">Module • 2022</div>
                 </div>
@@ -214,18 +277,28 @@ export default function OffensiveSecurityPage() {
 
         <TabsContent value="simulator" className="space-y-4 mt-6">
           <h2 className="text-lg font-semibold">Attack Simulator</h2>
-          <p className="text-sm text-gray-400">Launch controlled scenarios to validate controls.</p>
+          <p className="text-sm text-gray-400">
+            Launch controlled scenarios to validate controls.
+          </p>
 
           <Card className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-4">
             <CardContent>
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
-                  <div className="font-semibold text-gray-200">Phishing Campaign Simulation</div>
-                  <div className="text-sm text-gray-400">Simulate targeted phishing and measure user response.</div>
+                  <div className="font-semibold text-gray-200">
+                    Phishing Campaign Simulation
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    Simulate targeted phishing and measure user response.
+                  </div>
                 </div>
                 <div className="flex gap-3">
-                  <Button variant="outline" className="bg-white/10 border-none">Configure</Button>
-                  <Button className="bg-red-600 hover:bg-red-700">Start Simulation</Button>
+                  <Button variant="outline" className="bg-white/10 border-none">
+                    Configure
+                  </Button>
+                  <Button className="bg-red-600 hover:bg-red-700">
+                    Start Simulation
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -235,9 +308,11 @@ export default function OffensiveSecurityPage() {
 
       {/* Footer CTA */}
       <div className="flex justify-end">
-        <Button variant="ghost" className="text-gray-300">Export Report</Button>
+        <Button variant="ghost" className="text-gray-300">
+          Export Report
+        </Button>
         <Button className="ml-3 bg-blue-500">Open Findings</Button>
       </div>
     </div>
-  )
+  );
 }

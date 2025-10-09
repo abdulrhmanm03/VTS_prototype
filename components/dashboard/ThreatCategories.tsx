@@ -2,19 +2,73 @@
 
 import { FC } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Radio, Shield, AlertCircle, Bug, Globe, Lock, Wifi, Cloud, Server, User, Folders } from "lucide-react";
+import {
+  Radio,
+  Shield,
+  AlertCircle,
+  Bug,
+  Globe,
+  Lock,
+  Wifi,
+  Cloud,
+  Server,
+  User,
+  Folders,
+} from "lucide-react";
 
 const threatCategories = [
-  { name: 'APT Groups', active: 23, trend: -12, level: 'CRITICAL', icon: Shield },
-  { name: 'Ransomware', active: 156, trend: 8, level: 'CRITICAL', icon: Lock },
-  { name: 'Supply Chain', active: 89, trend: -34, level: 'MEDIUM', icon: Globe },
-  { name: 'Zero-Day', active: 12, trend: -5, level: 'CRITICAL', icon: AlertCircle },
-  { name: 'Phishing', active: 12, trend: 4, level: 'HIGH', icon: User },
-  { name: 'IoT Vulnerabilities', active: 47, trend: 10, level: 'HIGH', icon: Wifi },
-  { name: 'Botnet Activity', active: 32, trend: -7, level: 'CRITICAL', icon: Bug },
-  { name: 'Cloud Misconfig', active: 18, trend: -2, level: 'MEDIUM', icon: Cloud },
-  { name: 'Malware', active: 66, trend: 5, level: 'MEDIUM', icon: Server },
-  { name: 'Social Engineering', active: 29, trend: -3, level: 'HIGH', icon: Folders },
+  {
+    name: "APT Groups",
+    active: 23,
+    trend: -12,
+    level: "CRITICAL",
+    icon: Shield,
+  },
+  { name: "Ransomware", active: 156, trend: 8, level: "CRITICAL", icon: Lock },
+  {
+    name: "Supply Chain",
+    active: 89,
+    trend: -34,
+    level: "MEDIUM",
+    icon: Globe,
+  },
+  {
+    name: "Zero-Day",
+    active: 12,
+    trend: -5,
+    level: "CRITICAL",
+    icon: AlertCircle,
+  },
+  { name: "Phishing", active: 12, trend: 4, level: "HIGH", icon: User },
+  {
+    name: "IoT Vulnerabilities",
+    active: 47,
+    trend: 10,
+    level: "HIGH",
+    icon: Wifi,
+  },
+  {
+    name: "Botnet Activity",
+    active: 32,
+    trend: -7,
+    level: "CRITICAL",
+    icon: Bug,
+  },
+  {
+    name: "Cloud Misconfig",
+    active: 18,
+    trend: -2,
+    level: "MEDIUM",
+    icon: Cloud,
+  },
+  { name: "Malware", active: 66, trend: 5, level: "MEDIUM", icon: Server },
+  {
+    name: "Social Engineering",
+    active: 29,
+    trend: -3,
+    level: "HIGH",
+    icon: Folders,
+  },
 ];
 
 const threatGradients = {
@@ -53,13 +107,16 @@ const ThreatCategories: FC = () => {
             >
               {/* Gradient Overlay */}
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${threatGradients[threat.level as keyof typeof threatGradients]} pointer-events-none`}
+                className={`absolute inset-0 bg-gradient-to-br ${
+                  threatGradients[threat.level as keyof typeof threatGradients]
+                } pointer-events-none`}
               />
               <div className="relative z-10 w-full px-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-white font-semibold text-xs truncate flex items-center gap-2">
-                    {threat.name} 
-                    <Icon className="h-5 w-5 text-blue-400" /> {/* Inline icon */}
+                    {threat.name}
+                    <Icon className="h-5 w-5 text-blue-400" />{" "}
+                    {/* Inline icon */}
                   </h3>
                   <span
                     className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${

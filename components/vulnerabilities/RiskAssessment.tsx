@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { ShieldCheck, AlertTriangle } from "lucide-react"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ShieldCheck, AlertTriangle } from "lucide-react";
 
 export default function RiskAssessment() {
   return (
@@ -13,7 +13,9 @@ export default function RiskAssessment() {
           </CardTitle>
         </CardHeader>
         <CardContent className="text-gray-300">
-          Risk Level: <span className="text-green-400 font-semibold">Moderate</span><br />
+          Risk Level:{" "}
+          <span className="text-green-400 font-semibold">Moderate</span>
+          <br />
           Most assets have been patched within SLA.
         </CardContent>
       </Card>
@@ -25,9 +27,10 @@ export default function RiskAssessment() {
           </CardTitle>
         </CardHeader>
         <CardContent className="text-gray-300">
-          5 servers with unpatched CVEs older than 90 days. Recommend immediate action.
+          5 servers with unpatched CVEs older than 90 days. Recommend immediate
+          action.
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

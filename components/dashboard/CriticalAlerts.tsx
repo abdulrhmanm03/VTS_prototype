@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Activity } from "lucide-react"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Activity } from "lucide-react";
 
 const alerts = [
   {
@@ -32,7 +32,7 @@ const alerts = [
     color: "bg-yellow-500",
     time: "3 hours ago",
   },
-]
+];
 
 export default function CriticalAlerts() {
   return (
@@ -50,13 +50,18 @@ export default function CriticalAlerts() {
         </CardHeader>
         <CardContent className="space-y-4">
           {alerts.map((a) => (
-            <div key={a.title} className="flex justify-between items-center p-4 rounded-md">
+            <div
+              key={a.title}
+              className="flex justify-between items-center p-4 rounded-md"
+            >
               <div>
                 <p className="font-semibold">{a.title}</p>
                 <p className="text-sm text-gray-400">{a.desc}</p>
               </div>
               <div className="flex items-center gap-2">
-                <span className={`${a.color} text-white text-xs font-bold px-2 py-1 rounded`}>
+                <span
+                  className={`${a.color} text-white text-xs font-bold px-2 py-1 rounded`}
+                >
                   {a.severity}
                 </span>
                 <span className="text-sm text-gray-400">{a.time}</span>
@@ -69,5 +74,5 @@ export default function CriticalAlerts() {
         </CardContent>
       </div>
     </Card>
-  )
+  );
 }

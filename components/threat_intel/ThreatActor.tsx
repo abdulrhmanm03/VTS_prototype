@@ -27,11 +27,16 @@ const threatActors: Record<string, ThreatActorType> = {
     countries: "Singapore, Taiwan, Thailand, United States",
     sectors: "Manufacturing, Financial Services, Healthcare",
     attackType: "Data Encryption, Data Exfiltration",
-    techniques: ["Phishing (T1566)", "Inhibit System Recovery (T1490)", "Data Encrypted for Impact (T1486)"],
+    techniques: [
+      "Phishing (T1566)",
+      "Inhibit System Recovery (T1490)",
+      "Data Encrypted for Impact (T1486)",
+    ],
     date: "Sep 19, 2025",
     readTime: "10 Mins Read",
     quote: "We only seek money. No morals, no political stance.",
-    description: "Black Cat emerged in 2025 and quickly carried out disruptive ransomware attacks in multiple regions..."
+    description:
+      "Black Cat emerged in 2025 and quickly carried out disruptive ransomware attacks in multiple regions...",
   },
   "dire-wolf": {
     name: "Dire Wolf Ransomware",
@@ -40,11 +45,16 @@ const threatActors: Record<string, ThreatActorType> = {
     countries: "USA, Canada, UK",
     sectors: "Healthcare, Education, Retail",
     attackType: "Data Encryption, Credential Theft",
-    techniques: ["Spear Phishing (T1566.002)", "Account Takeover (T1078)", "Data Encrypted for Impact (T1486)"],
+    techniques: [
+      "Spear Phishing (T1566.002)",
+      "Account Takeover (T1078)",
+      "Data Encrypted for Impact (T1486)",
+    ],
     date: "Sep 04, 2025",
     readTime: "8 Mins Read",
     quote: "Profit is everything. No politics, no ideology.",
-    description: "Dire Wolf surfaced in 2024 targeting multiple sectors with advanced phishing campaigns and ransomware attacks..."
+    description:
+      "Dire Wolf surfaced in 2024 targeting multiple sectors with advanced phishing campaigns and ransomware attacks...",
   },
 };
 
@@ -79,16 +89,24 @@ export default function ThreatActor() {
               </CardHeader>
               <CardContent className="space-y-2 text-sm text-white/80">
                 <p>
-                  <span className="font-semibold text-white">Motivation:</span> {actor.motivation}
+                  <span className="font-semibold text-white">Motivation:</span>{" "}
+                  {actor.motivation}
                 </p>
                 <p>
-                  <span className="font-semibold text-white">Target Countries:</span> {actor.countries}
+                  <span className="font-semibold text-white">
+                    Target Countries:
+                  </span>{" "}
+                  {actor.countries}
                 </p>
                 <p>
-                  <span className="font-semibold text-white">Target Sectors:</span> {actor.sectors}
+                  <span className="font-semibold text-white">
+                    Target Sectors:
+                  </span>{" "}
+                  {actor.sectors}
                 </p>
                 <p>
-                  <span className="font-semibold text-white">Attack Type:</span> {actor.attackType}
+                  <span className="font-semibold text-white">Attack Type:</span>{" "}
+                  {actor.attackType}
                 </p>
                 <Separator className="my-2 bg-white/20" />
                 <ul className="space-y-1 text-blue-300">
@@ -109,7 +127,9 @@ export default function ThreatActor() {
           <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md p-4">
             <p className="font-semibold mb-3 text-blue-400">Table Of Content</p>
             <ul className="text-sm space-y-2 text-white/70">
-              <li className="text-blue-300 font-semibold">Dark Web Profile: {actor.name}</li>
+              <li className="text-blue-300 font-semibold">
+                Dark Web Profile: {actor.name}
+              </li>
               <li>Who is {actor.name}?</li>
               <li>What are {actor.name}’s Targets?</li>
               <li>What are {actor.name}’s Techniques?</li>
@@ -122,11 +142,15 @@ export default function ThreatActor() {
         {/* Main Content */}
         <main className="lg:col-span-6 space-y-6">
           <div>
-            <p className="text-xs text-white/60">Home › Blog › Threat Actor Profiles</p>
+            <p className="text-xs text-white/60">
+              Home › Blog › Threat Actor Profiles
+            </p>
             <h1 className="text-3xl font-bold mt-2 mb-4 text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
               Dark Web Profile: {actor.name}
             </h1>
-            <p className="text-sm text-white/60">{actor.date} • {actor.readTime}</p>
+            <p className="text-sm text-white/60">
+              {actor.date} • {actor.readTime}
+            </p>
           </div>
 
           <div className="prose prose-invert max-w-none text-white/80">

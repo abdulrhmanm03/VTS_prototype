@@ -1,50 +1,103 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
+import { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts"
-import { Search, Globe, Shield, AlertTriangle, AlertCircle } from "lucide-react"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
+import {
+  Search,
+  Globe,
+  Shield,
+  AlertTriangle,
+  AlertCircle,
+} from "lucide-react";
 
 const mockAssets = [
-  { id: 1, name: "api.company.com", type: "Subdomain", risk: "Medium", lastScan: "2025-10-05", vulns: 3, services: "HTTPS, SSH" },
-  { id: 2, name: "staging.company.com", type: "Subdomain", risk: "High", lastScan: "2025-10-07", vulns: 5, services: "HTTPS" },
-  { id: 3, name: "portal.company.com", type: "Web App", risk: "Low", lastScan: "2025-10-08", vulns: 0, services: "HTTPS" },
-  { id: 4, name: "192.168.1.22", type: "Host", risk: "Critical", lastScan: "2025-10-06", vulns: 8, services: "SSH, RDP" },
-  { id: 5, name: "cdn.company.com", type: "Asset", risk: "Medium", lastScan: "2025-10-08", vulns: 2, services: "HTTPS" },
-]
+  {
+    id: 1,
+    name: "api.company.com",
+    type: "Subdomain",
+    risk: "Medium",
+    lastScan: "2025-10-05",
+    vulns: 3,
+    services: "HTTPS, SSH",
+  },
+  {
+    id: 2,
+    name: "staging.company.com",
+    type: "Subdomain",
+    risk: "High",
+    lastScan: "2025-10-07",
+    vulns: 5,
+    services: "HTTPS",
+  },
+  {
+    id: 3,
+    name: "portal.company.com",
+    type: "Web App",
+    risk: "Low",
+    lastScan: "2025-10-08",
+    vulns: 0,
+    services: "HTTPS",
+  },
+  {
+    id: 4,
+    name: "192.168.1.22",
+    type: "Host",
+    risk: "Critical",
+    lastScan: "2025-10-06",
+    vulns: 8,
+    services: "SSH, RDP",
+  },
+  {
+    id: 5,
+    name: "cdn.company.com",
+    type: "Asset",
+    risk: "Medium",
+    lastScan: "2025-10-08",
+    vulns: 2,
+    services: "HTTPS",
+  },
+];
 
 const pieData = [
   { name: "Low", value: 6 },
   { name: "Medium", value: 9 },
   { name: "High", value: 5 },
   { name: "Critical", value: 3 },
-]
+];
 
-const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"]
+const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"];
 
 export default function AssetInventory() {
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
 
   const filteredAssets = useMemo(
-    () => mockAssets.filter((a) => a.name.toLowerCase().includes(search.toLowerCase())),
+    () =>
+      mockAssets.filter((a) =>
+        a.name.toLowerCase().includes(search.toLowerCase())
+      ),
     [search]
-  )
+  );
 
   return (
     <div className="space-y-8 text-white">
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold">Asset Inventory</h2>
-        <p className="text-gray-400">Comprehensive view of discovered assets and security posture.</p>
+        <p className="text-gray-400">
+          Comprehensive view of discovered assets and security posture.
+        </p>
       </div>
 
       {/* Summary Cards */}
@@ -139,9 +192,14 @@ export default function AssetInventory() {
               </TableHeader>
               <TableBody>
                 {filteredAssets.map((asset) => (
-                  <TableRow key={asset.id} className="hover:bg-white/10 transition">
+                  <TableRow
+                    key={asset.id}
+                    className="hover:bg-white/10 transition"
+                  >
                     <TableCell className="font-medium">{asset.name}</TableCell>
-                    <TableCell><Badge>{asset.type}</Badge></TableCell>
+                    <TableCell>
+                      <Badge>{asset.type}</Badge>
+                    </TableCell>
                     <TableCell>
                       <Badge
                         className={
@@ -162,8 +220,19 @@ export default function AssetInventory() {
                     <TableCell>{asset.services}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
-                        <Button size="sm" variant="outline" className="bg-white/10 border-none">Scan</Button>
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700">Details</Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="bg-white/10 border-none"
+                        >
+                          Scan
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700"
+                        >
+                          Details
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -174,5 +243,5 @@ export default function AssetInventory() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

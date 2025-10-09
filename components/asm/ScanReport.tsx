@@ -140,13 +140,12 @@ export default function ScanReport({ data }: Props) {
             <Card
               key={risk}
               onClick={() => handleRiskCardClick(risk)}
-              className={`cursor-pointer w-32 h-32 flex items-center justify-center rounded-full border border-white/20 text-white hover:shadow-lg transition-all duration-300 ${
-                risk === "high"
+              className={`cursor-pointer w-32 h-32 flex items-center justify-center rounded-full border border-white/20 text-white hover:shadow-lg transition-all duration-300 ${risk === "high"
                   ? "bg-red-500/20"
                   : risk === "medium"
-                  ? "bg-yellow-400/20"
-                  : "bg-blue-400/20"
-              }`}
+                    ? "bg-yellow-400/20"
+                    : "bg-blue-400/20"
+                }`}
             >
               <CardContent className="text-center flex flex-col items-center justify-center">
                 {riskIcons[risk]}
@@ -183,75 +182,75 @@ export default function ScanReport({ data }: Props) {
         </ResponsiveContainer>
       </Card>
 
-{/* Detailed Alerts */}
-{expandedRisk && (
-  <div className="space-y-4 w-full max-w-4xl">
-    <h2 className="text-3xl text-center mb-4 font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-      {expandedRisk.toUpperCase()} Alerts
-    </h2>
+      {/* Detailed Alerts */}
+      {expandedRisk && (
+        <div className="space-y-4 w-full max-w-4xl">
+          <h2 className="text-3xl text-center mb-4 font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+            {expandedRisk.toUpperCase()} Alerts
+          </h2>
 
-    {filteredAlertsByRisk(expandedRisk).length > 0 ? (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredAlertsByRisk(expandedRisk).map((alert, idx) => (
-          <Card
-            key={idx}
-            className="bg-white/5 text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition duration-300 rounded-2xl p-4"
-          >
-            <CardTitle className="text-lg font-semibold mb-2">
-              {truncate(alert.alert, 40)}
-            </CardTitle>
-            <p className="text-white/80 mb-1">
-              <strong>Solution:</strong> {truncate(alert.solution, 60)}
-            </p>
-            <p className="mb-1">
-              <Badge className={confColors[alert.confidence.toLowerCase()]}>
-                Confidence: {alert.confidence}
-              </Badge>
-              <Badge
-                className={`ml-2 ${riskColors[alert.risk.toLowerCase()]}`}
-              >
-                Risk: {alert.risk}
-              </Badge>
-            </p>
-            <p className="font-bold">Asset:</p>
-            <p className="text-blue-400 underline break-all">
-              {truncate(alert.url, 50)}
-            </p>
-          </Card>
-        ))}
-      </div>
-    ) : (
-      <div className="flex flex-col items-center justify-center text-center bg-white/5 backdrop-blur-md text-white/70 p-8 rounded-2xl border border-white/10">
-        <Shield className="w-12 h-12 text-blue-400 mb-3" />
-        <p className="text-lg font-semibold">No alerts found</p>
-        <p className="text-sm text-white/50">
-          There are currently no {expandedRisk.toLowerCase()} alerts to display.
-        </p>
-      </div>
-    )}
-  </div>
-)}
+          {filteredAlertsByRisk(expandedRisk).length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredAlertsByRisk(expandedRisk).map((alert, idx) => (
+                <Card
+                  key={idx}
+                  className="bg-white/5 text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition duration-300 rounded-2xl p-4"
+                >
+                  <CardTitle className="text-lg font-semibold mb-2">
+                    {truncate(alert.alert, 40)}
+                  </CardTitle>
+                  <p className="text-white/80 mb-1">
+                    <strong>Solution:</strong> {truncate(alert.solution, 60)}
+                  </p>
+                  <p className="mb-1">
+                    <Badge className={confColors[alert.confidence.toLowerCase()]}>
+                      Confidence: {alert.confidence}
+                    </Badge>
+                    <Badge
+                      className={`ml-2 ${riskColors[alert.risk.toLowerCase()]}`}
+                    >
+                      Risk: {alert.risk}
+                    </Badge>
+                  </p>
+                  <p className="font-bold">Asset:</p>
+                  <p className="text-blue-400 underline break-all">
+                    {truncate(alert.url, 50)}
+                  </p>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center text-center bg-white/5 backdrop-blur-md text-white/70 p-8 rounded-2xl border border-white/10">
+              <Shield className="w-12 h-12 text-blue-400 mb-3" />
+              <p className="text-lg font-semibold">No alerts found</p>
+              <p className="text-sm text-white/50">
+                There are currently no {expandedRisk.toLowerCase()} alerts to display.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Asset Discovered Sub-URLs */}
       {showSubUrls && (
-  <div className="space-y-6 w-full max-w-5xl mx-auto">
-    <h2 className="text-3xl text-center mb-4 font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-      Assets Discovered
-    </h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {distinctSubUrls.map((url, idx) => (
-<Card key={idx} className="transform hover:scale-105 transition duration-300 relative bg-gradient-to-br from-blue-800/20 text-white rounded-2xl p-4 hover:shadow-[0_0_20px_rgba(59,130,246,0.7)] w-full h-36 flex items-start justify-start">
-  {/* Gradient overlay glow */}
-  <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5 blur-xl pointer-events-none"></div>
+        <div className="space-y-6 w-full max-w-5xl mx-auto">
+          <h2 className="text-3xl text-center mb-4 font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+            Assets Discovered
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {distinctSubUrls.map((url, idx) => (
+              <Card key={idx} className="transform hover:scale-105 transition duration-300 relative bg-gradient-to-br from-blue-800/20 text-white rounded-2xl p-4 hover:shadow-[0_0_20px_rgba(59,130,246,0.7)] w-full h-36 flex items-start justify-start">
+                {/* Gradient overlay glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5 blur-xl pointer-events-none"></div>
 
-  <p className="font-medium break-all text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-    {url}
-  </p>
-</Card>
-      ))}
-    </div>
-  </div>
-)}
+                <p className="font-medium break-all text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+                  {url}
+                </p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
 
     </div>
   );

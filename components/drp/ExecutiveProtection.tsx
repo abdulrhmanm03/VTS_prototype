@@ -1,14 +1,16 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function ExecutiveProtection() {
   return (
     <div className="space-y-4 mt-6">
       <h2 className="text-lg font-semibold">Executive Protection Monitoring</h2>
-      <p className="text-sm text-gray-400">Detect impersonation, leaks, and threats to executives</p>
+      <p className="text-sm text-gray-400">
+        Detect impersonation, leaks, and threats to executives
+      </p>
 
       {[
         {
@@ -26,7 +28,10 @@ export default function ExecutiveProtection() {
           action: "Escalated",
         },
       ].map((e, i) => (
-        <Card key={i} className="bg-white/5 border-none rounded-2xl backdrop-blur-md shadow-lg hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-shadow duration-300">
+        <Card
+          key={i}
+          className="bg-white/5 border-none rounded-2xl backdrop-blur-md shadow-lg hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-shadow duration-300"
+        >
           <CardContent className="flex items-center justify-between p-4">
             <div>
               <div className="flex items-center space-x-2">
@@ -38,10 +43,12 @@ export default function ExecutiveProtection() {
                 Detected: {e.date} · Action: {e.action}
               </p>
             </div>
-            <Button size="sm" className="bg-purple-500 hover:bg-purple-600">Investigate</Button>
+            <Button size="sm" className="bg-purple-500 hover:bg-purple-600">
+              Investigate
+            </Button>
           </CardContent>
         </Card>
       ))}
     </div>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { Shield } from "lucide-react"
-import ThreatCategories from "@/components/dashboard/ThreatCategories"
-import LiveThreatFeed from "@/components/dashboard/ThreatFeed"
-import GlobalThreatHeatMap from "@/components/HeatMap"
-import MetricsBar from "@/components/dashboard/MetricBar"
-import StatsCards from "@/components/dashboard/StatsCards"
-import DashboardCharts from "@/components/dashboard/Charts"
-import CriticalAlerts from "@/components/dashboard/CriticalAlerts"
-import AttackChainProgression from "@/components/dashboard/AttackChainProgression"
-import TrendingThreatActors from "@/components/dashboard/TrendingThreat"
+import { Shield } from "lucide-react";
+import ThreatCategories from "@/components/dashboard/ThreatCategories";
+import LiveThreatFeed from "@/components/dashboard/ThreatFeed";
+import GlobalThreatHeatMap from "@/components/HeatMap";
+import MetricsBar from "@/components/dashboard/MetricBar";
+import StatsCards from "@/components/dashboard/StatsCards";
+import DashboardCharts from "@/components/dashboard/Charts";
+import CriticalAlerts from "@/components/dashboard/CriticalAlerts";
+import AttackChainProgression from "@/components/dashboard/AttackChainProgression";
+import TrendingThreatActors from "@/components/dashboard/TrendingThreat";
 
 export default function DashboardPage() {
   return (
@@ -23,7 +23,9 @@ export default function DashboardPage() {
         </div>
 
         <div className="ml-4">
-          <h2 className="text-3xl font-bold text-white">Threat Intelligence Dashboard</h2>
+          <h2 className="text-3xl font-bold text-white">
+            Threat Intelligence Dashboard
+          </h2>
           <p className="text-gray-400">
             Real-time overview of your organization&#39;s security posture
           </p>
@@ -49,7 +51,6 @@ export default function DashboardPage() {
       </div>
 
       <CriticalAlerts />
-
     </div>
-  )
+  );
 }

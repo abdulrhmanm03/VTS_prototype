@@ -4,7 +4,13 @@ import { jwtVerify } from "jose";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 const encoder = new TextEncoder();
-const PUBLIC_PATHS = ["/auth", "/api/auth/", "/favicon.ico", "/_next", "/images"];
+const PUBLIC_PATHS = [
+  "/auth",
+  "/api/auth/",
+  "/favicon.ico",
+  "/_next",
+  "/images",
+];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

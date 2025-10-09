@@ -1,12 +1,21 @@
 "use client";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line, AreaChart, Area, PieChart, Pie, Cell } from "recharts";
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 import { ShieldAlert, Globe, Activity, Wifi, Cpu } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -58,13 +67,41 @@ export default function ThreatLandscape() {
       {/* === Top Stats Row === */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { title: "Active Threats", value: "347", icon: ShieldAlert, color: "from-red-500/20 to-red-900/10" },
-          { title: "Open Incidents", value: "128", icon: Activity, color: "from-orange-500/20 to-orange-900/10" },
-          { title: "Dark Web Mentions", value: "523", icon: Globe, color: "from-blue-500/20 to-blue-900/10" },
-          { title: "Botnets Detected", value: "74", icon: Wifi, color: "from-green-500/20 to-green-900/10" },
-          { title: "Zero-Day Exploits", value: "6", icon: Cpu, color: "from-purple-500/20 to-purple-900/10" },
+          {
+            title: "Active Threats",
+            value: "347",
+            icon: ShieldAlert,
+            color: "from-red-500/20 to-red-900/10",
+          },
+          {
+            title: "Open Incidents",
+            value: "128",
+            icon: Activity,
+            color: "from-orange-500/20 to-orange-900/10",
+          },
+          {
+            title: "Dark Web Mentions",
+            value: "523",
+            icon: Globe,
+            color: "from-blue-500/20 to-blue-900/10",
+          },
+          {
+            title: "Botnets Detected",
+            value: "74",
+            icon: Wifi,
+            color: "from-green-500/20 to-green-900/10",
+          },
+          {
+            title: "Zero-Day Exploits",
+            value: "6",
+            icon: Cpu,
+            color: "from-purple-500/20 to-purple-900/10",
+          },
         ].map((stat, i) => (
-          <Card key={i} className={`bg-gradient-to-br ${stat.color} rounded-2xl backdrop-blur-md shadow-md`}>
+          <Card
+            key={i}
+            className={`bg-gradient-to-br ${stat.color} rounded-2xl backdrop-blur-md shadow-md`}
+          >
             <CardContent className="p-4 flex flex-col items-center text-center">
               <stat.icon className="w-6 h-6 mb-2 text-blue-400" />
               <div className="text-lg font-bold">{stat.value}</div>
@@ -87,8 +124,18 @@ export default function ThreatLandscape() {
                 <XAxis dataKey="month" stroke="#94a3b8" />
                 <YAxis stroke="#94a3b8" />
                 <Tooltip />
-                <Line type="monotone" dataKey="malware" stroke="#3b82f6" strokeWidth={2} />
-                <Line type="monotone" dataKey="phishing" stroke="#f59e0b" strokeWidth={2} />
+                <Line
+                  type="monotone"
+                  dataKey="malware"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="phishing"
+                  stroke="#f59e0b"
+                  strokeWidth={2}
+                />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -122,7 +169,13 @@ export default function ThreatLandscape() {
                 <XAxis dataKey="region" stroke="#94a3b8" />
                 <YAxis stroke="#94a3b8" />
                 <Tooltip />
-                <Area type="monotone" dataKey="incidents" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
+                <Area
+                  type="monotone"
+                  dataKey="incidents"
+                  stroke="#10b981"
+                  fill="#10b981"
+                  fillOpacity={0.3}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -171,10 +224,17 @@ export default function ThreatLandscape() {
             </thead>
             <tbody>
               {topThreats.map((t, i) => (
-                <tr key={i} className="border-b border-gray-800 hover:bg-white/5">
+                <tr
+                  key={i}
+                  className="border-b border-gray-800 hover:bg-white/5"
+                >
                   <td className="py-2">{t.name}</td>
-                  <td><Badge variant="outline">{t.type}</Badge></td>
-                  <td className="text-right text-green-400 font-semibold">{t.trend}</td>
+                  <td>
+                    <Badge variant="outline">{t.type}</Badge>
+                  </td>
+                  <td className="text-right text-green-400 font-semibold">
+                    {t.trend}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -17,16 +17,86 @@ const badgeColors = {
 };
 
 const threats = [
-  { id: 1, level: "CRITICAL", confidence: "96%", title: "APT40 Maritime Infrastructure", region: "Asia-Pacific", time: "2m ago" },
-  { id: 2, level: "HIGH", confidence: "89%", title: "LockBit 3.0 Ransomware Evolution", region: "Global", time: "8m ago" },
-  { id: 3, level: "HIGH", confidence: "92%", title: "Supply Chain Compromise", region: "UAE", time: "15m ago" },
-  { id: 4, level: "CRITICAL", confidence: "87%", title: "Zero-Day Exploitation", region: "MENA", time: "23m ago" },
-  { id: 5, level: "MEDIUM", confidence: "94%", title: "Phishing Campaign Surge", region: "Global", time: "31m ago" },
-  { id: 6, level: "HIGH", confidence: "90%", title: "IoT Device Vulnerability", region: "Europe", time: "45m ago" },
-  { id: 7, level: "MEDIUM", confidence: "88%", title: "Social Engineering Alert", region: "North America", time: "1h ago" },
-  { id: 8, level: "CRITICAL", confidence: "93%", title: "Critical Cloud Misconfiguration", region: "APAC", time: "1h 15m ago" },
-  { id: 9, level: "HIGH", confidence: "85%", title: "Ransomware Email Campaign", region: "Europe", time: "1h 30m ago" },
-  { id: 10, level: "MEDIUM", confidence: "91%", title: "Malware Botnet Activity", region: "Global", time: "2h ago" },
+  {
+    id: 1,
+    level: "CRITICAL",
+    confidence: "96%",
+    title: "APT40 Maritime Infrastructure",
+    region: "Asia-Pacific",
+    time: "2m ago",
+  },
+  {
+    id: 2,
+    level: "HIGH",
+    confidence: "89%",
+    title: "LockBit 3.0 Ransomware Evolution",
+    region: "Global",
+    time: "8m ago",
+  },
+  {
+    id: 3,
+    level: "HIGH",
+    confidence: "92%",
+    title: "Supply Chain Compromise",
+    region: "UAE",
+    time: "15m ago",
+  },
+  {
+    id: 4,
+    level: "CRITICAL",
+    confidence: "87%",
+    title: "Zero-Day Exploitation",
+    region: "MENA",
+    time: "23m ago",
+  },
+  {
+    id: 5,
+    level: "MEDIUM",
+    confidence: "94%",
+    title: "Phishing Campaign Surge",
+    region: "Global",
+    time: "31m ago",
+  },
+  {
+    id: 6,
+    level: "HIGH",
+    confidence: "90%",
+    title: "IoT Device Vulnerability",
+    region: "Europe",
+    time: "45m ago",
+  },
+  {
+    id: 7,
+    level: "MEDIUM",
+    confidence: "88%",
+    title: "Social Engineering Alert",
+    region: "North America",
+    time: "1h ago",
+  },
+  {
+    id: 8,
+    level: "CRITICAL",
+    confidence: "93%",
+    title: "Critical Cloud Misconfiguration",
+    region: "APAC",
+    time: "1h 15m ago",
+  },
+  {
+    id: 9,
+    level: "HIGH",
+    confidence: "85%",
+    title: "Ransomware Email Campaign",
+    region: "Europe",
+    time: "1h 30m ago",
+  },
+  {
+    id: 10,
+    level: "MEDIUM",
+    confidence: "91%",
+    title: "Malware Botnet Activity",
+    region: "Global",
+    time: "2h ago",
+  },
 ];
 
 const LiveThreatFeed: FC = () => {
@@ -51,7 +121,9 @@ const LiveThreatFeed: FC = () => {
           >
             {/* Gradient Overlay */}
             <div
-              className={`absolute inset-0 bg-gradient-to-br ${threatGradients[threat.level as keyof typeof threatGradients]} pointer-events-none`}
+              className={`absolute inset-0 bg-gradient-to-br ${
+                threatGradients[threat.level as keyof typeof threatGradients]
+              } pointer-events-none`}
             />
             <div className="relative z-10 w-full px-3">
               <div className="flex items-center justify-between">

@@ -9,8 +9,8 @@ const demoUser = {
   id: "1",
   email: "vts@gmail.com",
   fullName: "VTS",
-  password : "jkfjajl;jkfdajkkkkkkdjfj" 
- };
+  password: "jkfjajl;jkfdajkkkkkkdjfj",
+};
 
 // POST /api/auth/login
 export async function POST(req: Request) {
@@ -19,10 +19,16 @@ export async function POST(req: Request) {
 
     // 1. Check if user exists (hardcoded for demo)
     if (email !== demoUser.email) {
-      return NextResponse.json({ detail: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json(
+        { detail: "Invalid credentials" },
+        { status: 401 }
+      );
     }
     if (password !== demoUser.password) {
-      return NextResponse.json({ detail: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json(
+        { detail: "Invalid credentials" },
+        { status: 401 }
+      );
     }
 
     // 3. Generate JWT token including username (fullName)
@@ -57,6 +63,9 @@ export async function POST(req: Request) {
     return response;
   } catch (err) {
     console.error("Login error:", err);
-    return NextResponse.json({ detail: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { detail: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

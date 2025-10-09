@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 export default function PatchManagement() {
   return (
@@ -11,7 +11,9 @@ export default function PatchManagement() {
           <CardTitle>Patch Deployment Progress</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-400 mb-2">Overall patch coverage: 87%</p>
+          <p className="text-sm text-gray-400 mb-2">
+            Overall patch coverage: 87%
+          </p>
           <Progress value={87} className="h-2" />
         </CardContent>
       </Card>
@@ -21,11 +23,12 @@ export default function PatchManagement() {
           <CardTitle>Pending Patches</CardTitle>
         </CardHeader>
         <CardContent className="text-gray-300">
-          - WebFramework 2.3.4 (Security Patch)<br />
-          - OpenSSL 3.1.2 (Critical Update)<br />
-          - Linux Kernel 6.1.10 (Privilege Escalation Fix)
+          - WebFramework 2.3.4 (Security Patch)
+          <br />
+          - OpenSSL 3.1.2 (Critical Update)
+          <br />- Linux Kernel 6.1.10 (Privilege Escalation Fix)
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

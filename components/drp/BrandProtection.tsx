@@ -1,14 +1,16 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function BrandProtection() {
   return (
     <div className="space-y-4 mt-6">
       <h2 className="text-lg font-semibold">Brand Protection Monitoring</h2>
-      <p className="text-sm text-gray-400">Monitor for typosquatting, phishing, and brand abuse</p>
+      <p className="text-sm text-gray-400">
+        Monitor for typosquatting, phishing, and brand abuse
+      </p>
 
       {[
         {
@@ -45,7 +47,11 @@ export default function BrandProtection() {
               </p>
             </div>
             <div className="flex space-x-2">
-              <Button size="sm" variant="outline" className="bg-white/10 border-none">
+              <Button
+                size="sm"
+                variant="outline"
+                className="bg-white/10 border-none"
+              >
                 Investigate
               </Button>
               <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
@@ -56,5 +62,5 @@ export default function BrandProtection() {
         </Card>
       ))}
     </div>
-  )
+  );
 }

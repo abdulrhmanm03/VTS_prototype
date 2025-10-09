@@ -1,26 +1,28 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { MessageCircle, X, Shield } from "lucide-react"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { MessageCircle, X, Shield } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Chatbot() {
-  const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState<{ from: "user" | "bot"; text: string }[]>([])
-  const [input, setInput] = useState("")
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState<
+    { from: "user" | "bot"; text: string }[]
+  >([]);
+  const [input, setInput] = useState("");
 
   const sendMessage = () => {
-    if (!input.trim()) return
+    if (!input.trim()) return;
     setMessages([
       ...messages,
       { from: "user", text: input },
       { from: "bot", text: "I’m your Security Analyst, here to assist. 🔍" },
-    ])
-    setInput("")
-  }
+    ]);
+    setInput("");
+  };
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
@@ -39,7 +41,7 @@ export default function Chatbot() {
       {open && (
         <Card className="w-80 h-120 flex flex-col rounded-2xl bg-white/5 backdrop-blur-md border-none shadow-lg hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
           <CardHeader className="flex flex-row items-center justify-between p-1 border-b border-white/10">
-           <div className="flex items-center space-x-2 ml-3">
+            <div className="flex items-center space-x-2 ml-3">
               <Avatar className="h-6 w-6 border border-blue-500/40 bg-blue-500/20">
                 <AvatarFallback className="bg-transparent text-blue-400">
                   <Shield className="h-6 w-6" />
@@ -49,7 +51,12 @@ export default function Chatbot() {
                 Security Analyst
               </CardTitle>
             </div>
-            <Button size="icon" variant="ghost" className="text-gray-400 hover:text-white" onClick={() => setOpen(false)}>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="text-gray-400 hover:text-white"
+              onClick={() => setOpen(false)}
+            >
               <X className="h-4 w-4" />
             </Button>
           </CardHeader>
@@ -75,12 +82,15 @@ export default function Chatbot() {
               className="flex-1 bg-white/10 border-none text-white placeholder-gray-400"
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
-            <Button className="bg-blue-500 hover:bg-blue-600" onClick={sendMessage}>
+            <Button
+              className="bg-blue-500 hover:bg-blue-600"
+              onClick={sendMessage}
+            >
               Send
             </Button>
           </div>
         </Card>
       )}
     </div>
-  )
+  );
 }

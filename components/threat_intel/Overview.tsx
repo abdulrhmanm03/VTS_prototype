@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, MapPin, Server, Link2 } from "lucide-react";
@@ -157,7 +152,6 @@ const regions = ["Germany", "Singapore", "USA", "Netherlands"];
 export default function ThreatIntelOverview() {
   return (
     <div className="space-y-8 text-white">
-
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
         <h1 className="text-2xl font-bold">Threat Intelligence Overview</h1>
@@ -184,7 +178,9 @@ export default function ThreatIntelOverview() {
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant="secondary">{ioc.type}</Badge>
-                    <span className="font-mono font-semibold truncate">{ioc.value}</span>
+                    <span className="font-mono font-semibold truncate">
+                      {ioc.value}
+                    </span>
                     <Badge
                       className={`${
                         ioc.severity === "High"
@@ -233,7 +229,13 @@ export default function ThreatIntelOverview() {
                   <div className="w-32 h-10">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={ioc.trend}>
-                        <Area type="monotone" dataKey="hits" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.3} />
+                        <Area
+                          type="monotone"
+                          dataKey="hits"
+                          stroke="#3b82f6"
+                          fill="#3b82f6"
+                          fillOpacity={0.3}
+                        />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
@@ -252,7 +254,11 @@ export default function ThreatIntelOverview() {
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2">
                   {ioc.tags.map((tag, i) => (
-                    <Badge key={i} variant="outline" className="border-white/20 text-white/80 bg-white/5">
+                    <Badge
+                      key={i}
+                      variant="outline"
+                      className="border-white/20 text-white/80 bg-white/5"
+                    >
                       {tag}
                     </Badge>
                   ))}
@@ -266,7 +272,11 @@ export default function ThreatIntelOverview() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {ioc.related.map((rel, i) => (
-                      <Badge key={i} variant="outline" className="border-blue-400/30 text-blue-300 bg-blue-900/10">
+                      <Badge
+                        key={i}
+                        variant="outline"
+                        className="border-blue-400/30 text-blue-300 bg-blue-900/10"
+                      >
                         {rel}
                       </Badge>
                     ))}
@@ -297,7 +307,10 @@ export default function ThreatIntelOverview() {
             </thead>
             <tbody>
               {iocs.map((ioc, idx) => (
-                <tr key={idx} className="border-b border-gray-800 hover:bg-white/5 transition">
+                <tr
+                  key={idx}
+                  className="border-b border-gray-800 hover:bg-white/5 transition"
+                >
                   <td className="py-2 font-mono">{ioc.value}</td>
                   <td>{ioc.type}</td>
                   <td
@@ -329,7 +342,10 @@ export default function ThreatIntelOverview() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {threatActors.map((actor, i) => (
-              <div key={i} className="flex justify-between items-center p-2 border-b border-gray-700 last:border-none">
+              <div
+                key={i}
+                className="flex justify-between items-center p-2 border-b border-gray-700 last:border-none"
+              >
                 <div className="flex flex-col">
                   <span className="font-semibold">{actor.name}</span>
                   <span className="text-sm text-white/60">{actor.type}</span>
@@ -352,7 +368,10 @@ export default function ThreatIntelOverview() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {malwareCampaigns.map((campaign, i) => (
-              <div key={i} className="p-2 border-b border-gray-700 last:border-none flex justify-between items-center">
+              <div
+                key={i}
+                className="p-2 border-b border-gray-700 last:border-none flex justify-between items-center"
+              >
                 <div>
                   <span className="font-semibold">{campaign.name}</span>
                   <div className="text-sm text-white/60">{campaign.type}</div>
@@ -376,7 +395,11 @@ export default function ThreatIntelOverview() {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag, i) => (
-              <Badge key={i} variant="outline" className="border-white/20 text-white/80 bg-white/5 text-sm">
+              <Badge
+                key={i}
+                variant="outline"
+                className="border-white/20 text-white/80 bg-white/5 text-sm"
+              >
                 {tag} ({Math.floor(Math.random() * 20) + 1})
               </Badge>
             ))}
@@ -392,10 +415,15 @@ export default function ThreatIntelOverview() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {regions.map((region, i) => (
-              <div key={i} className="p-2 bg-white/10 rounded-xl flex flex-col items-center">
+              <div
+                key={i}
+                className="p-2 bg-white/10 rounded-xl flex flex-col items-center"
+              >
                 <MapPin className="w-6 h-6 text-blue-400 mb-1" />
                 <span>{region}</span>
-                <span className="text-xs text-white/60">{Math.floor(Math.random() * 20) + 5} detections</span>
+                <span className="text-xs text-white/60">
+                  {Math.floor(Math.random() * 20) + 5} detections
+                </span>
               </div>
             ))}
           </div>
@@ -409,7 +437,11 @@ export default function ThreatIntelOverview() {
         </CardHeader>
         <CardContent className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={iocs.flatMap(i => i.trend.map(t => ({ day: t.day, [i.value]: t.hits })))}>
+            <AreaChart
+              data={iocs.flatMap((i) =>
+                i.trend.map((t) => ({ day: t.day, [i.value]: t.hits }))
+              )}
+            >
               {iocs.map((ioc, idx) => (
                 <Area
                   key={idx}
@@ -434,12 +466,27 @@ export default function ThreatIntelOverview() {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={[
-                { severity: "High", count: iocs.filter(i => i.severity === "High").length },
-                { severity: "Medium", count: iocs.filter(i => i.severity === "Medium").length },
-                { severity: "Low", count: iocs.filter(i => i.severity === "Low").length },
+                {
+                  severity: "High",
+                  count: iocs.filter((i) => i.severity === "High").length,
+                },
+                {
+                  severity: "Medium",
+                  count: iocs.filter((i) => i.severity === "Medium").length,
+                },
+                {
+                  severity: "Low",
+                  count: iocs.filter((i) => i.severity === "Low").length,
+                },
               ]}
             >
-              <Area type="monotone" dataKey="count" stroke="#f87171" fill="#f87171" fillOpacity={0.3} />
+              <Area
+                type="monotone"
+                dataKey="count"
+                stroke="#f87171"
+                fill="#f87171"
+                fillOpacity={0.3}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>
@@ -448,10 +495,12 @@ export default function ThreatIntelOverview() {
       {/* Threat Ticker */}
       <div className="w-full flex justify-center overflow-hidden">
         <div className="animate-marquee whitespace-nowrap flex gap-4 items-center">
-            detected •
-            <span className="text-red-400">Zero-day exploit CVE-2025-44321</span> 
-            active •
-            <span className="text-yellow-400">Phishing campaign targeting finance</span>
+          detected •
+          <span className="text-red-400">Zero-day exploit CVE-2025-44321</span>
+          active •
+          <span className="text-yellow-400">
+            Phishing campaign targeting finance
+          </span>
         </div>
       </div>
     </div>

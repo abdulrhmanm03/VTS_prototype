@@ -1,39 +1,39 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Shield } from "lucide-react"
-import Cookies from "js-cookie"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Shield } from "lucide-react";
+import Cookies from "js-cookie";
 
 export default function AuthPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [message, setMessage] = useState("")
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const API_URL = "/api/auth"
+  const API_URL = "/api/auth";
 
   const handleSubmit = async () => {
-    setLoading(true)
-    setMessage("")
+    setLoading(true);
+    setMessage("");
 
     try {
       const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (!res.ok) {
-        setMessage(data.detail || "Something went wrong")
+        setMessage(data.detail || "Something went wrong");
       } else {
-        setMessage(data.message)
+        setMessage(data.message);
 
         if (data.token) {
           Cookies.set("token", data.token, {
@@ -41,25 +41,25 @@ export default function AuthPage() {
             secure: true,
             sameSite: "strict",
             path: "/",
-          })
+          });
 
           try {
-            localStorage.setItem("token", data.token)
+            localStorage.setItem("token", data.token);
           } catch (err) {
-            console.error("Failed to save token in localStorage:", err)
+            console.error("Failed to save token in localStorage:", err);
           }
         }
 
-        setPassword("")
-        router.push("/")
+        setPassword("");
+        router.push("/");
       }
     } catch (err) {
-      setMessage("Failed to connect to server")
-      console.error("Auth error:", err)
+      setMessage("Failed to connect to server");
+      console.error("Auth error:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center from-gray-900 via-black to-gray-800 p-6 text-white min-h-screen">
@@ -107,11 +107,18 @@ export default function AuthPage() {
               {loading ? "Processing..." : "Login"}
             </Button>
             <p className="text-xs text-gray-400 text-center">
-              Forgot password? <span className="text-blue-400 cursor-pointer">Reset</span>
+              Forgot password?{" "}
+              <span className="text-blue-400 cursor-pointer">Reset</span>
             </p>
 
             {message && (
-              <p className={`text-center mt-4 text-sm ${message.toLowerCase().includes("success") ? "text-green-400" : "text-red-400"}`}>
+              <p
+                className={`text-center mt-4 text-sm ${
+                  message.toLowerCase().includes("success")
+                    ? "text-green-400"
+                    : "text-red-400"
+                }`}
+              >
                 {message}
               </p>
             )}
@@ -119,5 +126,5 @@ export default function AuthPage() {
         </div>
       </Card>
     </div>
-  )
+  );
 }

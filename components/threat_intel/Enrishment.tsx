@@ -2,7 +2,12 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 import { Activity, MapPin, Server, Link2 } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area } from "recharts";
 
@@ -164,7 +169,9 @@ export default function Enrichment() {
                   <Activity className="w-4 h-4 text-green-400" />
                   <Tooltip>
                     <TooltipTrigger>Active in last 7 days</TooltipTrigger>
-                    <TooltipContent>Activity trend from collected logs</TooltipContent>
+                    <TooltipContent>
+                      Activity trend from collected logs
+                    </TooltipContent>
                   </Tooltip>
                 </div>
               </div>

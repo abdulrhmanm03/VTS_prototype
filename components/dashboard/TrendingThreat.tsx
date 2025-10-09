@@ -17,16 +17,71 @@ const badgeColors = {
 };
 
 const actors = [
-  { id: 1, level: "CRITICAL", name: "APT29 (Cozy Bear)", campaign: "Advanced Espionage Targeting Governments", region: "Global", time: "1h ago" },
-  { id: 2, level: "HIGH", name: "LockBit 4.0", campaign: "Ransomware-as-a-Service Expansion", region: "Global", time: "2h ago" },
-  { id: 3, level: "HIGH", name: "TA505", campaign: "Financial Malware & Phishing Campaigns", region: "Europe & North America", time: "3h ago" },
-  { id: 4, level: "CRITICAL", name: "Hafnium", campaign: "Microsoft Exchange Zero-Day Exploitation", region: "Global", time: "4h ago" },
-  { id: 5, level: "MEDIUM", name: "FIN7", campaign: "Point-of-Sale Malware Attacks", region: "North America", time: "5h ago" },
-  { id: 6, level: "HIGH", name: "Cobalt Strike Users", campaign: "IoT & Network Intrusions", region: "Europe & Asia", time: "6h ago" },
-  { id: 7, level: "MEDIUM", name: "Silent Lynx", campaign: "Credential Theft & Social Engineering", region: "North America", time: "7h ago" },
-  { id: 8, level: "CRITICAL", name: "Chimera", campaign: "Cloud Misconfiguration Exploits", region: "APAC", time: "8h ago" },
+  {
+    id: 1,
+    level: "CRITICAL",
+    name: "APT29 (Cozy Bear)",
+    campaign: "Advanced Espionage Targeting Governments",
+    region: "Global",
+    time: "1h ago",
+  },
+  {
+    id: 2,
+    level: "HIGH",
+    name: "LockBit 4.0",
+    campaign: "Ransomware-as-a-Service Expansion",
+    region: "Global",
+    time: "2h ago",
+  },
+  {
+    id: 3,
+    level: "HIGH",
+    name: "TA505",
+    campaign: "Financial Malware & Phishing Campaigns",
+    region: "Europe & North America",
+    time: "3h ago",
+  },
+  {
+    id: 4,
+    level: "CRITICAL",
+    name: "Hafnium",
+    campaign: "Microsoft Exchange Zero-Day Exploitation",
+    region: "Global",
+    time: "4h ago",
+  },
+  {
+    id: 5,
+    level: "MEDIUM",
+    name: "FIN7",
+    campaign: "Point-of-Sale Malware Attacks",
+    region: "North America",
+    time: "5h ago",
+  },
+  {
+    id: 6,
+    level: "HIGH",
+    name: "Cobalt Strike Users",
+    campaign: "IoT & Network Intrusions",
+    region: "Europe & Asia",
+    time: "6h ago",
+  },
+  {
+    id: 7,
+    level: "MEDIUM",
+    name: "Silent Lynx",
+    campaign: "Credential Theft & Social Engineering",
+    region: "North America",
+    time: "7h ago",
+  },
+  {
+    id: 8,
+    level: "CRITICAL",
+    name: "Chimera",
+    campaign: "Cloud Misconfiguration Exploits",
+    region: "APAC",
+    time: "8h ago",
+  },
 ];
-
 
 const TrendingThreatActors: FC = () => {
   return (
@@ -50,12 +105,14 @@ const TrendingThreatActors: FC = () => {
           >
             {/* Gradient Overlay */}
             <div
-              className={`absolute inset-0 bg-gradient-to-br ${actorGradients[actor.level as keyof typeof actorGradients]} pointer-events-none`}
+              className={`absolute inset-0 bg-gradient-to-br ${
+                actorGradients[actor.level as keyof typeof actorGradients]
+              } pointer-events-none`}
             />
             <div className="relative z-10 w-full px-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-white font-semibold text-xs truncate">
-                  {actor.name}  {actor.campaign}
+                  {actor.name} {actor.campaign}
                 </h3>
                 <span
                   className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${

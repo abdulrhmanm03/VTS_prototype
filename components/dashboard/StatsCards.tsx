@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { AlertCircle, Shield, Database, Eye, Bug } from "lucide-react"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { AlertCircle, Shield, Database, Eye, Bug } from "lucide-react";
 
 const stats = [
   {
@@ -49,32 +49,50 @@ const stats = [
     gradient: "from-yellow-900/30 via-yellow-800/10",
     iconColor: "text-yellow-400",
   },
-]
+];
 
 export default function StatsCards() {
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4 text-blue-400">Executive Summary</h2>
+      <h2 className="text-xl font-semibold mb-4 text-blue-400">
+        Executive Summary
+      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-        {stats.map(({ title, value, change, changeColor, icon: Icon, gradient, iconColor }) => (
-          <Card
-            key={title}
-            className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
-          >
-            <div className={`absolute inset-0 bg-gradient-to-br ${gradient} to-transparent pointer-events-none`} />
-            <div className="relative z-10">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-400">{title}</CardTitle>
-                <Icon className={`h-8 w-8 ${iconColor} drop-shadow-md`} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold drop-shadow-lg">{value}</div>
-                <p className={`text-xs ${changeColor}`}>{change}</p>
-              </CardContent>
-            </div>
-          </Card>
-        ))}
+        {stats.map(
+          ({
+            title,
+            value,
+            change,
+            changeColor,
+            icon: Icon,
+            gradient,
+            iconColor,
+          }) => (
+            <Card
+              key={title}
+              className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+            >
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${gradient} to-transparent pointer-events-none`}
+              />
+              <div className="relative z-10">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-400">
+                    {title}
+                  </CardTitle>
+                  <Icon className={`h-8 w-8 ${iconColor} drop-shadow-md`} />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold drop-shadow-lg">
+                    {value}
+                  </div>
+                  <p className={`text-xs ${changeColor}`}>{change}</p>
+                </CardContent>
+              </div>
+            </Card>
+          )
+        )}
       </div>
     </div>
-  )
+  );
 }

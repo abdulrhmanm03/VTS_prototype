@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Suspense } from "react"
+import { Suspense } from "react";
 
 function NotFoundContent() {
   return (
@@ -8,7 +8,7 @@ function NotFoundContent() {
       <h1 className="text-6xl font-bold mb-4">404</h1>
       <p className="text-gray-400 mb-6">This page could not be found.</p>
     </div>
-  )
+  );
 }
 
 export default function NotFoundPage() {
@@ -16,5 +16,5 @@ export default function NotFoundPage() {
     <Suspense fallback={<div>Loading...</div>}>
       <NotFoundContent />
     </Suspense>
-  )
+  );
 }

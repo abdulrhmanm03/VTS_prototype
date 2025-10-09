@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Input } from "@/components/ui/input"
-import { Search, AlertCircle, Globe, Shield } from "lucide-react"
-import ScanAndReport from "@/components/ScanAndReport"
-import AssetInventory from "@/components/asm/AssetInventory"
-import ExternalExposure from "@/components/asm/ExternalExposure"
-import Monitoring from "@/components/asm/Monitoring"
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Search, AlertCircle, Globe, Shield } from "lucide-react";
+import ScanAndReport from "@/components/ScanAndReport";
+import AssetInventory from "@/components/asm/AssetInventory";
+import ExternalExposure from "@/components/asm/ExternalExposure";
+import Monitoring from "@/components/asm/Monitoring";
 
 export default function AttackSurfacePage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const tabParam = searchParams.get("tab") || "inventory"
-  const [activeTab, setActiveTab] = useState(tabParam)
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab") || "inventory";
+  const [activeTab, setActiveTab] = useState(tabParam);
 
   useEffect(() => {
-    setActiveTab(tabParam)
-  }, [tabParam])
+    setActiveTab(tabParam);
+  }, [tabParam]);
 
   const handleTabChange = (value: string) => {
-    setActiveTab(value)
-    const params = new URLSearchParams(window.location.search)
-    params.set("tab", value)
-    router.replace(`?${params.toString()}`, { scroll: false })
-  }
+    setActiveTab(value);
+    const params = new URLSearchParams(window.location.search);
+    params.set("tab", value);
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
     <div className="flex flex-col gap-6 p-6 min-h-screen text-white">
@@ -48,12 +48,16 @@ export default function AttackSurfacePage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Assets */}
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+        <Card
+          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
+          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Total Assets</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Total Assets
+              </CardTitle>
               <Globe className="h-8 w-8 text-blue-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -64,12 +68,16 @@ export default function AttackSurfacePage() {
         </Card>
 
         {/* Critical Vulnerabilities */}
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+        <Card
+          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
+          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-red-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Critical Vulnerabilities</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Critical Vulnerabilities
+              </CardTitle>
               <AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -80,12 +88,16 @@ export default function AttackSurfacePage() {
         </Card>
 
         {/* Exposed Services */}
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+        <Card
+          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
+          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 via-green-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Exposed Services</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Exposed Services
+              </CardTitle>
               <Globe className="h-8 w-8 text-green-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -96,12 +108,16 @@ export default function AttackSurfacePage() {
         </Card>
 
         {/* Risk Score */}
-        <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+        <Card
+          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
+          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-yellow-800/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">Risk Score</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-400">
+                Risk Score
+              </CardTitle>
               <Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -121,7 +137,10 @@ export default function AttackSurfacePage() {
             className="pl-8 bg-white/10 border-none rounded-lg text-white placeholder-gray-400"
           />
         </div>
-        <Button variant="outline" className="bg-white/10 hover:bg-white/20 border-none">
+        <Button
+          variant="outline"
+          className="bg-white/10 hover:bg-white/20 border-none"
+        >
           Filter
         </Button>
         <Button className="bg-blue-500 hover:bg-blue-600 shadow-lg">
@@ -155,5 +174,5 @@ export default function AttackSurfacePage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

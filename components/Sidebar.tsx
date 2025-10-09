@@ -1,8 +1,8 @@
 // Sidebar.tsx
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { usePathname, useSearchParams, useRouter } from "next/navigation"
+import { useState, useEffect } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import {
   AlertCircle,
   Shield,
@@ -12,21 +12,21 @@ import {
   Bug,
   Swords,
   Settings,
-  BadgeCheck
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
+  BadgeCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
-  collapsed: boolean
+  collapsed: boolean;
 }
 
 export default function Sidebar({ collapsed }: SidebarProps) {
-  const [active, setActive] = useState<string>("")
-  const [openSubMenu, setOpenSubMenu] = useState<string>("")
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const activeTab = searchParams.get("tab")
+  const [active, setActive] = useState<string>("");
+  const [openSubMenu, setOpenSubMenu] = useState<string>("");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get("tab");
 
   const navItems = [
     { name: "Access Gate", icon: BadgeCheck, path: "/onboarding" },
@@ -43,42 +43,48 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         { name: "Threat Actors", tab: "threat-actors" },
       ],
     },
-    { name: "Surface Sentinel", icon: Shield, path: "/attack-surface-management" },
+    {
+      name: "Surface Sentinel",
+      icon: Shield,
+      path: "/attack-surface-management",
+    },
     { name: "Deep Guard", icon: Activity, path: "/digital-risk-protection" },
     { name: "Risk Matrix", icon: BarChart, path: "/risk-assessment-scores" },
     // { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
     { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
     { name: "Red Shift", icon: Swords, path: "/offensive-security" },
-  ]
+  ];
 
   useEffect(() => {
-    const sortedItems = [...navItems].sort((a, b) => b.path.length - a.path.length)
-    const current = sortedItems.find(item => pathname.startsWith(item.path))
-    if (current) setActive(current.name)
-    if (current?.subItems && activeTab) setOpenSubMenu(current.name)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, activeTab])
+    const sortedItems = [...navItems].sort(
+      (a, b) => b.path.length - a.path.length
+    );
+    const current = sortedItems.find((item) => pathname.startsWith(item.path));
+    if (current) setActive(current.name);
+    if (current?.subItems && activeTab) setOpenSubMenu(current.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, activeTab]);
 
   const handleNavigation = (name: string, path: string, tab?: string) => {
-    const item = navItems.find(i => i.name === name)
+    const item = navItems.find((i) => i.name === name);
 
     if (!tab && item?.subItems) {
       if (collapsed) {
         // If sidebar is collapsed, navigate to first subitem
-        const firstSubTab = item.subItems[0].tab
-        router.push(`${path}?tab=${firstSubTab}`)
-        setActive(name)
+        const firstSubTab = item.subItems[0].tab;
+        router.push(`${path}?tab=${firstSubTab}`);
+        setActive(name);
       } else {
         // If sidebar is expanded, just toggle submenu
-        setOpenSubMenu(openSubMenu === name ? "" : name)
-        setActive(name)
+        setOpenSubMenu(openSubMenu === name ? "" : name);
+        setActive(name);
       }
     } else {
-      const url = tab ? `${path}?tab=${tab}` : path
-      router.push(url)
-      setActive(name)
+      const url = tab ? `${path}?tab=${tab}` : path;
+      router.push(url);
+      setActive(name);
     }
-  }
+  };
 
   return (
     <aside
@@ -102,10 +108,10 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 
       {/* Navigation (scrollable) */}
       <div className="space-y-2 flex-1 overflow-y-auto hide-scrollbar pr-1">
-        {navItems.map(item => {
-          const isActive = active === item.name
-          const hasSubItems = !!item.subItems
-          const isOpen = openSubMenu === item.name
+        {navItems.map((item) => {
+          const isActive = active === item.name;
+          const hasSubItems = !!item.subItems;
+          const isOpen = openSubMenu === item.name;
 
           return (
             <div key={item.name}>
@@ -135,8 +141,8 @@ export default function Sidebar({ collapsed }: SidebarProps) {
               {/* Subitems */}
               {!collapsed && hasSubItems && isOpen && (
                 <div className="ml-6 mt-1 space-y-1">
-                  {item.subItems!.map(sub => {
-                    const isSubActive = activeTab === sub.tab
+                  {item.subItems!.map((sub) => {
+                    const isSubActive = activeTab === sub.tab;
                     return (
                       <Button
                         key={sub.name}
@@ -150,12 +156,12 @@ export default function Sidebar({ collapsed }: SidebarProps) {
                       >
                         {sub.name}
                       </Button>
-                    )
+                    );
                   })}
                 </div>
               )}
             </div>
-          )
+          );
         })}
       </div>
 
@@ -168,5 +174,5 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         {!collapsed && "Settings"}
       </Button>
     </aside>
-  )
+  );
 }
