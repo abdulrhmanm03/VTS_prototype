@@ -15,7 +15,7 @@ import {
 import BrandProtection from "@/components/drp/BrandProtection";
 import ExecutiveProtection from "@/components/drp/ExecutiveProtection";
 import DataLeakDetection from "@/components/drp/DataLeakDetection";
-import MonitoringRules from "@/components/drp/MonitoringRules";
+import DarkWebResearch from "@/components/drp/DarkWebResearch";
 import { ReactNode } from "react";
 
 export default function DigitalRiskPage() {
@@ -98,7 +98,7 @@ export default function DigitalRiskPage() {
           <TabsTrigger value="data-leak-detection">
             Data Leak Detection
           </TabsTrigger>
-          <TabsTrigger value="monitoring-rules">Monitoring Rules</TabsTrigger>
+          <TabsTrigger value="dark-web-research">Dark Web Research</TabsTrigger>
         </TabsList>
 
         <TabsContent value="brand-protection">
@@ -110,8 +110,8 @@ export default function DigitalRiskPage() {
         <TabsContent value="data-leak-detection">
           <DataLeakDetection />
         </TabsContent>
-        <TabsContent value="monitoring-rules">
-          <MonitoringRules />
+        <TabsContent value="dark-web-research">
+          <DarkWebResearch />
         </TabsContent>
       </Tabs>
     </div>

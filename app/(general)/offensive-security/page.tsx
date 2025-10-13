@@ -14,6 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, GitBranch, Terminal, ShieldAlert, Play } from "lucide-react";
+import StartSimulation from "@/components/StartSimulation";
 
 export default function OffensiveSecurityPage() {
   return (
@@ -276,43 +277,13 @@ export default function OffensiveSecurityPage() {
         </TabsContent>
 
         <TabsContent value="simulator" className="space-y-4 mt-6">
-          <h2 className="text-lg font-semibold">Attack Simulator</h2>
-          <p className="text-sm text-gray-400">
-            Launch controlled scenarios to validate controls.
-          </p>
-
           <Card className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg p-4">
             <CardContent>
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                  <div className="font-semibold text-gray-200">
-                    Phishing Campaign Simulation
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    Simulate targeted phishing and measure user response.
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <Button variant="outline" className="bg-white/10 border-none">
-                    Configure
-                  </Button>
-                  <Button className="bg-red-600 hover:bg-red-700">
-                    Start Simulation
-                  </Button>
-                </div>
-              </div>
+              <StartSimulation />
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
-
-      {/* Footer CTA */}
-      <div className="flex justify-end">
-        <Button variant="ghost" className="text-gray-300">
-          Export Report
-        </Button>
-        <Button className="ml-3 bg-blue-500">Open Findings</Button>
-      </div>
     </div>
   );
 }
