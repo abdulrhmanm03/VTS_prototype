@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Search, AlertCircle, Globe, Shield } from "lucide-react";
+import { AlertCircle, Globe, Shield } from "lucide-react";
 import ScanAndReport from "@/components/ScanAndReport";
 import AssetInventory from "@/components/asm/AssetInventory";
 import ExternalExposure from "@/components/asm/ExternalExposure";
@@ -126,26 +124,6 @@ export default function AttackSurfacePage() {
             </CardContent>
           </div>
         </Card>
-      </div>
-
-      {/* Search + Actions */}
-      <div className="flex items-center space-x-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search assets, domains, IPs..."
-            className="pl-8 bg-white/10 border-none rounded-lg text-white placeholder-gray-400"
-          />
-        </div>
-        <Button
-          variant="outline"
-          className="bg-white/10 hover:bg-white/20 border-none"
-        >
-          Filter
-        </Button>
-        <Button className="bg-blue-500 hover:bg-blue-600 shadow-lg">
-          Start Scan
-        </Button>
       </div>
 
       {/* Tabs */}

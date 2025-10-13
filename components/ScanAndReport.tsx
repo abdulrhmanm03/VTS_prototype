@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,80 +24,59 @@ type ReportData = {
 };
 
 type ScanStatus = {
-  id: string;
   status: "pending" | "running" | "done" | "failed";
   progress: number;
   result?: ReportData | null;
   error?: string | null;
 };
 
-export default function ScanAndReport() {
+export default function DemoScanAndReport() {
   const [url, setUrl] = useState("");
-  const [taskId, setTaskId] = useState<string | null>(null);
-  const [status, setStatus] = useState<ScanStatus | null>(null);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<ScanStatus | null>(null);
   const [report, setReport] = useState<ReportData | null>(null);
 
   async function handleScan() {
     if (!url) return;
     setLoading(true);
     setReport(null);
-    setTaskId(null);
-    setStatus(null);
 
+    // Initialize fake scan
+    setStatus({ status: "pending", progress: 0 });
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 15) + 5; // increase 5-20%
+      if (progress >= 100) progress = 100;
+
+      setStatus({ status: "running", progress });
+
+      if (progress === 100) {
+        clearInterval(interval);
+        fetchDemoReport();
+      }
+    }, 500); // every 0.5s
+  }
+
+  async function fetchDemoReport() {
     try {
-      // Step 1: create scan task
-      const resp = await fetch("http://127.0.0.1:8000/scan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
+      const resp = await fetch("/api/report"); // your demo endpoint
+      if (!resp.ok) throw new Error("Failed to fetch demo report");
+      const data: ReportData = await resp.json();
 
-      if (!resp.ok) throw new Error(`Scan creation failed: ${resp.status}`);
-
-      const data = await resp.json();
-      setTaskId(data.task_id);
+      setReport(data);
+      setStatus({ status: "done", progress: 100 });
     } catch (err) {
       console.error(err);
+      setStatus({
+        status: "failed",
+        progress: 100,
+        error: (err as Error).message,
+      });
+    } finally {
       setLoading(false);
     }
   }
-
-  // Step 2: poll scan progress
-  useEffect(() => {
-    if (!taskId) return;
-
-    const interval = setInterval(async () => {
-      try {
-        const resp = await fetch(`http://127.0.0.1:8000/scan/${taskId}`);
-        if (!resp.ok) throw new Error(`Failed to get status`);
-        const data: ScanStatus = await resp.json();
-        setStatus(data);
-
-        if (data.status === "done") {
-          setReport(data.result || null);
-          setLoading(false);
-          clearInterval(interval);
-        } else if (data.status === "failed") {
-          setLoading(false);
-          clearInterval(interval);
-        }
-      } catch (err) {
-        console.error("Polling error:", err);
-        setLoading(false);
-        clearInterval(interval);
-      }
-    }, 5000); // poll every 5s
-
-    return () => clearInterval(interval);
-  }, [taskId]);
-
-  const progress =
-    status && status.progress
-      ? Math.min(status.progress, 100)
-      : loading
-      ? 0
-      : 0;
 
   return (
     <div className="space-y-6">
@@ -105,7 +84,7 @@ export default function ScanAndReport() {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
         <div className="relative z-10">
           <CardHeader>
-            <CardTitle className="text-white">Scan & Generate Report</CardTitle>
+            <CardTitle className="text-white">Demo Scan & Report</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col space-y-4">
             <Input
@@ -122,15 +101,14 @@ export default function ScanAndReport() {
             >
               {loading
                 ? status?.status === "running"
-                  ? `Scanning... ${progress}%`
+                  ? `Scanning... ${status.progress}%`
                   : "Initializing..."
                 : "Scan and Generate Report"}
             </Button>
 
-            {/* Optional progress indicator */}
             {status && status.status !== "done" && (
               <div className="text-sm text-blue-300">
-                Status: {status.status} ({progress}%)
+                Status: {status.status} ({status.progress}%)
               </div>
             )}
 

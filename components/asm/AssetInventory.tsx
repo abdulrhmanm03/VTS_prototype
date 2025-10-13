@@ -31,6 +31,9 @@ const mockAssets = [
     lastScan: "2025-10-05",
     vulns: 3,
     services: "HTTPS, SSH",
+    owner: "Team A",
+    location: "US-East",
+    description: "Public API endpoint for internal services",
   },
   {
     id: 2,
@@ -40,6 +43,9 @@ const mockAssets = [
     lastScan: "2025-10-07",
     vulns: 5,
     services: "HTTPS",
+    owner: "Team B",
+    location: "EU-West",
+    description: "Staging environment for QA testing",
   },
   {
     id: 3,
@@ -49,6 +55,9 @@ const mockAssets = [
     lastScan: "2025-10-08",
     vulns: 0,
     services: "HTTPS",
+    owner: "Team C",
+    location: "US-Central",
+    description: "Employee portal for internal resources",
   },
   {
     id: 4,
@@ -58,6 +67,9 @@ const mockAssets = [
     lastScan: "2025-10-06",
     vulns: 8,
     services: "SSH, RDP",
+    owner: "Ops Team",
+    location: "On-Prem Data Center",
+    description: "Critical internal host",
   },
   {
     id: 5,
@@ -67,6 +79,9 @@ const mockAssets = [
     lastScan: "2025-10-08",
     vulns: 2,
     services: "HTTPS",
+    owner: "Team D",
+    location: "Global",
+    description: "Content Delivery Network for assets",
   },
 ];
 
@@ -81,6 +96,7 @@ const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"];
 
 export default function AssetInventory() {
   const [search, setSearch] = useState("");
+  const [expandedRows, setExpandedRows] = useState<number[]>([]);
 
   const filteredAssets = useMemo(
     () =>
@@ -89,6 +105,12 @@ export default function AssetInventory() {
       ),
     [search]
   );
+
+  const toggleRow = (id: number) => {
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
+    );
+  };
 
   return (
     <div className="space-y-8 text-white">
@@ -192,50 +214,69 @@ export default function AssetInventory() {
               </TableHeader>
               <TableBody>
                 {filteredAssets.map((asset) => (
-                  <TableRow
-                    key={asset.id}
-                    className="hover:bg-white/10 transition"
-                  >
-                    <TableCell className="font-medium">{asset.name}</TableCell>
-                    <TableCell>
-                      <Badge>{asset.type}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        className={
-                          asset.risk === "Critical"
-                            ? "bg-red-500/30 text-red-300"
-                            : asset.risk === "High"
-                            ? "bg-orange-500/30 text-orange-300"
-                            : asset.risk === "Medium"
-                            ? "bg-yellow-500/30 text-yellow-300"
-                            : "bg-green-500/30 text-green-300"
-                        }
-                      >
-                        {asset.risk}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{asset.lastScan}</TableCell>
-                    <TableCell>{asset.vulns}</TableCell>
-                    <TableCell>{asset.services}</TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="bg-white/10 border-none"
+                  <>
+                    <TableRow
+                      key={asset.id}
+                      className="hover:bg-white/10 transition"
+                    >
+                      <TableCell className="font-medium">
+                        {asset.name}
+                      </TableCell>
+                      <TableCell>
+                        <Badge>{asset.type}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          className={
+                            asset.risk === "Critical"
+                              ? "bg-red-500/30 text-red-300"
+                              : asset.risk === "High"
+                              ? "bg-orange-500/30 text-orange-300"
+                              : asset.risk === "Medium"
+                              ? "bg-yellow-500/30 text-yellow-300"
+                              : "bg-green-500/30 text-green-300"
+                          }
                         >
-                          Scan
-                        </Button>
+                          {asset.risk}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{asset.lastScan}</TableCell>
+                      <TableCell>{asset.vulns}</TableCell>
+                      <TableCell>{asset.services}</TableCell>
+                      <TableCell>
                         <Button
                           size="sm"
                           className="bg-blue-600 hover:bg-blue-700"
+                          onClick={() => toggleRow(asset.id)}
                         >
-                          Details
+                          {expandedRows.includes(asset.id) ? "Hide" : "Details"}
                         </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
+                      </TableCell>
+                    </TableRow>
+
+                    {expandedRows.includes(asset.id) && (
+                      <TableRow className="bg-white/10 text-gray-300">
+                        <TableCell colSpan={7}>
+                          <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <p>
+                              <span className="font-semibold">Owner:</span>{" "}
+                              {asset.owner}
+                            </p>
+                            <p>
+                              <span className="font-semibold">Location:</span>{" "}
+                              {asset.location}
+                            </p>
+                            <p className="sm:col-span-2">
+                              <span className="font-semibold">
+                                Description:
+                              </span>{" "}
+                              {asset.description}
+                            </p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </>
                 ))}
               </TableBody>
             </Table>

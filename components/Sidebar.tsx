@@ -13,6 +13,7 @@ import {
   Swords,
   Settings,
   BadgeCheck,
+  Ribbon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -53,6 +54,17 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     // { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
     { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
     { name: "Red Shift", icon: Swords, path: "/offensive-security" },
+    {
+      name: "Security Awareness",
+      icon: Ribbon,
+      path: "/security-awareness",
+      subItems: [
+        { name: "Overview", tab: "overview" },
+        { name: "Group and Targets", tab: "group-and-targets" },
+        { name: "Campaign", tab: "campaign" },
+        { name: "Templates", tab: "templates" },
+      ],
+    },
   ];
 
   useEffect(() => {

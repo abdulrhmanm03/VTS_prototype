@@ -222,21 +222,12 @@ export default function ExternalExposure() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="bg-white/10 border-none"
-                        >
-                          Scan
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="bg-blue-600 hover:bg-blue-700"
-                        >
-                          Details
-                        </Button>
-                      </div>
+                      <Button
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        Details
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
