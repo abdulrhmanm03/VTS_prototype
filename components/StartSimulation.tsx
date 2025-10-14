@@ -200,13 +200,6 @@ export default function StartSimulation() {
         <CardContent>
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex-1 min-w-0">
-              <div className="font-semibold text-gray-200">
-                Phishing Campaign Simulation
-              </div>
-              <div className="text-sm text-gray-400">
-                Simulate targeted phishing and measure user response.
-              </div>
-
               <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <StatCard label="Emails Sent" value={summary.sent} />
                 <StatCard label="Delivered" value={summary.delivered} />
