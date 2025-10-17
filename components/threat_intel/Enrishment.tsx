@@ -1,321 +1,326 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
-import { Activity, MapPin, Server, Link2, Download } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ResponsiveContainer, AreaChart, Area } from "recharts";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, ShieldAlert, Eye } from "lucide-react";
 
-// ✅ Define proper types
-type ActivityData = {
-  day: string;
-  hits: number;
-};
+interface IOC {
+  ip: string;
+  domain: string;
+  type: string;
+  confidence: string;
+  date: string;
+  source: string;
+  risk: string;
+  details?: string; // new field for extra details
+}
 
-type EnrichmentItem = {
-  indicator: string;
-  reputation: string;
-  categories: string[];
-  lastUpdate: string;
+interface EnrichmentSource {
+  name: string;
   confidence: number;
-  geo: string;
-  asn: string;
-  related: string[];
-  activity: ActivityData[];
-};
-
-// ✅ Dummy Data (5–6 entries)
-const dummyData: EnrichmentItem[] = [
-  {
-    indicator: "malicious-domain.com",
-    reputation: "High Risk",
-    categories: ["Phishing", "Malware Distribution"],
-    lastUpdate: "2025-09-15",
-    confidence: 95,
-    geo: "Russia",
-    asn: "AS203020 EvilNet Ltd.",
-    related: ["suspicious-login.net", "malware-dropper.io"],
-    activity: [
-      { day: "Mon", hits: 3 },
-      { day: "Tue", hits: 8 },
-      { day: "Wed", hits: 12 },
-      { day: "Thu", hits: 9 },
-      { day: "Fri", hits: 14 },
-    ],
-  },
-  {
-    indicator: "45.67.89.120",
-    reputation: "Medium Risk",
-    categories: ["Botnet", "Spam Source"],
-    lastUpdate: "2025-08-10",
-    confidence: 78,
-    geo: "Ukraine",
-    asn: "AS48031 HostLine ISP",
-    related: ["darkspam.cc", "45.67.89.130"],
-    activity: [
-      { day: "Mon", hits: 2 },
-      { day: "Tue", hits: 5 },
-      { day: "Wed", hits: 4 },
-      { day: "Thu", hits: 9 },
-      { day: "Fri", hits: 6 },
-    ],
-  },
-  {
-    indicator: "cve-2025-44321",
-    reputation: "Critical",
-    categories: ["Exploit", "Zero-Day"],
-    lastUpdate: "2025-10-01",
-    confidence: 99,
-    geo: "Global",
-    asn: "N/A",
-    related: ["0day-market.org", "exploit-scan.net"],
-    activity: [
-      { day: "Mon", hits: 10 },
-      { day: "Tue", hits: 13 },
-      { day: "Wed", hits: 17 },
-      { day: "Thu", hits: 20 },
-      { day: "Fri", hits: 23 },
-    ],
-  },
-  {
-    indicator: "evilcdn.net",
-    reputation: "High Risk",
-    categories: ["Malware Hosting", "Exploit Kit"],
-    lastUpdate: "2025-09-22",
-    confidence: 91,
-    geo: "China",
-    asn: "AS3213 ShanghaiNet",
-    related: ["cdn-loader.cc", "malicious-update.com"],
-    activity: [
-      { day: "Mon", hits: 5 },
-      { day: "Tue", hits: 9 },
-      { day: "Wed", hits: 11 },
-      { day: "Thu", hits: 14 },
-      { day: "Fri", hits: 18 },
-    ],
-  },
-  {
-    indicator: "109.120.45.22",
-    reputation: "Low Risk",
-    categories: ["Suspicious Login Source"],
-    lastUpdate: "2025-07-19",
-    confidence: 65,
-    geo: "Germany",
-    asn: "AS8767 DE-Hosting GmbH",
-    related: ["109.120.45.23", "vpn-hub.org"],
-    activity: [
-      { day: "Mon", hits: 1 },
-      { day: "Tue", hits: 3 },
-      { day: "Wed", hits: 2 },
-      { day: "Thu", hits: 5 },
-      { day: "Fri", hits: 3 },
-    ],
-  },
-  {
-    indicator: "fakeupdate.org",
-    reputation: "High Risk",
-    categories: ["Scam", "Credential Harvesting"],
-    lastUpdate: "2025-09-27",
-    confidence: 88,
-    geo: "United States",
-    asn: "AS701 Verizon Business",
-    related: ["update-checker.cc", "browserfix.io"],
-    activity: [
-      { day: "Mon", hits: 4 },
-      { day: "Tue", hits: 6 },
-      { day: "Wed", hits: 9 },
-      { day: "Thu", hits: 12 },
-      { day: "Fri", hits: 10 },
-    ],
-  },
-];
+  verdict: string;
+  metrics: string[];
+  tags: string[];
+}
 
 export default function Enrichment() {
   const [loading, setLoading] = useState(false);
-  const [enrichments, setEnrichments] = useState<EnrichmentItem[]>([]);
+  const [activeSources, setActiveSources] = useState<EnrichmentSource[]>([]);
+  const [showSummary, setShowSummary] = useState(false);
+  const [iocs, setIocs] = useState<IOC[]>([]);
+  const [expandedIOC, setExpandedIOC] = useState<string | null>(null); // track expanded IOC
 
-  const handleEnrich = () => {
+  const sources: EnrichmentSource[] = [
+    {
+      name: "VirusTotal",
+      confidence: 92,
+      verdict: "Malicious - High Confidence",
+      metrics: ["Detected by 42/57 engines", "Linked to known phishing kits"],
+      tags: ["Phishing", "Credential Theft", "C2"],
+    },
+    {
+      name: "AbuseIPDB",
+      confidence: 85,
+      verdict: "Reported for abuse & scanning",
+      metrics: ["Recent activity in 3 countries", "Brute-force behavior noted"],
+      tags: ["Abuse", "Brute-force", "Scanner"],
+    },
+    {
+      name: "Shodan",
+      confidence: 78,
+      verdict: "Open RDP & FTP ports found",
+      metrics: ["Ports 21, 3389 open", "Weak SSL configuration"],
+      tags: ["Exposure", "Vulnerability"],
+    },
+    {
+      name: "GreyNoise",
+      confidence: 68,
+      verdict: "Seen in benign scanning activity",
+      metrics: ["Tagged as opportunistic", "No targeted attacks detected"],
+      tags: ["Scanner", "Low Threat"],
+    },
+    {
+      name: "Hybrid Analysis",
+      confidence: 91,
+      verdict: "Executable shows network beaconing",
+      metrics: ["C2 callouts to multiple IPs", "Suspicious mutex behavior"],
+      tags: ["Malware", "C2", "Beaconing"],
+    },
+    {
+      name: "ThreatFox",
+      confidence: 88,
+      verdict: "IOC associated with recent campaign",
+      metrics: ["Listed in ThreatFox database", "TTP overlaps with Emotet"],
+      tags: ["Campaign", "Emotet", "High Risk"],
+    },
+  ];
+
+  const simulatedIocs: IOC[] = [
+    {
+      ip: "192.168.43.55",
+      domain: "malicious-login.net",
+      type: "Phishing Domain",
+      confidence: "High",
+      date: "2025-10-16",
+      source: "VirusTotal",
+      risk: "Critical",
+      details:
+        "This domain is linked to credential theft campaigns targeting financial institutions.",
+    },
+    {
+      ip: "45.77.120.210",
+      domain: "rdp-scanhost.org",
+      type: "Scanner",
+      confidence: "Medium",
+      date: "2025-10-15",
+      source: "AbuseIPDB",
+      risk: "Moderate",
+      details:
+        "Observed performing brute-force RDP attempts across multiple hosts in the past 24h.",
+    },
+    {
+      ip: "89.248.172.45",
+      domain: "botnet-relay.com",
+      type: "C2 Server",
+      confidence: "High",
+      date: "2025-10-14",
+      source: "Hybrid Analysis",
+      risk: "Severe",
+      details:
+        "C2 server for Emotet malware, communicating with infected endpoints.",
+    },
+    {
+      ip: "103.51.122.88",
+      domain: "update-secure.net",
+      type: "Malware Host",
+      confidence: "High",
+      date: "2025-10-13",
+      source: "ThreatFox",
+      risk: "Critical",
+      details: "Hosts malicious payloads and actively distributes ransomware.",
+    },
+    {
+      ip: "156.232.10.34",
+      domain: "cloud-proxy.io",
+      type: "Proxy/VPN",
+      confidence: "Low",
+      date: "2025-10-12",
+      source: "Shodan",
+      risk: "Low",
+      details:
+        "Exposed open proxy server, potential for anonymized attack routing.",
+    },
+  ];
+
+  const handleStart = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setEnrichments(dummyData);
-    }, 2000);
+    setActiveSources([]);
+    setShowSummary(false);
+    setIocs([]);
+    setExpandedIOC(null);
+
+    for (let i = 0; i < sources.length; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setActiveSources((prev) => [...prev, sources[i]]);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setIocs(simulatedIocs);
+    setLoading(false);
+    setShowSummary(true);
   };
 
   return (
-    <TooltipProvider>
-      <div className="space-y-8 text-white">
-        {/* Enrich Button Section */}
-        <div className="flex flex-col items-center text-center">
-          <Button
-            onClick={handleEnrich}
-            disabled={loading}
-            className="w-full text-white py-4 text-lg font-semibold rounded-2xl 
-              bg-gradient-to-r from-blue-900/30 via-blue-700/20 to-blue-500/10 
-              hover:from-blue-600/40 hover:to-blue-400/20 
-              border border-blue-500/30 shadow-[0_0_25px_rgba(59,130,246,0.4)] 
-              backdrop-blur-md transition-all"
+    <div className="space-y-8 p-6">
+      {/* Header */}
+      <div className="flex flex-col items-center text-center">
+        <h2 className="text-2xl font-bold mb-2">
+          Threat Intelligence Enrichment
+        </h2>
+        <p className="text-gray-400 mb-6 max-w-xl">
+          Launch automated enrichment across multiple intelligence sources to
+          analyze suspicious IOCs and summarize threat context.
+        </p>
+        <Button
+          onClick={handleStart}
+          disabled={loading}
+          className="w-full sm:w-1/2 bg-gradient-to-r from-blue-500/20 to-cyan-400/20 text-blue-300 border border-blue-400/40 hover:from-blue-600/30 hover:to-cyan-500/30"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Enriching
+              Data...
+            </>
+          ) : (
+            "Start Enrichment Process"
+          )}
+        </Button>
+      </div>
+
+      {/* Enrichment Sources */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {activeSources.map((src, idx) => (
+          <motion.div
+            key={src.name}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.2 }}
           >
-            <Download className="w-5 h-5 mr-2" />
-            {enrichments.length > 0 ? "Refresh IOCs" : "Enrich IOCs"}
-          </Button>
-          <p className="text-sm text-gray-400 mt-2">
-            Click here to start the enrichment process — this will analyze and
-            enrich indicators of compromise (IOCs) with threat intelligence
-            data.
+            <Card className="bg-white/5 backdrop-blur-md rounded-2xl border border-gray-700 shadow-md">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>{src.name}</span>
+                  <Badge
+                    variant="outline"
+                    className="text-blue-300 border-blue-400/30"
+                  >
+                    {src.confidence}% Confidence
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-gray-300">
+                <p className="text-sm font-semibold text-blue-300">
+                  {src.verdict}
+                </p>
+                <ul className="list-disc list-inside text-sm text-gray-400">
+                  {src.metrics.map((m, i) => (
+                    <li key={i}>{m}</li>
+                  ))}
+                </ul>
+                <div className="flex flex-wrap gap-2">
+                  {src.tags.map((tag) => (
+                    <Badge
+                      key={tag}
+                      className="bg-blue-500/20 border border-blue-400/20 text-xs"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* AI Threat Summary */}
+      {showSummary && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="p-6 bg-gradient-to-r from-gray-800/40 to-gray-900/40 border border-gray-700/50 rounded-2xl"
+        >
+          <h3 className="text-lg font-semibold mb-2 text-blue-300">
+            AI Threat Summary
+          </h3>
+          <p className="text-gray-300 text-sm leading-relaxed">
+            The enrichment process indicates a coordinated phishing campaign
+            utilizing multiple domains linked to Emotet infrastructure. Several
+            hosts show evidence of command-and-control activity, suggesting
+            active infection attempts in the wild.
           </p>
-        </div>
+        </motion.div>
+      )}
 
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center text-gray-400 mt-4 animate-pulse">
-            Downloading and enriching IOCs...
-          </div>
-        )}
-
-        {/* Enrichment Cards */}
-        {enrichments.length > 0 && (
-          <div className="space-y-6 mt-6">
-            {enrichments.map((item, idx) => (
+      {/* IOC Results */}
+      {showSummary && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <h3 className="text-xl font-semibold mb-4">Results Summary</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {iocs.map((ioc, index) => (
               <Card
-                key={idx}
-                className={`bg-white/5 rounded-2xl backdrop-blur-md shadow-lg transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] ${
-                  item.reputation === "Critical"
-                    ? "border border-red-500/30"
-                    : item.reputation === "High Risk"
-                    ? "border border-orange-500/30"
-                    : "border border-yellow-500/30"
-                }`}
+                key={index}
+                className="bg-white/5 border border-gray-700/50 hover:border-blue-400/40 transition rounded-2xl shadow-md"
               >
                 <CardHeader>
-                  <CardTitle className="flex justify-between items-center">
-                    <div className="flex flex-col">
-                      <span className="font-mono text-lg">
-                        {item.indicator}
-                      </span>
-                      <div className="text-xs text-gray-400 mt-1">
-                        Updated: {item.lastUpdate}
-                      </div>
-                    </div>
-                    <Badge
-                      className={`${
-                        item.reputation === "Critical"
-                          ? "bg-red-600"
-                          : item.reputation === "High Risk"
-                          ? "bg-orange-500"
-                          : "bg-yellow-400"
-                      } text-white`}
-                    >
-                      {item.reputation}
-                    </Badge>
+                  <CardTitle className="text-blue-200 flex items-center gap-2">
+                    <ShieldAlert className="w-5 h-5 text-blue-400" />{" "}
+                    {ioc.domain}
                   </CardTitle>
                 </CardHeader>
+                <CardContent className="space-y-1 text-sm text-gray-300">
+                  <p>
+                    <strong>IP:</strong> {ioc.ip}
+                  </p>
+                  <p>
+                    <strong>Type:</strong> {ioc.type}
+                  </p>
+                  <p>
+                    <strong>Confidence:</strong> {ioc.confidence}
+                  </p>
+                  <p>
+                    <strong>Date:</strong> {ioc.date}
+                  </p>
+                  <p>
+                    <strong>Source:</strong> {ioc.source}
+                  </p>
+                  <p>
+                    <strong>Risk:</strong> {ioc.risk}
+                  </p>
 
-                <CardContent className="space-y-4">
-                  {/* Confidence + Sparkline */}
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-white/70">
-                      Confidence:{" "}
-                      <span
-                        className={`font-semibold ${
-                          item.confidence > 90
-                            ? "text-green-400"
-                            : item.confidence > 70
-                            ? "text-yellow-400"
-                            : "text-red-400"
-                        }`}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="w-full mt-3 bg-transparent border-blue-400/30 text-blue-300 hover:bg-blue-500/20"
+                    onClick={() =>
+                      setExpandedIOC(
+                        expandedIOC === ioc.domain ? null : ioc.domain
+                      )
+                    }
+                  >
+                    <Eye className="w-4 h-4 mr-2" />{" "}
+                    {expandedIOC === ioc.domain
+                      ? "Hide Details"
+                      : "View Details"}
+                  </Button>
+
+                  {/* Expanded Details */}
+                  <AnimatePresence>
+                    {expandedIOC === ioc.domain && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden mt-2 text-gray-300 text-sm bg-blue-900/20 p-3 rounded-lg"
                       >
-                        {item.confidence}%
-                      </span>
-                    </div>
-                    <div className="w-32 h-10">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={item.activity}>
-                          <Area
-                            type="monotone"
-                            dataKey="hits"
-                            stroke="#3b82f6"
-                            fill="#3b82f6"
-                            fillOpacity={0.3}
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-
-                  {/* Category Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    {item.categories.map((cat, i) => (
-                      <Badge
-                        key={i}
-                        variant="outline"
-                        className="border-white/20 text-white/80 bg-white/5"
-                      >
-                        {cat}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  {/* Metadata Info Row */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2 text-sm">
-                    <div className="flex items-center gap-2 text-white/70">
-                      <MapPin className="w-4 h-4 text-blue-400" />
-                      <Tooltip>
-                        <TooltipTrigger>{item.geo}</TooltipTrigger>
-                        <TooltipContent>Geolocation</TooltipContent>
-                      </Tooltip>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-white/70">
-                      <Server className="w-4 h-4 text-purple-400" />
-                      <Tooltip>
-                        <TooltipTrigger>{item.asn}</TooltipTrigger>
-                        <TooltipContent>Autonomous System (ISP)</TooltipContent>
-                      </Tooltip>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-white/70">
-                      <Activity className="w-4 h-4 text-green-400" />
-                      <Tooltip>
-                        <TooltipTrigger>Active in last 7 days</TooltipTrigger>
-                        <TooltipContent>
-                          Activity trend from collected logs
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </div>
-
-                  {/* Related Indicators */}
-                  <div className="mt-3">
-                    <div className="flex items-center gap-2 mb-2 text-sm text-gray-400">
-                      <Link2 className="w-4 h-4 text-blue-400" />
-                      Related Indicators
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {item.related.map((rel, i) => (
-                        <Badge
-                          key={i}
-                          variant="outline"
-                          className="border-blue-400/30 text-blue-300 bg-blue-900/10"
-                        >
-                          {rel}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
+                        {ioc.details}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </CardContent>
               </Card>
             ))}
           </div>
-        )}
-      </div>
-    </TooltipProvider>
+        </motion.div>
+      )}
+    </div>
   );
 }

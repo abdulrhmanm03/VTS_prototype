@@ -2,8 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Eye, MapPin, Server, Link2 } from "lucide-react";
+import { MapPin, Server, Link2 } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area } from "recharts";
 
 const iocs = [
@@ -197,13 +196,6 @@ export default function ThreatIntelOverview() {
                     First: {ioc.firstSeen} • Last: {ioc.lastSeen}
                   </div>
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-white/20 text-white hover:border-blue-400 hover:text-white"
-                >
-                  <Eye className="h-4 w-4 mr-1" /> View
-                </Button>
               </CardHeader>
 
               <CardContent className="space-y-4">

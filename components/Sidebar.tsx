@@ -14,6 +14,7 @@ import {
   Settings,
   BadgeCheck,
   Ribbon,
+  Brain,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -54,6 +55,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     // { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
     { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
     { name: "Red Shift", icon: Swords, path: "/offensive-security" },
+    { name: "Sentinel analytics", icon: Brain, path: "/ai" },
     {
       name: "Security Awareness",
       icon: Ribbon,
@@ -113,7 +115,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         <Shield className="h-10 w-10 text-blue-400 drop-shadow-[0_0_8px_rgba(30,64,175,0.8)]" />
         {!collapsed && (
           <h1 className="text-2xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-            Sentinel Sovereign
+            Churchill
           </h1>
         )}
       </div>

@@ -1,17 +1,8 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import {
-  Search,
-  Filter,
-  Shield,
-  AlertCircle,
-  FileText,
-  User,
-} from "lucide-react";
+import { Shield, AlertCircle, FileText, User } from "lucide-react";
 import BrandProtection from "@/components/drp/BrandProtection";
 import ExecutiveProtection from "@/components/drp/ExecutiveProtection";
 import DataLeakDetection from "@/components/drp/DataLeakDetection";
@@ -66,26 +57,6 @@ export default function DigitalRiskPage() {
           icon={<Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />}
           gradient="from-yellow-900/20 via-yellow-800/10"
         />
-      </div>
-
-      {/* Search + Actions */}
-      <div className="flex items-center space-x-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search threats, domains, executives..."
-            className="pl-8 bg-white/10 border-none rounded-lg text-white placeholder-gray-400"
-          />
-        </div>
-        <Button
-          variant="outline"
-          className="bg-white/10 hover:bg-white/20 border-none"
-        >
-          <Filter className="h-4 w-4 mr-1" /> Filter
-        </Button>
-        <Button className="bg-blue-500 hover:bg-blue-600 shadow-lg">
-          New Monitoring Rule
-        </Button>
       </div>
 
       {/* Tabs */}

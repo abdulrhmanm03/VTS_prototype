@@ -1,11 +1,22 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TrendingUp } from "lucide-react";
 
 export default function RemediationPriorities() {
+  const [message, setMessage] = useState("");
+
+  const handlePlanClick = (task: string) => {
+    setMessage(`Planning started for ${task}`);
+  };
+
+  const handleStartClick = (task: string) => {
+    setMessage(`Action started for ${task}`);
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold flex items-center text-white">
@@ -42,10 +53,15 @@ export default function RemediationPriorities() {
               variant="outline"
               size="sm"
               className="bg-white/10 border-none"
+              onClick={() => handlePlanClick("Dark Web Monitoring")}
             >
               Plan
             </Button>
-            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+            <Button
+              size="sm"
+              className="bg-blue-500 hover:bg-blue-600"
+              onClick={() => handleStartClick("Dark Web Monitoring")}
+            >
               Start
             </Button>
           </div>
@@ -78,15 +94,24 @@ export default function RemediationPriorities() {
               variant="outline"
               size="sm"
               className="bg-white/10 border-none"
+              onClick={() => handlePlanClick("Attack Surface Management")}
             >
               Plan
             </Button>
-            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+            <Button
+              size="sm"
+              className="bg-blue-500 hover:bg-blue-600"
+              onClick={() => handleStartClick("Attack Surface Management")}
+            >
               Start
             </Button>
           </div>
         </CardContent>
       </Card>
+
+      {message && (
+        <p className="text-sm text-green-400 mt-2 font-semibold">{message}</p>
+      )}
     </div>
   );
 }

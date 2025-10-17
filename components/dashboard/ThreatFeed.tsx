@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Clock, Radio } from "lucide-react";
 
@@ -16,7 +16,7 @@ const badgeColors = {
   MEDIUM: "bg-blue-500 text-white",
 };
 
-const threats = [
+const initialThreats = [
   {
     id: 1,
     level: "CRITICAL",
@@ -41,65 +41,60 @@ const threats = [
     region: "UAE",
     time: "15m ago",
   },
+];
+
+const threatPool = [
   {
-    id: 4,
     level: "CRITICAL",
     confidence: "87%",
     title: "Zero-Day Exploitation",
     region: "MENA",
-    time: "23m ago",
   },
   {
-    id: 5,
     level: "MEDIUM",
     confidence: "94%",
     title: "Phishing Campaign Surge",
     region: "Global",
-    time: "31m ago",
   },
   {
-    id: 6,
     level: "HIGH",
     confidence: "90%",
     title: "IoT Device Vulnerability",
     region: "Europe",
-    time: "45m ago",
   },
   {
-    id: 7,
     level: "MEDIUM",
     confidence: "88%",
     title: "Social Engineering Alert",
     region: "North America",
-    time: "1h ago",
   },
   {
-    id: 8,
     level: "CRITICAL",
     confidence: "93%",
     title: "Critical Cloud Misconfiguration",
     region: "APAC",
-    time: "1h 15m ago",
-  },
-  {
-    id: 9,
-    level: "HIGH",
-    confidence: "85%",
-    title: "Ransomware Email Campaign",
-    region: "Europe",
-    time: "1h 30m ago",
-  },
-  {
-    id: 10,
-    level: "MEDIUM",
-    confidence: "91%",
-    title: "Malware Botnet Activity",
-    region: "Global",
-    time: "2h ago",
   },
 ];
 
 const LiveThreatFeed: FC = () => {
+  const [threats, setThreats] = useState(initialThreats);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomThreat =
+        threatPool[Math.floor(Math.random() * threatPool.length)];
+      const newThreat = {
+        ...randomThreat,
+        id: Date.now(),
+        time: "Just now",
+      };
+
+      setThreats((prev) => [newThreat, ...prev].slice(0, 10)); // keep max 10 threats
+    }, 5000); // every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Card className="bg-[#0e1321] border-none text-white h-[600px] shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
       <CardHeader>

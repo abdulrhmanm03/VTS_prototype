@@ -25,7 +25,6 @@ const attackChain = [
     name: "Spear Phishing Email",
     details:
       "Malicious email with a disguised payload successfully delivered to target inbox.",
-    time: "09:12 AM",
   },
   {
     id: 2,
@@ -33,7 +32,6 @@ const attackChain = [
     name: "Payload Execution",
     details:
       "Victim opened the attachment, executing a PowerShell script establishing C2.",
-    time: "09:16 AM",
   },
   {
     id: 3,
@@ -41,7 +39,6 @@ const attackChain = [
     name: "Credential Harvesting",
     details:
       "Attacker escalated privileges using cached domain credentials and moved laterally.",
-    time: "09:23 AM",
   },
   {
     id: 4,
@@ -49,7 +46,6 @@ const attackChain = [
     name: "Data Transfer to Remote Server",
     details:
       "Sensitive files compressed and exfiltrated via HTTPS to external host.",
-    time: "09:37 AM",
   },
   {
     id: 5,
@@ -57,7 +53,6 @@ const attackChain = [
     name: "Spear Phishing Email",
     details:
       "Malicious email with a disguised payload successfully delivered to target inbox.",
-    time: "09:12 AM",
   },
   {
     id: 6,
@@ -65,7 +60,6 @@ const attackChain = [
     name: "Payload Execution",
     details:
       "Victim opened the attachment, executing a PowerShell script establishing C2.",
-    time: "09:16 AM",
   },
   {
     id: 7,
@@ -73,7 +67,6 @@ const attackChain = [
     name: "Credential Harvesting",
     details:
       "Attacker escalated privileges using cached domain credentials and moved laterally.",
-    time: "09:23 AM",
   },
   {
     id: 8,
@@ -81,7 +74,6 @@ const attackChain = [
     name: "Data Transfer to Remote Server",
     details:
       "Sensitive files compressed and exfiltrated via HTTPS to external host.",
-    time: "09:37 AM",
   },
 ];
 
@@ -93,6 +85,10 @@ const AttackChainProgression: FC = () => {
           <Activity className="h-6 w-6 text-blue-400 animate-pulse" />
           Attack Timeline
         </CardTitle>
+        <p className="text-xs text-gray-400 mt-1">
+          Visualizes the progression of a cyber attack across stages, showing
+          each action and its details.
+        </p>
       </CardHeader>
       <CardContent className="space-y-3 overflow-y-auto hide-scrollbar pr-2">
         {attackChain.map((attack) => (
@@ -133,9 +129,6 @@ const AttackChainProgression: FC = () => {
               />
               <div className="relative z-10 text-xs text-gray-300 leading-snug">
                 {attack.details}
-              </div>
-              <div className="relative z-10 text-[10px] text-gray-500 mt-1">
-                ⏱ {attack.time}
               </div>
             </Card>
           </div>

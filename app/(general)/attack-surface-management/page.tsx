@@ -2,19 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { AlertCircle, Globe, Shield } from "lucide-react";
-import ScanAndReport from "@/components/ScanAndReport";
+import { AlertCircle, Globe, Shield, Loader2, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AssetInventory from "@/components/asm/AssetInventory";
 import ExternalExposure from "@/components/asm/ExternalExposure";
-import Monitoring from "@/components/asm/Monitoring";
 
 export default function AttackSurfacePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab") || "inventory";
   const [activeTab, setActiveTab] = useState(tabParam);
+  const [scanStarted, setScanStarted] = useState(false);
+  const [scanCompleted, setScanCompleted] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     setActiveTab(tabParam);
@@ -27,130 +30,201 @@ export default function AttackSurfacePage() {
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
+  const handleStartScan = () => {
+    setScanStarted(true);
+    setScanCompleted(false);
+    setProgress(0);
+
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setScanCompleted(true), 500);
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 500);
+  };
+
   return (
     <div className="flex flex-col gap-6 p-6 min-h-screen text-white">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center mb-2 space-x-2">
+      {/* Header with Button */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
           <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
             Attack Surface Management
           </h1>
-        </div>
-        <div className="ml-2">
-          <p className="text-gray-400">
+          <p className="text-gray-400 mt-1">
             Discover, assess, and monitor your external attack surface
           </p>
         </div>
+
+        <Button
+          disabled={scanStarted && !scanCompleted}
+          onClick={handleStartScan}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl flex items-center gap-2 shadow-lg"
+        >
+          {scanStarted && !scanCompleted ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Scanning...
+            </>
+          ) : (
+            <>
+              <Play className="w-4 h-4" />
+              Start Scan
+            </>
+          )}
+        </Button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Total Assets */}
-        <Card
-          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+      {/* Scan Progress (Fake Animation) */}
+      {scanStarted && !scanCompleted && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="relative bg-white/10 border border-blue-500/20 rounded-2xl p-6 shadow-lg overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">
-                Total Assets
-              </CardTitle>
-              <Globe className="h-8 w-8 text-blue-400 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">1,234</div>
-              <p className="text-xs text-green-500">+12 discovered today</p>
-            </CardContent>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/30 via-blue-800/10 to-transparent animate-pulse" />
+          <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+            <Loader2 className="w-10 h-10 animate-spin text-blue-400" />
+            <p className="text-lg font-medium">Scanning external assets...</p>
+            <p className="text-sm text-gray-400">
+              Discovering endpoints, services, and vulnerabilities
+            </p>
+            <div className="w-full bg-white/10 rounded-full h-2 mt-4 overflow-hidden">
+              <motion.div
+                className="h-2 bg-blue-500 rounded-full"
+                style={{ width: `${progress}%` }}
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.4 }}
+              />
+            </div>
+            <p className="text-sm text-gray-400">{progress}% completed</p>
           </div>
-        </Card>
+        </motion.div>
+      )}
 
-        {/* Critical Vulnerabilities */}
-        <Card
-          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+      {/* Stats + Tabs appear only after scan */}
+      {scanCompleted && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-red-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">
-                Critical Vulnerabilities
-              </CardTitle>
-              <AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">12</div>
-              <p className="text-xs text-green-500">-3 from last week</p>
-            </CardContent>
-          </div>
-        </Card>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Total Assets */}
+            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
+              <div className="relative z-10">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-400">
+                    Total Assets
+                  </CardTitle>
+                  <Globe className="h-8 w-8 text-blue-400 drop-shadow-md" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold drop-shadow-lg">1,234</div>
+                  <p className="text-xs text-green-500">+12 discovered today</p>
+                </CardContent>
+              </div>
+            </Card>
 
-        {/* Exposed Services */}
-        <Card
-          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
+            {/* Critical Vulnerabilities */}
+            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-red-800/10 to-transparent pointer-events-none" />
+              <div className="relative z-10">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-400">
+                    Critical Vulnerabilities
+                  </CardTitle>
+                  <AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold drop-shadow-lg">12</div>
+                  <p className="text-xs text-green-500">-3 from last week</p>
+                </CardContent>
+              </div>
+            </Card>
+
+            {/* Exposed Services */}
+            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 via-green-800/10 to-transparent pointer-events-none" />
+              <div className="relative z-10">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-400">
+                    Exposed Services
+                  </CardTitle>
+                  <Globe className="h-8 w-8 text-green-400 drop-shadow-md" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold drop-shadow-lg">47</div>
+                  <p className="text-xs text-yellow-500">5 require attention</p>
+                </CardContent>
+              </div>
+            </Card>
+
+            {/* Risk Score */}
+            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-yellow-800/10 to-transparent pointer-events-none" />
+              <div className="relative z-10">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-400">
+                    Risk Score
+                  </CardTitle>
+                  <Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold drop-shadow-lg">
+                    68/100
+                  </div>
+                  <p className="text-xs text-green-500">Improving trend</p>
+                </CardContent>
+              </div>
+            </Card>
+          </div>
+
+          {/* Tabs */}
+          <Tabs
+            value={activeTab}
+            onValueChange={handleTabChange}
+            className="mt-8"
+          >
+            <TabsList className="bg-white/10 p-1 rounded-lg">
+              <TabsTrigger value="inventory">Asset Inventory</TabsTrigger>
+              <TabsTrigger value="exposure">External Exposure</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="inventory" className="mt-6">
+              <AssetInventory />
+            </TabsContent>
+
+            <TabsContent value="exposure" className="mt-6">
+              <ExternalExposure />
+            </TabsContent>
+          </Tabs>
+        </motion.div>
+      )}
+
+      {/* Default View Before Scan */}
+      {!scanStarted && !scanCompleted && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col items-center justify-center py-20 text-center text-gray-400"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 via-green-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">
-                Exposed Services
-              </CardTitle>
-              <Globe className="h-8 w-8 text-green-400 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">47</div>
-              <p className="text-xs text-yellow-500">5 require attention</p>
-            </CardContent>
-          </div>
-        </Card>
-
-        {/* Risk Score */}
-        <Card
-          className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md 
-          hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-yellow-800/10 to-transparent pointer-events-none" />
-          <div className="relative z-10">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-400">
-                Risk Score
-              </CardTitle>
-              <Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold drop-shadow-lg">68/100</div>
-              <p className="text-xs text-green-500">Improving trend</p>
-            </CardContent>
-          </div>
-        </Card>
-      </div>
-
-      {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-4">
-        <TabsList className="bg-white/10 p-1 rounded-lg">
-          <TabsTrigger value="inventory">Asset Inventory</TabsTrigger>
-          <TabsTrigger value="scan">Scan and Report</TabsTrigger>
-          <TabsTrigger value="exposure">External Exposure</TabsTrigger>
-          <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="inventory" className="mt-6">
-          <AssetInventory />
-        </TabsContent>
-
-        <TabsContent value="scan" className="mt-6">
-          <ScanAndReport />
-        </TabsContent>
-
-        <TabsContent value="exposure" className="mt-6">
-          <ExternalExposure />
-        </TabsContent>
-
-        <TabsContent value="monitoring" className="mt-6">
-          <Monitoring />
-        </TabsContent>
-      </Tabs>
+          <Globe className="w-12 h-12 text-blue-400 mb-4" />
+          <h2 className="text-xl font-semibold mb-2">
+            No Scan Results Available
+          </h2>
+          <p className="text-sm text-gray-500">
+            Click “Start Scan” to begin discovering your external assets.
+          </p>
+        </motion.div>
+      )}
     </div>
   );
 }

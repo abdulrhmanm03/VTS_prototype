@@ -46,6 +46,10 @@ const exposedAssets = [
     ports: "80, 443",
     risk: "Medium",
     service: "HTTPS, HTTP",
+    owner: "IT Team",
+    location: "US-East",
+    lastScan: "2025-10-15",
+    description: "Main public API endpoint.",
   },
   {
     id: 2,
@@ -54,6 +58,10 @@ const exposedAssets = [
     ports: "22, 443",
     risk: "High",
     service: "SSH, HTTPS",
+    owner: "DevOps Team",
+    location: "US-West",
+    lastScan: "2025-10-14",
+    description: "Staging environment for testing releases.",
   },
   {
     id: 3,
@@ -62,6 +70,10 @@ const exposedAssets = [
     ports: "443, 1194",
     risk: "Critical",
     service: "HTTPS, OpenVPN",
+    owner: "Security Team",
+    location: "EU-Central",
+    lastScan: "2025-10-16",
+    description: "VPN gateway for remote employees.",
   },
   {
     id: 4,
@@ -70,6 +82,10 @@ const exposedAssets = [
     ports: "443",
     risk: "Low",
     service: "HTTPS",
+    owner: "HR Team",
+    location: "US-East",
+    lastScan: "2025-10-10",
+    description: "Employee self-service portal.",
   },
   {
     id: 5,
@@ -78,11 +94,16 @@ const exposedAssets = [
     ports: "80, 443",
     risk: "Medium",
     service: "HTTP, HTTPS",
+    owner: "IT Team",
+    location: "Global",
+    lastScan: "2025-10-13",
+    description: "Content delivery network.",
   },
 ];
 
 export default function ExternalExposure() {
   const [search, setSearch] = useState("");
+  const [expandedRows, setExpandedRows] = useState<number[]>([]);
 
   const filteredAssets = useMemo(
     () =>
@@ -93,6 +114,12 @@ export default function ExternalExposure() {
       ),
     [search]
   );
+
+  const toggleRow = (id: number) => {
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]
+    );
+  };
 
   return (
     <div className="space-y-8 text-white">
@@ -176,7 +203,8 @@ export default function ExternalExposure() {
             placeholder="Search by host or IP..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-white/10 border-none text-white placeholder:text-gray-400"
+            className="bg-white/20 border-none text-white placeholder:text-gray-400 focus:ring-2 focus:ring-blue-400"
+            type="text"
           />
         </div>
 
@@ -185,54 +213,94 @@ export default function ExternalExposure() {
             <CardTitle>Exposed Assets</CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="text-gray-400">
-                  <TableHead>Host</TableHead>
-                  <TableHead>IP</TableHead>
-                  <TableHead>Ports</TableHead>
-                  <TableHead>Services</TableHead>
-                  <TableHead>Risk</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredAssets.map((asset) => (
-                  <TableRow
-                    key={asset.id}
-                    className="hover:bg-white/10 transition"
-                  >
-                    <TableCell className="font-medium">{asset.host}</TableCell>
-                    <TableCell>{asset.ip}</TableCell>
-                    <TableCell>{asset.ports}</TableCell>
-                    <TableCell>{asset.service}</TableCell>
-                    <TableCell>
-                      <Badge
-                        className={
-                          asset.risk === "Critical"
-                            ? "bg-red-500/30 text-red-300"
-                            : asset.risk === "High"
-                            ? "bg-orange-500/30 text-orange-300"
-                            : asset.risk === "Medium"
-                            ? "bg-yellow-500/30 text-yellow-300"
-                            : "bg-green-500/30 text-green-300"
-                        }
-                      >
-                        {asset.risk}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        className="bg-blue-600 hover:bg-blue-700"
-                      >
-                        Details
-                      </Button>
-                    </TableCell>
+            {filteredAssets.length === 0 ? (
+              <p className="text-gray-400 p-4">No assets found.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow className="text-gray-400">
+                    <TableHead>Host</TableHead>
+                    <TableHead>IP</TableHead>
+                    <TableHead>Ports</TableHead>
+                    <TableHead>Services</TableHead>
+                    <TableHead>Risk</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredAssets.map((asset) => (
+                    <>
+                      <TableRow
+                        key={asset.id}
+                        className="hover:bg-white/10 transition"
+                      >
+                        <TableCell className="font-medium">
+                          {asset.host}
+                        </TableCell>
+                        <TableCell>{asset.ip}</TableCell>
+                        <TableCell>{asset.ports}</TableCell>
+                        <TableCell>{asset.service}</TableCell>
+                        <TableCell>
+                          <Badge
+                            className={
+                              asset.risk === "Critical"
+                                ? "bg-red-500/30 text-red-300"
+                                : asset.risk === "High"
+                                ? "bg-orange-500/30 text-orange-300"
+                                : asset.risk === "Medium"
+                                ? "bg-yellow-500/30 text-yellow-300"
+                                : "bg-green-500/30 text-green-300"
+                            }
+                          >
+                            {asset.risk}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700"
+                            onClick={() => toggleRow(asset.id)}
+                          >
+                            {expandedRows.includes(asset.id)
+                              ? "Hide"
+                              : "Details"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+
+                      {expandedRows.includes(asset.id) && (
+                        <TableRow className="bg-white/10 text-gray-300">
+                          <TableCell colSpan={6}>
+                            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              <p>
+                                <span className="font-semibold">Owner:</span>{" "}
+                                {asset.owner || "N/A"}
+                              </p>
+                              <p>
+                                <span className="font-semibold">Location:</span>{" "}
+                                {asset.location || "N/A"}
+                              </p>
+                              <p>
+                                <span className="font-semibold">
+                                  Last Scan:
+                                </span>{" "}
+                                {asset.lastScan || "N/A"}
+                              </p>
+                              <p className="sm:col-span-2">
+                                <span className="font-semibold">
+                                  Description:
+                                </span>{" "}
+                                {asset.description || "No description"}
+                              </p>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>

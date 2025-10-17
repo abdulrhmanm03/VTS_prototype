@@ -59,89 +59,113 @@ const threatActors: Record<string, ThreatActorType> = {
 };
 
 export default function ThreatActor() {
-  const [currentActorKey, setCurrentActorKey] = useState("black-cat");
-  const actor = threatActors[currentActorKey];
+  const [selectedActorKey, setSelectedActorKey] = useState<string | null>(null);
+
+  const actor = selectedActorKey ? threatActors[selectedActorKey] : null;
 
   return (
-    <div className="min-h-screen text-gray-200">
-      {/* Hero Section */}
-      <section className="relative w-full">
-        <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
-          {/* Image */}
-          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-lg">
-            <Image
-              src={actor.image}
-              alt={actor.name}
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/20 to-transparent" />
-          </div>
-
-          {/* Info Card */}
-          <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition duration-300">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/10 to-transparent" />
-            <div className="relative z-10">
+    <div className="min-h-screen text-gray-200 max-w-7xl mx-auto px-6 py-12 space-y-8">
+      {/* If no actor selected, show list */}
+      {!actor && (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Object.entries(threatActors).map(([key, item]) => (
+            <Card
+              key={key}
+              className="cursor-pointer relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md p-4 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition"
+              onClick={() => setSelectedActorKey(key)}
+            >
+              <div className="relative w-full h-40 rounded-xl overflow-hidden mb-4">
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/20 to-transparent" />
+              </div>
               <CardHeader>
-                <CardTitle className="text-xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.8)]">
-                  {actor.name}
+                <CardTitle className="text-lg font-bold text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">
+                  {item.name}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm text-white/80">
+              <CardContent className="text-sm text-white/70">
                 <p>
-                  <span className="font-semibold text-white">Motivation:</span>{" "}
-                  {actor.motivation}
+                  {item.date} • {item.readTime}
                 </p>
-                <p>
-                  <span className="font-semibold text-white">
-                    Target Countries:
-                  </span>{" "}
-                  {actor.countries}
-                </p>
-                <p>
-                  <span className="font-semibold text-white">
-                    Target Sectors:
-                  </span>{" "}
-                  {actor.sectors}
-                </p>
-                <p>
-                  <span className="font-semibold text-white">Attack Type:</span>{" "}
-                  {actor.attackType}
-                </p>
-                <Separator className="my-2 bg-white/20" />
-                <ul className="space-y-1 text-blue-300">
-                  {actor.techniques.map((technique) => (
-                    <li key={technique}>• {technique}</li>
-                  ))}
-                </ul>
               </CardContent>
-            </div>
-          </Card>
+            </Card>
+          ))}
         </div>
-      </section>
+      )}
 
-      {/* Body Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-12 gap-8">
-        {/* Sidebar Left */}
-        <aside className="lg:col-span-3 space-y-6">
-          <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md p-4">
-            <p className="font-semibold mb-3 text-blue-400">Table Of Content</p>
-            <ul className="text-sm space-y-2 text-white/70">
-              <li className="text-blue-300 font-semibold">
-                Dark Web Profile: {actor.name}
-              </li>
-              <li>Who is {actor.name}?</li>
-              <li>What are {actor.name}’s Targets?</li>
-              <li>What are {actor.name}’s Techniques?</li>
-              <li>What are the Mitigation Tactics?</li>
-              <li>How Can SOCRadar Help?</li>
-            </ul>
-          </Card>
-        </aside>
+      {/* If an actor is selected, show article */}
+      {actor && (
+        <div className="space-y-8">
+          <button
+            className="text-blue-400 underline"
+            onClick={() => setSelectedActorKey(null)}
+          >
+            ← Back to Threat Actors List
+          </button>
 
-        {/* Main Content */}
-        <main className="lg:col-span-6 space-y-6">
-          <div>
+          {/* Hero Section */}
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+              <Image
+                src={actor.image}
+                alt={actor.name}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/20 to-transparent" />
+            </div>
+
+            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/10 to-transparent" />
+              <div className="relative z-10">
+                <CardHeader>
+                  <CardTitle className="text-xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.8)]">
+                    {actor.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-sm text-white/80">
+                  <p>
+                    <span className="font-semibold text-white">
+                      Motivation:
+                    </span>{" "}
+                    {actor.motivation}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-white">
+                      Target Countries:
+                    </span>{" "}
+                    {actor.countries}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-white">
+                      Target Sectors:
+                    </span>{" "}
+                    {actor.sectors}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-white">
+                      Attack Type:
+                    </span>{" "}
+                    {actor.attackType}
+                  </p>
+                  <Separator className="my-2 bg-white/20" />
+                  <ul className="space-y-1 text-blue-300">
+                    {actor.techniques.map((technique) => (
+                      <li key={technique}>• {technique}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </div>
+            </Card>
+          </div>
+
+          {/* Article Content */}
+          <div className="space-y-4">
             <p className="text-xs text-white/60">
               Home › Blog › Threat Actor Profiles
             </p>
@@ -151,35 +175,15 @@ export default function ThreatActor() {
             <p className="text-sm text-white/60">
               {actor.date} • {actor.readTime}
             </p>
+            <div className="prose prose-invert max-w-none text-white/80">
+              <p>{actor.description}</p>
+              <p>
+                <em className="text-blue-300">{actor.quote}</em>
+              </p>
+            </div>
           </div>
-
-          <div className="prose prose-invert max-w-none text-white/80">
-            <p>{actor.description}</p>
-            <p>
-              <em className="text-blue-300">{actor.quote}</em>
-            </p>
-          </div>
-        </main>
-
-        {/* Related Articles */}
-        <aside className="lg:col-span-3 space-y-6">
-          <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md p-4">
-            <p className="font-semibold mb-3 text-blue-400">Related Articles</p>
-            <ul className="space-y-4 text-sm text-white/70">
-              {Object.entries(threatActors).map(([key, item]) => (
-                <li
-                  key={key}
-                  className="cursor-pointer hover:text-blue-300"
-                  onClick={() => setCurrentActorKey(key)}
-                >
-                  <p>{item.name}</p>
-                  <p className="text-xs text-white/50">{item.date}</p>
-                </li>
-              ))}
-            </ul>
-          </Card>
-        </aside>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
