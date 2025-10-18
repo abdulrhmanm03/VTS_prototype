@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
 import ThreatIntelOverview from "@/components/threat_intel/Overview";
 import ThreatLandscape from "@/components/threat_intel/Landscape";
 import Enrichment from "@/components/threat_intel/Enrishment";
@@ -25,13 +27,24 @@ export default function ThreatIntelPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-          Threat Intelligence Hub
-        </h1>
-        <p className="text-muted-foreground">
-          Centralized management and analysis of threat intelligence data
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+            Threat Intelligence Hub
+          </h1>
+          <p className="text-muted-foreground">
+            Centralized management and analysis of threat intelligence data
+          </p>
+        </div>
+
+        {/* Fake Generate Report button */}
+        <Button
+          variant="outline"
+          className="bg-blue-500/10 border border-blue-400/30 text-blue-300 hover:bg-blue-500/20 hover:text-blue-200 transition-all duration-300 rounded-xl shadow-md hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+        >
+          <FileText className="w-4 h-4 mr-2" />
+          Generate Report
+        </Button>
       </div>
 
       <Tabs value={defaultTab} onValueChange={handleTabChange}>
