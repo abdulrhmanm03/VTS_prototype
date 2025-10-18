@@ -5,7 +5,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useSearchParams, useRouter } from "next/navigation";
 import ThreatIntelOverview from "@/components/threat_intel/Overview";
 import ThreatLandscape from "@/components/threat_intel/Landscape";
-import ThreatHeatMap from "@/components/HeatMap";
 import Enrichment from "@/components/threat_intel/Enrishment";
 import ThreatActors from "@/components/threat_intel/ThreatActor";
 
@@ -50,12 +49,6 @@ export default function ThreatIntelPage() {
             Threat Landscape
           </TabsTrigger>
           <TabsTrigger
-            value="heatmap"
-            className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all"
-          >
-            Threat Heat Map
-          </TabsTrigger>
-          <TabsTrigger
             value="enrichment"
             className="flex-1 text-white/90 bg-white/5 rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/10 transition-all"
           >
@@ -75,10 +68,6 @@ export default function ThreatIntelPage() {
 
         <TabsContent value="landscape" className="mt-4">
           <ThreatLandscape />
-        </TabsContent>
-
-        <TabsContent value="heatmap" className="mt-4">
-          <ThreatHeatMap />
         </TabsContent>
 
         <TabsContent value="enrichment" className="mt-4">

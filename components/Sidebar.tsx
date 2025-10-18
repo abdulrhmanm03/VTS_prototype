@@ -1,4 +1,3 @@
-// Sidebar.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -15,8 +14,10 @@ import {
   BadgeCheck,
   Ribbon,
   Brain,
+  Link,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import RegionToggle from "@/components/RegionToggle";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -25,6 +26,8 @@ interface SidebarProps {
 export default function Sidebar({ collapsed }: SidebarProps) {
   const [active, setActive] = useState<string>("");
   const [openSubMenu, setOpenSubMenu] = useState<string>("");
+  const [region, setRegion] = useState<"global" | "uae">("global");
+  const [role, setRole] = useState<"SOC" | "IR" | "TI" | "TH">("SOC");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -40,7 +43,6 @@ export default function Sidebar({ collapsed }: SidebarProps) {
       subItems: [
         { name: "Overview", tab: "overview" },
         { name: "Threat Landscape", tab: "landscape" },
-        { name: "Threat Heat Map", tab: "heatmap" },
         { name: "Enrichment", tab: "enrichment" },
         { name: "Threat Actors", tab: "threat-actors" },
       ],
@@ -52,10 +54,9 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     },
     { name: "Deep Guard", icon: Activity, path: "/digital-risk-protection" },
     { name: "Risk Matrix", icon: BarChart, path: "/risk-assessment-scores" },
-    // { name: "AI Insights", icon: Globe, path: "/dark-web-intelligence" },
     { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
     { name: "Red Shift", icon: Swords, path: "/offensive-security" },
-    { name: "Sentinel analytics", icon: Brain, path: "/ai" },
+    { name: "Sentinel Analytics", icon: Brain, path: "/ai" },
     {
       name: "Security Awareness",
       icon: Ribbon,
@@ -67,6 +68,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         { name: "Templates", tab: "templates" },
       ],
     },
+    { name: "Integrations", icon: Link, path: "/integrations" },
   ];
 
   useEffect(() => {
@@ -76,20 +78,16 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     const current = sortedItems.find((item) => pathname.startsWith(item.path));
     if (current) setActive(current.name);
     if (current?.subItems && activeTab) setOpenSubMenu(current.name);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, activeTab]);
 
   const handleNavigation = (name: string, path: string, tab?: string) => {
     const item = navItems.find((i) => i.name === name);
-
     if (!tab && item?.subItems) {
       if (collapsed) {
-        // If sidebar is collapsed, navigate to first subitem
         const firstSubTab = item.subItems[0].tab;
         router.push(`${path}?tab=${firstSubTab}`);
         setActive(name);
       } else {
-        // If sidebar is expanded, just toggle submenu
         setOpenSubMenu(openSubMenu === name ? "" : name);
         setActive(name);
       }
@@ -102,13 +100,13 @@ export default function Sidebar({ collapsed }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-screen bg-muted/30 flex flex-col p-4 border-r transition-all duration-300 ${
-        collapsed ? "w-20" : "w-60"
+      className={`fixed top-0 left-0 h-screen bg-slate-900/40 backdrop-blur-xl flex flex-col p-4 border-r border-slate-800 transition-all duration-300 ${
+        collapsed ? "w-20" : "w-64"
       }`}
     >
       {/* Branding */}
       <div
-        className={`flex items-center mb-6 space-x-2 ${
+        className={`flex items-center mb-5 space-x-2 ${
           collapsed ? "justify-center" : ""
         }`}
       >
@@ -120,7 +118,37 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         )}
       </div>
 
-      {/* Navigation (scrollable) */}
+      {/* Integrated Components */}
+      {!collapsed && (
+        <div className="space-y-4 mb-5">
+          {/* Region Toggle */}
+          <RegionToggle region={region} onChange={setRegion} />
+
+          {/* Role Selector styled like header */}
+          <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-3">
+            <p className="text-xs text-slate-400 mb-2 uppercase tracking-wide">
+              Active Role
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {(["SOC", "IR", "TI", "TH"] as const).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setRole(r)}
+                  className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${
+                    role === r
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "text-slate-400 hover:bg-slate-700 hover:text-white"
+                  }`}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Navigation */}
       <div className="space-y-2 flex-1 overflow-y-auto hide-scrollbar pr-1">
         {navItems.map((item) => {
           const isActive = active === item.name;
@@ -152,7 +180,6 @@ export default function Sidebar({ collapsed }: SidebarProps) {
                 )}
               </Button>
 
-              {/* Subitems */}
               {!collapsed && hasSubItems && isOpen && (
                 <div className="ml-6 mt-1 space-y-1">
                   {item.subItems!.map((sub) => {
@@ -179,7 +206,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         })}
       </div>
 
-      {/* Settings (always at bottom) */}
+      {/* Settings Button */}
       <Button
         variant="ghost"
         className="justify-start bg-transparent transition-transform duration-200 hover:scale-105 text-gray-300 mt-4"

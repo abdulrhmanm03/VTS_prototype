@@ -8,8 +8,10 @@ import MetricsBar from "@/components/dashboard/MetricBar";
 import StatsCards from "@/components/dashboard/StatsCards";
 import DashboardCharts from "@/components/dashboard/Charts";
 import CriticalAlerts from "@/components/dashboard/CriticalAlerts";
-import AttackChainProgression from "@/components/dashboard/AttackChainProgression";
 import TrendingThreatActors from "@/components/dashboard/TrendingThreat";
+import BusinessRiskCard from "@/components/dashboard/BusinessRiskCard";
+import ComplianceFrameworkCard from "@/components/dashboard/ComplianceFrameworkCard";
+import StrategicInitiativesCard from "@/components/dashboard/StrategicInitiativesCard";
 
 export default function DashboardPage() {
   return (
@@ -40,9 +42,18 @@ export default function DashboardPage() {
 
       <MetricsBar />
 
+      <div className="flex gap-6">
+        <div className="w-7/12">
+          <BusinessRiskCard />
+        </div>
+        <div className="w-5/12">
+          <ComplianceFrameworkCard />
+        </div>
+      </div>
+
       <DashboardCharts />
 
-      <AttackChainProgression />
+      <StrategicInitiativesCard />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ThreatCategories />
