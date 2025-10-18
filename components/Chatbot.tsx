@@ -14,14 +14,53 @@ export default function Chatbot() {
   >([]);
   const [input, setInput] = useState("");
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
+  // Predefined questions and answers
+  const faqs = [
+    {
+      question: "How can I improve my password security?",
+      answer:
+        "Use long, unique passwords for each account, enable 2FA, and avoid common words or patterns.",
+    },
+    {
+      question: "What is phishing and how to avoid it?",
+      answer:
+        "Phishing is a scam to steal your data via fake emails or websites. Always verify senders and avoid clicking unknown links.",
+    },
+    {
+      question: "How do I secure my Wi-Fi network?",
+      answer:
+        "Use WPA3 encryption, a strong password, hide your SSID, and regularly update your router firmware.",
+    },
+    {
+      question: "What is the best way to backup data?",
+      answer:
+        "Use the 3-2-1 rule: 3 copies, 2 different media, 1 offsite. Cloud backups and external drives are recommended.",
+    },
+  ];
+
+  const sendMessage = (text?: string) => {
+    const messageText = text || input;
+    if (!messageText.trim()) return;
+
     setMessages([
       ...messages,
-      { from: "user", text: input },
-      { from: "bot", text: "I’m your Security Analyst, here to assist. 🔍" },
+      { from: "user", text: messageText },
+      {
+        from: "bot",
+        text:
+          "💡 " + faqs.find((f) => f.answer === messageText)?.answer ||
+          "I’m your Security Analyst, here to assist. 🔍",
+      },
     ]);
     setInput("");
+  };
+
+  const handleFaqClick = (faq: (typeof faqs)[0]) => {
+    setMessages([
+      ...messages,
+      { from: "user", text: faq.question },
+      { from: "bot", text: faq.answer },
+    ]);
   };
 
   return (
@@ -73,6 +112,23 @@ export default function Chatbot() {
                 {m.text}
               </div>
             ))}
+
+            {/* Suggested questions */}
+            {messages.length === 0 && (
+              <div className="mt-2 space-y-2">
+                {faqs.map((faq, i) => (
+                  <Button
+                    key={i}
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-left text-white border-white/20 hover:bg-blue-500/30"
+                    onClick={() => handleFaqClick(faq)}
+                  >
+                    {faq.question}
+                  </Button>
+                ))}
+              </div>
+            )}
           </CardContent>
           <div className="p-3 border-t border-white/10 flex gap-2">
             <Input
@@ -84,7 +140,7 @@ export default function Chatbot() {
             />
             <Button
               className="bg-blue-500 hover:bg-blue-600"
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
             >
               Send
             </Button>

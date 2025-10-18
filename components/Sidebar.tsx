@@ -15,6 +15,7 @@ import {
   Ribbon,
   Brain,
   Link,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RegionToggle from "@/components/RegionToggle";
@@ -56,7 +57,12 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     { name: "Risk Matrix", icon: BarChart, path: "/risk-assessment-scores" },
     { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
     { name: "Red Shift", icon: Swords, path: "/offensive-security" },
-    { name: "Sentinel Analytics", icon: Brain, path: "/ai" },
+    { name: "Sentinel Analyst", icon: Brain, path: "/ai" },
+    {
+      name: "Incident Management",
+      icon: AlertTriangle,
+      path: "/incident-management",
+    },
     {
       name: "Security Awareness",
       icon: Ribbon,
@@ -113,7 +119,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         <Shield className="h-10 w-10 text-blue-400 drop-shadow-[0_0_8px_rgba(30,64,175,0.8)]" />
         {!collapsed && (
           <h1 className="text-2xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-            Churchill
+            CHURCHILL<sup className="text-xl align-super">™</sup>
           </h1>
         )}
       </div>
