@@ -210,19 +210,111 @@ export default function AttackSurfacePage() {
       )}
 
       {/* Default View Before Scan */}
+      {/* Default View Before Scan (Show Previous Summary) */}
       {!scanStarted && !scanCompleted && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex flex-col items-center justify-center py-20 text-center text-gray-400"
+          className="space-y-8"
         >
-          <Globe className="w-12 h-12 text-blue-400 mb-4" />
-          <h2 className="text-xl font-semibold mb-2">
-            No Scan Results Available
-          </h2>
-          <p className="text-sm text-gray-500">
-            Click “Start Scan” to begin discovering your external assets.
-          </p>
+          {/* Last Scan Summary */}
+          <div className="bg-white/5 border border-slate-700/30 backdrop-blur-lg rounded-2xl p-6 shadow-lg">
+            <h2 className="text-2xl font-semibold text-blue-400 mb-2">
+              Last Scan Summary
+            </h2>
+            <p className="text-gray-400 mb-6">
+              Last external attack surface scan completed on{" "}
+              <span className="text-white font-medium">October 12, 2025</span>.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Total Assets */}
+              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm text-gray-400">
+                    Total Assets
+                  </CardTitle>
+                  <Globe className="h-6 w-6 text-blue-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">1,218</div>
+                  <p className="text-xs text-green-500">+32 since last month</p>
+                </CardContent>
+              </Card>
+
+              {/* Exposed Services */}
+              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm text-gray-400">
+                    Exposed Services
+                  </CardTitle>
+                  <Shield className="h-6 w-6 text-yellow-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">43</div>
+                  <p className="text-xs text-yellow-500">
+                    5 high-risk endpoints
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Vulnerabilities */}
+              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm text-gray-400">
+                    Critical Vulns
+                  </CardTitle>
+                  <AlertCircle className="h-6 w-6 text-red-500" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">14</div>
+                  <p className="text-xs text-green-500">-2 since last scan</p>
+                </CardContent>
+              </Card>
+
+              {/* Risk Score */}
+              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm text-gray-400">
+                    Risk Score
+                  </CardTitle>
+                  <Shield className="h-6 w-6 text-green-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">72/100</div>
+                  <p className="text-xs text-green-500">Moderate risk level</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Overview Section */}
+          <Card className="bg-white/5 border border-slate-700/30 rounded-2xl backdrop-blur-lg p-6">
+            <CardHeader>
+              <CardTitle className="text-xl text-blue-400">
+                External Exposure Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-gray-400 space-y-4">
+              <p>
+                Your organization currently maintains{" "}
+                <span className="text-white font-medium">
+                  76 active internet-facing domains
+                </span>
+                , including cloud resources, SaaS services, and externally
+                hosted assets.
+              </p>
+              <p>
+                The previous scan revealed several outdated TLS configurations
+                and misconfigured DNS records that may increase your exposure
+                risk.
+              </p>
+              <p className="text-sm text-gray-500 italic">
+                Click “Start Scan” to perform a fresh discovery and risk
+                assessment.
+              </p>
+            </CardContent>
+          </Card>
         </motion.div>
       )}
     </div>
