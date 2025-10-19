@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -54,7 +54,7 @@ export default function SentinelAnalysisPage() {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setAnalysisCompleted(true), 500);
+          setTimeout(() => setAnalysisCompleted(true), 600);
           return 100;
         }
         return prev + 10;
@@ -67,39 +67,134 @@ export default function SentinelAnalysisPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8 p-8 min-h-screen text-white">
+    <div className="flex flex-col gap-10 p-8 min-h-screen text-white">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-5xl font-bold text-blue-400 drop-shadow-[0_0_14px_rgba(192,132,252,0.8)]">
             Sentinel Analysis
           </h1>
-          <p className="text-gray-400 mt-2 text-lg max-w-2xl">
+          <p className="text-gray-400 mt-2 text-lg max-w-3xl">
             AI-powered behavioral analytics and threat correlation engine —
             discover, predict, and respond before incidents occur.
           </p>
         </div>
-
-        <Button
-          disabled={analysisStarted && !analysisCompleted}
-          onClick={handleStartAnalysis}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg"
-        >
-          {analysisStarted && !analysisCompleted ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin" />
-              Analyzing...
-            </>
-          ) : (
-            <>
-              <Play className="w-5 h-5" />
-              Start Analysis
-            </>
-          )}
-        </Button>
       </div>
 
-      {/* Analysis Progress */}
+      {/* BEFORE ANALYSIS */}
+      {!analysisStarted && !analysisCompleted && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex flex-col gap-10"
+        >
+          {/* Intro Card */}
+          <Card className="bg-white/5 border-none rounded-2xl p-8 text-gray-300 shadow-lg backdrop-blur-md text-center">
+            <Cpu className="w-14 h-14 text-blue-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-semibold text-blue-300 mb-2">
+              Sentinel AI Ready
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Begin an AI-powered deep analysis across your telemetry data to
+              uncover hidden threats, anomalies, and behavioral risks.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <Button
+                onClick={handleStartAnalysis}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl flex items-center gap-2"
+              >
+                <Play className="w-5 h-5" /> Launch AI Analysis
+              </Button>
+            </div>
+          </Card>
+
+          {/* Capabilities Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="bg-white/5 border-none rounded-2xl p-6 text-gray-300">
+              <h3 className="text-lg font-semibold text-blue-300 mb-2">
+                Telemetry Sources
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Sentinel processes SIEM, EDR, and NDR data from multiple
+                regions, unifying over 2.5M daily telemetry points.
+              </p>
+            </Card>
+
+            <Card className="bg-white/5 border-none rounded-2xl p-6 text-gray-300">
+              <h3 className="text-lg font-semibold text-blue-300 mb-2">
+                Machine Learning Models
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Transformer-based anomaly detectors, ensemble classifiers, and
+                correlation graphs trained on 3 years of enterprise data.
+              </p>
+            </Card>
+
+            <Card className="bg-white/5 border-none rounded-2xl p-6 text-gray-300">
+              <h3 className="text-lg font-semibold text-blue-300 mb-2">
+                Expected Output
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                Risk prioritization, anomaly timelines, and confidence metrics —
+                fully visualized and actionable.
+              </p>
+            </Card>
+          </div>
+
+          {/* What Sentinel Will Do */}
+          <Card className="bg-white/5 border-none rounded-2xl p-8 text-gray-300">
+            <h3 className="text-xl font-semibold text-blue-300 mb-4">
+              What Sentinel Will Analyze
+            </h3>
+            <ul className="space-y-3 text-gray-400 text-sm">
+              <li>• Correlation between login behaviors and time anomalies</li>
+              <li>• Endpoint command execution patterns</li>
+              <li>• DNS and network beaconing activity</li>
+              <li>• Privilege escalation and abnormal privilege persistence</li>
+              <li>• Cloud identity and API usage deviations</li>
+            </ul>
+          </Card>
+
+          {/* Sample Telemetry Preview */}
+          <Card className="bg-white/5 border-none rounded-2xl p-6">
+            <h3 className="text-xl font-semibold mb-4 text-blue-300">
+              Recent Telemetry Snapshot
+            </h3>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Source</TableHead>
+                  <TableHead>Event Type</TableHead>
+                  <TableHead>Count</TableHead>
+                  <TableHead>Timestamp</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Firewall Logs</TableCell>
+                  <TableCell>Blocked Connections</TableCell>
+                  <TableCell>340</TableCell>
+                  <TableCell>3 mins ago</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Azure AD</TableCell>
+                  <TableCell>Failed Logins</TableCell>
+                  <TableCell>28</TableCell>
+                  <TableCell>10 mins ago</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Endpoint Sensors</TableCell>
+                  <TableCell>Process Spawns</TableCell>
+                  <TableCell>980</TableCell>
+                  <TableCell>15 mins ago</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* PROGRESS STATE */}
       {analysisStarted && !analysisCompleted && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -129,14 +224,15 @@ export default function SentinelAnalysisPage() {
         </motion.div>
       )}
 
-      {/* Results Section */}
+      {/* AFTER ANALYSIS */}
       {analysisCompleted && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          className="space-y-10"
         >
-          {/* Cards */}
+          {/* Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
@@ -176,7 +272,7 @@ export default function SentinelAnalysisPage() {
                 key={card.id}
                 whileHover={{ scale: 1.02 }}
                 onClick={() => toggleCard(card.id)}
-                className={` p-4 cursor-pointer relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(192,132,252,0.6)] transition-all duration-300 ${
+                className={`p-4 cursor-pointer relative text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(192,132,252,0.6)] transition-all duration-300 ${
                   expandedCard === card.id ? "ring-2 ring-blue-500" : ""
                 }`}
               >
@@ -201,67 +297,20 @@ export default function SentinelAnalysisPage() {
             ))}
           </div>
 
-          {/* Expanded Details Tables */}
-          <AnimatePresence>
-            {expandedCard && (
-              <motion.div
-                key={expandedCard}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className="mt-6"
-              >
-                <Card className=" p-6 bg-white/5 border-none rounded-2xl text-gray-300 shadow-lg backdrop-blur-md">
-                  <h3 className="text-lg font-semibold text-blue-300 mb-4 capitalize">
-                    {expandedCard.replace("-", " ")} Details
-                  </h3>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-blue-300">ID</TableHead>
-                        <TableHead className="text-blue-300">
-                          Description
-                        </TableHead>
-                        <TableHead className="text-blue-300">
-                          Severity
-                        </TableHead>
-                        <TableHead className="text-blue-300">
-                          Timestamp
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {[...Array(5)].map((_, i) => (
-                        <TableRow key={i}>
-                          <TableCell>EVT-{1000 + i}</TableCell>
-                          <TableCell>
-                            {expandedCard === "risk"
-                              ? "Abnormal credential usage detected"
-                              : expandedCard === "confidence"
-                              ? "AI confidence stable across model iterations"
-                              : expandedCard === "anomalies"
-                              ? "Unusual outbound data spike"
-                              : "Correlated threat score update"}
-                          </TableCell>
-                          <TableCell>
-                            {
-                              ["Low", "Medium", "High", "Critical"][
-                                Math.floor(Math.random() * 4)
-                              ]
-                            }
-                          </TableCell>
-                          <TableCell>2025-10-16 14:{10 + i}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Card>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Anomaly Breakdown Section */}
+          <Card className="bg-white/5 border-none rounded-2xl p-6 text-gray-300">
+            <h3 className="text-xl font-semibold mb-4 text-blue-300">
+              Anomaly Breakdown by Category
+            </h3>
+            <ul className="text-sm text-gray-400 space-y-2">
+              <li>• User Behavior: 15 anomalies (5 high-risk)</li>
+              <li>• Network Traffic: 12 anomalies (2 critical)</li>
+              <li>• Endpoint Actions: 10 anomalies (3 medium)</li>
+              <li>• Cloud API Calls: 5 anomalies (low-risk)</li>
+            </ul>
+          </Card>
 
-          {/* Tabs */}
+          {/* Tabs with insights, behavior, summary */}
           <Tabs
             value={activeTab}
             onValueChange={handleTabChange}
@@ -273,7 +322,6 @@ export default function SentinelAnalysisPage() {
               <TabsTrigger value="summary">AI Summary</TabsTrigger>
             </TabsList>
 
-            {/* Threat Insights */}
             <TabsContent value="insights" className="mt-6">
               <Card className="bg-white/5 border-none rounded-2xl p-6 text-gray-300">
                 <h3 className="text-xl font-semibold mb-4 text-blue-300">
@@ -312,7 +360,6 @@ export default function SentinelAnalysisPage() {
               </Card>
             </TabsContent>
 
-            {/* Behavioral Patterns */}
             <TabsContent value="behavior" className="mt-6">
               <Card className="bg-white/5 border-none rounded-2xl p-6 text-gray-300">
                 <h3 className="text-xl font-semibold mb-4 text-blue-300">
@@ -320,61 +367,79 @@ export default function SentinelAnalysisPage() {
                 </h3>
                 <ul className="space-y-2 text-sm text-gray-400">
                   <li>
-                    • Multiple concurrent logins detected from separate
-                    geolocations (3 accounts).
+                    • Concurrent logins detected from separate geolocations.
                   </li>
                   <li>
                     • Unusual privilege escalations traced to new service
                     accounts.
                   </li>
                   <li>
-                    • Network lateral movement patterns match previous
-                    simulation data.
+                    • Network lateral movement patterns match prior simulations.
                   </li>
                   <li>
-                    • Decrease in false positives by 21% after retraining.
+                    • False positive rates reduced by 21% after retraining.
                   </li>
                 </ul>
               </Card>
             </TabsContent>
 
-            {/* AI Summary */}
             <TabsContent value="summary" className="mt-6">
               <Card className="bg-white/5 border-none rounded-2xl p-6 text-gray-300">
                 <h3 className="text-xl font-semibold mb-4 text-blue-300">
                   AI Correlation Summary
                 </h3>
                 <p className="text-sm text-gray-400 leading-relaxed">
-                  The Sentinel AI engine completed its correlation across 2.3
-                  million events and 450 network endpoints. Confidence levels
-                  remain above 95% across model layers.
+                  The Sentinel AI engine correlated 2.3 million events from 450
+                  endpoints. Confidence remains above 95% across model layers.
                   <br />
                   <br />
-                  <strong>Recommendation:</strong> Prioritize monitoring on
-                  external traffic anomalies and privilege escalation attempts.
-                  Deploy adaptive rule set for improved detection accuracy.
+                  <strong>Recommendation:</strong> Focus on external traffic
+                  anomalies and privilege escalation attempts.
                 </p>
               </Card>
             </TabsContent>
           </Tabs>
-        </motion.div>
-      )}
 
-      {/* Empty State */}
-      {!analysisStarted && !analysisCompleted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center justify-center py-32 text-center text-gray-400"
-        >
-          <Cpu className="w-14 h-14 text-blue-400 mb-4" />
-          <h2 className="text-2xl font-semibold mb-2">
-            No Analysis Results Available
-          </h2>
-          <p className="text-sm text-gray-500 max-w-md">
-            Click “Start Analysis” to let Sentinel AI process millions of
-            telemetry signals and generate threat correlations.
-          </p>
+          {/* Recommendations Section */}
+          <Card className="bg-white/5 border-none rounded-2xl p-8 text-gray-300">
+            <h3 className="text-xl font-semibold text-blue-300 mb-4">
+              Response Recommendations
+            </h3>
+            <ul className="space-y-3 text-sm text-gray-400">
+              <li>• Isolate 3 high-risk endpoints for further triage.</li>
+              <li>
+                • Enforce MFA challenges on 2 user accounts showing anomalies.
+              </li>
+              <li>• Deploy network sandboxing for outbound C2-like traffic.</li>
+              <li>
+                • Re-run AI correlation in 24 hours to confirm stabilization.
+              </li>
+            </ul>
+          </Card>
+
+          {/* Next Steps */}
+          <div className="flex flex-col md:flex-row gap-6">
+            <Card className="flex-1 bg-white/5 border-none rounded-2xl p-6">
+              <h3 className="text-lg font-semibold text-blue-300 mb-3">
+                Next Steps
+              </h3>
+              <ul className="text-gray-400 text-sm space-y-2">
+                <li>• Generate incident report summary</li>
+                <li>• Export findings to SIEM dashboard</li>
+                <li>• Schedule re-analysis pipeline</li>
+              </ul>
+            </Card>
+
+            <Card className="flex-1 bg-white/5 border-none rounded-2xl p-6">
+              <h3 className="text-lg font-semibold text-blue-300 mb-3">
+                Confidence Overview
+              </h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                All anomaly detection models maintained a steady mean confidence
+                of 96.4%, with no overfitting signals across validation layers.
+              </p>
+            </Card>
+          </div>
         </motion.div>
       )}
     </div>
