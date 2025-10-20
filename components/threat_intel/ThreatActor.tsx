@@ -1,189 +1,181 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
+import { Activity, Target, Shield, Signal } from "lucide-react";
 
-type ThreatActorType = {
-  name: string;
-  image: string;
-  motivation: string;
-  countries: string;
-  sectors: string;
-  attackType: string;
-  techniques: string[];
-  date: string;
-  readTime: string;
-  quote: string;
-  description: string;
-};
+export default function ThreatActorIntelligence() {
+  const stats = [
+    {
+      icon: <Target className="w-6 h-6 text-red-400" />,
+      value: "156",
+      label: "Tracked Actors",
+    },
+    {
+      icon: <Shield className="w-6 h-6 text-yellow-400" />,
+      value: "89",
+      label: "Active Campaigns",
+    },
+    {
+      icon: <Signal className="w-6 h-6 text-purple-400" />,
+      value: "15,847",
+      label: "Total IOCs",
+    },
+    {
+      icon: <Activity className="w-6 h-6 text-amber-400" />,
+      value: "+47",
+      label: "Recent Activity",
+    },
+  ];
 
-const threatActors: Record<string, ThreatActorType> = {
-  "black-cat": {
-    name: "Black Cat Ransomware",
-    image: "/black_cat_2.png",
-    motivation: "Financial Gain",
-    countries: "Singapore, Taiwan, Thailand, United States",
-    sectors: "Manufacturing, Financial Services, Healthcare",
-    attackType: "Data Encryption, Data Exfiltration",
-    techniques: [
-      "Phishing (T1566)",
-      "Inhibit System Recovery (T1490)",
-      "Data Encrypted for Impact (T1486)",
-    ],
-    date: "Sep 19, 2025",
-    readTime: "10 Mins Read",
-    quote: "We only seek money. No morals, no political stance.",
-    description:
-      "Black Cat emerged in 2025 and quickly carried out disruptive ransomware attacks in multiple regions...",
-  },
-  "dire-wolf": {
-    name: "Dire Wolf Ransomware",
-    image: "/dire_wolf_2.png",
-    motivation: "Financial Gain",
-    countries: "USA, Canada, UK",
-    sectors: "Healthcare, Education, Retail",
-    attackType: "Data Encryption, Credential Theft",
-    techniques: [
-      "Spear Phishing (T1566.002)",
-      "Account Takeover (T1078)",
-      "Data Encrypted for Impact (T1486)",
-    ],
-    date: "Sep 04, 2025",
-    readTime: "8 Mins Read",
-    quote: "Profit is everything. No politics, no ideology.",
-    description:
-      "Dire Wolf surfaced in 2024 targeting multiple sectors with advanced phishing campaigns and ransomware attacks...",
-  },
-};
-
-export default function ThreatActor() {
-  const [selectedActorKey, setSelectedActorKey] = useState<string | null>(null);
-
-  const actor = selectedActorKey ? threatActors[selectedActorKey] : null;
+  const actors = [
+    {
+      name: "APT28 (Fancy Bear)",
+      aliases: "Sofacy • Pawn Storm • Sednit",
+      country: "RU  Russia",
+      motivation: "Espionage",
+      sophistication: "Very High",
+      firstSeen: "2007",
+      campaigns: 47,
+      iocs: 1247,
+      sectors: 4,
+      targets: ["Government", "Military", "Defense"],
+      status: "Very Active",
+    },
+    {
+      name: "Lazarus Group",
+      aliases: "HIDDEN COBRA • Guardians of Peace",
+      country: "KP  North",
+      motivation: "Financial Gain, Espionage",
+      sophistication: "Very High",
+      firstSeen: "2009",
+      campaigns: 89,
+      iocs: 2341,
+      sectors: 4,
+      targets: ["Financial", "Cryptocurrency", "Defense"],
+      status: "Very Active",
+    },
+    {
+      name: "FIN7",
+      aliases: "Carbanak Group • Navigator Group",
+      country: "🌐 International",
+      motivation: "Financial Gain",
+      sophistication: "High",
+      firstSeen: "2013",
+      campaigns: 156,
+      iocs: 3421,
+      sectors: 3,
+      targets: ["Retail", "Hospitality", "Financial Services"],
+      status: "Active",
+    },
+  ];
 
   return (
-    <div className="min-h-screen text-gray-200 max-w-7xl mx-auto px-6 py-12 space-y-8">
-      {/* If no actor selected, show list */}
-      {!actor && (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Object.entries(threatActors).map(([key, item]) => (
-            <Card
-              key={key}
-              className="cursor-pointer relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md p-4 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition"
-              onClick={() => setSelectedActorKey(key)}
-            >
-              <div className="relative w-full h-40 rounded-xl overflow-hidden mb-4">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/20 to-transparent" />
-              </div>
-              <CardHeader>
-                <CardTitle className="text-lg font-bold text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]">
-                  {item.name}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-white/70">
-                <p>
-                  {item.date} • {item.readTime}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0A0F] via-[#11111A] to-[#1A1A24] text-white px-8 py-12 space-y-10">
+      {/* Header */}
+      <div className="space-y-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.2)] flex items-center gap-3">
+          <span className="text-orange-400">🧠</span> Threat Actor Intelligence
+        </h1>
+        <p className="text-slate-400">
+          Advanced Persistent Threats & Cybercrime Groups
+        </p>
+      </div>
 
-      {/* If an actor is selected, show article */}
-      {actor && (
-        <div className="space-y-8">
-          <button
-            className="text-blue-400 underline"
-            onClick={() => setSelectedActorKey(null)}
+      {/* Stats */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, i) => (
+          <Card
+            key={i}
+            className="bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md shadow-md hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition"
           >
-            ← Back to Threat Actors List
-          </button>
+            <CardContent className="flex flex-col items-center justify-center py-6">
+              <div className="mb-2">{stat.icon}</div>
+              <div className="text-3xl font-bold text-white">{stat.value}</div>
+              <div className="text-sm text-slate-400">{stat.label}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-          {/* Hero Section */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-lg">
-              <Image
-                src={actor.image}
-                alt={actor.name}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/20 to-transparent" />
+      {/* Actor Cards */}
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {actors.map((actor, i) => (
+          <Card
+            key={i}
+            className="relative bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md shadow-lg hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] transition p-6"
+          >
+            {/* Status Badge */}
+            <div
+              className={`absolute top-4 right-4 text-xs px-3 py-1 rounded-full ${
+                actor.status === "Very Active"
+                  ? "bg-red-600/80 text-white"
+                  : "bg-yellow-500/80 text-black"
+              }`}
+            >
+              {actor.status}
             </div>
 
-            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/10 to-transparent" />
-              <div className="relative z-10">
-                <CardHeader>
-                  <CardTitle className="text-xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.8)]">
-                    {actor.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm text-white/80">
-                  <p>
-                    <span className="font-semibold text-white">
-                      Motivation:
-                    </span>{" "}
-                    {actor.motivation}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-white">
-                      Target Countries:
-                    </span>{" "}
-                    {actor.countries}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-white">
-                      Target Sectors:
-                    </span>{" "}
-                    {actor.sectors}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-white">
-                      Attack Type:
-                    </span>{" "}
-                    {actor.attackType}
-                  </p>
-                  <Separator className="my-2 bg-white/20" />
-                  <ul className="space-y-1 text-blue-300">
-                    {actor.techniques.map((technique) => (
-                      <li key={technique}>• {technique}</li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </div>
-            </Card>
-          </div>
+            <h2 className="text-xl font-bold text-white mb-1">{actor.name}</h2>
+            <p className="text-slate-400 text-sm mb-2">{actor.aliases}</p>
+            <p className="text-slate-400 text-sm mb-4">{actor.country}</p>
 
-          {/* Article Content */}
-          <div className="space-y-4">
-            <p className="text-xs text-white/60">
-              Home › Blog › Threat Actor Profiles
-            </p>
-            <h1 className="text-3xl font-bold mt-2 mb-4 text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-              Dark Web Profile: {actor.name}
-            </h1>
-            <p className="text-sm text-white/60">
-              {actor.date} • {actor.readTime}
-            </p>
-            <div className="prose prose-invert max-w-none text-white/80">
-              <p>{actor.description}</p>
+            <div className="space-y-1 text-sm text-white/80">
               <p>
-                <em className="text-blue-300">{actor.quote}</em>
+                <span className="font-semibold text-white">Motivation:</span>{" "}
+                {actor.motivation}
+              </p>
+              <p>
+                <span className="font-semibold text-white">
+                  Sophistication:
+                </span>{" "}
+                <span className="text-red-400">{actor.sophistication}</span>
+              </p>
+              <p>
+                <span className="font-semibold text-white">First Seen:</span>{" "}
+                {actor.firstSeen}
               </p>
             </div>
-          </div>
-        </div>
-      )}
+
+            {/* Metrics */}
+            <div className="grid grid-cols-3 gap-3 mt-5 text-center">
+              <div className="bg-white/5 rounded-xl py-2">
+                <div className="text-xl font-bold">{actor.campaigns}</div>
+                <div className="text-xs text-slate-400">Campaigns</div>
+              </div>
+              <div className="bg-white/5 rounded-xl py-2">
+                <div className="text-xl font-bold">{actor.iocs}</div>
+                <div className="text-xs text-slate-400">IOCs</div>
+              </div>
+              <div className="bg-white/5 rounded-xl py-2">
+                <div className="text-xl font-bold">{actor.sectors}</div>
+                <div className="text-xs text-slate-400">Sectors</div>
+              </div>
+            </div>
+
+            {/* Targets */}
+            <div className="mt-5">
+              <p className="text-xs uppercase text-slate-400 mb-2">
+                Primary Targets:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {actor.targets.map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs bg-red-900/40 text-red-300 px-3 py-1 rounded-lg border border-red-700/40"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Button */}
+            <button className="w-full mt-6 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition">
+              View Full Profile
+            </button>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
