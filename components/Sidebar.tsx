@@ -46,10 +46,9 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         { name: "Threat Landscape", tab: "landscape" },
         { name: "Enrichment", tab: "enrichment" },
         { name: "Threat Actors", tab: "threat-actors" },
-        // { name: "Malware Intelligence", tab: "Malware Intelligence" },
-        // { name: "Ransomware Intelligence", tab: "Ransomware Intelligence" },
-        // { name: "Data Leaks", tab: "Data Leaks" },
-        // { name: "Fraud Intelligence", tab: "Fraud Intelligence" },
+        { name: "Malware Intelligence", tab: "malware" },
+        { name: "Ransomware Intelligence", tab: "ransomware" },
+        { name: "Fraud Intelligence", tab: "fraud" },
       ],
     },
     {

@@ -1,11 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { AlertCircle, Globe, Shield, Loader2, Play } from "lucide-react";
+import {
+  AlertCircle,
+  Globe,
+  Shield,
+  Loader2,
+  Play,
+  CheckCircle,
+  Zap,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AssetInventory from "@/components/asm/AssetInventory";
 import ExternalExposure from "@/components/asm/ExternalExposure";
@@ -15,9 +23,38 @@ export default function AttackSurfacePage() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab") || "inventory";
   const [activeTab, setActiveTab] = useState(tabParam);
+
   const [scanStarted, setScanStarted] = useState(false);
   const [scanCompleted, setScanCompleted] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [globalProgress, setGlobalProgress] = useState(0);
+
+  // staging
+  const stages = [
+    {
+      id: "discovery",
+      title: "Discovery Tool",
+      desc: "Enumerating domains & subdomains",
+    },
+    {
+      id: "portscan",
+      title: "Port Scanner",
+      desc: "Probing ports and services",
+    },
+    {
+      id: "fingerprinting",
+      title: "Asset Fingerprinting",
+      desc: "Identifying services and headers",
+    },
+    {
+      id: "tlscheck",
+      title: "TLS Check",
+      desc: "Analyzing SSL/TLS configurations",
+    },
+  ];
+
+  const [currentStage, setCurrentStage] = useState(0);
+  const [stageProgress, setStageProgress] = useState(0);
+  const stageIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     setActiveTab(tabParam);
@@ -30,22 +67,76 @@ export default function AttackSurfacePage() {
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
+  const clearStageInterval = () => {
+    if (stageIntervalRef.current) {
+      clearInterval(stageIntervalRef.current);
+      stageIntervalRef.current = null;
+    }
+  };
+
+  const startStageLoop = (startIndex = 0) => {
+    setCurrentStage(startIndex);
+    setStageProgress(0);
+
+    // make each stage take a slightly different random-ish length to feel alive
+    const startNextStage = (nextIndex: number) => {
+      if (nextIndex >= stages.length) {
+        // finished all stages
+        setGlobalProgress(100);
+        setTimeout(() => {
+          setScanCompleted(true);
+          setScanStarted(false);
+        }, 600);
+        return;
+      }
+
+      setCurrentStage(nextIndex);
+      setStageProgress(0);
+
+      // choose a duration for this stage (in ms)
+      const durationMs = 1800 + Math.floor(Math.random() * 2000);
+      const tickMs = 150;
+      const steps = Math.max(1, Math.floor(durationMs / tickMs));
+      let step = 0;
+
+      clearStageInterval();
+      stageIntervalRef.current = setInterval(() => {
+        step += 1;
+        const percent = Math.min(100, Math.round((step / steps) * 100));
+        setStageProgress(percent);
+
+        // rough global progress mapping across stages
+        const overall = Math.min(
+          100,
+          Math.round(((nextIndex + percent / 100) / stages.length) * 100)
+        );
+        setGlobalProgress(overall);
+
+        if (percent >= 100) {
+          clearStageInterval();
+          // short pause between stages so UI shows completion
+          setTimeout(() => startNextStage(nextIndex + 1), 400);
+        }
+      }, tickMs);
+    };
+
+    startNextStage(startIndex);
+  };
+
   const handleStartScan = () => {
     setScanStarted(true);
     setScanCompleted(false);
-    setProgress(0);
+    setGlobalProgress(0);
+    setCurrentStage(0);
+    setStageProgress(0);
 
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => setScanCompleted(true), 500);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 500);
+    startStageLoop(0);
   };
+
+  // cleanup on unmount
+  useEffect(() => {
+    return () => clearStageInterval();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6 p-6 min-h-screen text-white">
@@ -79,30 +170,93 @@ export default function AttackSurfacePage() {
         </Button>
       </div>
 
-      {/* Scan Progress (Fake Animation) */}
+      {/* Scan Progress (Staged Animation) */}
       {scanStarted && !scanCompleted && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="relative bg-white/10 border border-blue-500/20 rounded-2xl p-6 shadow-lg overflow-hidden"
+          className="relative bg-white/6 border border-blue-500/10 rounded-2xl p-6 shadow-lg overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/30 via-blue-800/10 to-transparent animate-pulse" />
-          <div className="relative z-10 flex flex-col items-center text-center space-y-4">
-            <Loader2 className="w-10 h-10 animate-spin text-blue-400" />
-            <p className="text-lg font-medium">Scanning external assets...</p>
-            <p className="text-sm text-gray-400">
-              Discovering endpoints, services, and vulnerabilities
-            </p>
-            <div className="w-full bg-white/10 rounded-full h-2 mt-4 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-blue-800/6 to-transparent pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <Loader2 className="w-10 h-10 animate-spin text-blue-400" />
+              <div>
+                <p className="text-lg font-medium">Live scan in progress</p>
+                <p className="text-sm text-gray-400">
+                  Stage:{" "}
+                  <span className="text-white font-medium">
+                    {stages[currentStage]?.title}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {/* Stage progress bar */}
+            <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
               <motion.div
                 className="h-2 bg-blue-500 rounded-full"
-                style={{ width: `${progress}%` }}
+                style={{ width: `${stageProgress}%` }}
                 initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.4 }}
+                animate={{ width: `${stageProgress}%` }}
+                transition={{ duration: 0.2 }}
               />
             </div>
-            <p className="text-sm text-gray-400">{progress}% completed</p>
+            <div className="flex items-center justify-between text-sm text-gray-400">
+              <div>
+                {stageProgress}% — {stages[currentStage]?.desc}
+              </div>
+              <div>{globalProgress}% overall</div>
+            </div>
+
+            {/* Visual stage list */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {stages.map((s, i) => {
+                const done =
+                  i < currentStage ||
+                  (i === currentStage && stageProgress === 100);
+                const active = i === currentStage && stageProgress < 100;
+                return (
+                  <div
+                    key={s.id}
+                    className={`flex items-center gap-3 p-3 rounded-lg border ${
+                      done
+                        ? "bg-white/5 border-white/10"
+                        : active
+                        ? "bg-white/6 border-blue-600"
+                        : "bg-transparent border-slate-700/30"
+                    }`}
+                  >
+                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white/6">
+                      {done ? (
+                        <CheckCircle className="w-5 h-5 text-green-400" />
+                      ) : (
+                        <Zap className="w-5 h-5 text-yellow-400" />
+                      )}
+                    </div>
+                    <div className="flex-1 text-sm">
+                      <div
+                        className={`font-medium ${
+                          done ? "text-white" : "text-gray-200"
+                        }`}
+                      >
+                        {s.title}
+                      </div>
+                      <div className="text-xs text-gray-400 truncate">
+                        {s.desc}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* small note */}
+            <p className="text-xs text-gray-500 italic">
+              This is a simulated scan for demo purposes — no network traffic is
+              performed.
+            </p>
           </div>
         </motion.div>
       )}
@@ -210,7 +364,6 @@ export default function AttackSurfacePage() {
       )}
 
       {/* Default View Before Scan */}
-      {/* Default View Before Scan (Show Previous Summary) */}
       {!scanStarted && !scanCompleted && (
         <motion.div
           initial={{ opacity: 0 }}
