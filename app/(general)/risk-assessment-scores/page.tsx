@@ -10,12 +10,12 @@ import {
   Calendar,
   DollarSign,
   Clock,
-  Download,
   Filter,
   Plus,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ConfirmDialogButton from "@/components/ConfirmButton";
 
 const RiskRegister = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -158,10 +158,13 @@ const RiskRegister = () => {
                     <Filter className="w-4 h-4" />
                     <span>Filter</span>
                   </button>
-                  <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm flex items-center space-x-2">
-                    <Download className="w-4 h-4" />
-                    <span>Export</span>
-                  </button>
+                  <ConfirmDialogButton
+                    buttonLabel="Export Report"
+                    dialogTitle="Confirm Export"
+                    extraContent="Are you sure you want to export the report?"
+                    onConfirm={() => console.log("Report exported")}
+                    onCancel={() => console.log("Export canceled")}
+                  />
                 </div>
               </CardTitle>
             </CardHeader>

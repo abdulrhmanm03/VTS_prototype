@@ -28,6 +28,7 @@ import {
   Edit,
   X,
 } from "lucide-react";
+import ConfirmDialogButton from "@/components/ConfirmButton";
 
 export default function IncidentManagement() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -387,10 +388,13 @@ export default function IncidentManagement() {
                 <Filter className="w-4 h-4" />
                 Filter
               </button>
-              <button className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors flex items-center gap-2 border border-slate-700">
-                <Download className="w-4 h-4" />
-                Export
-              </button>
+              <ConfirmDialogButton
+                buttonLabel="Export"
+                dialogTitle="Confirm Export"
+                extraContent="Are you sure you want to export this incident?"
+                onConfirm={() => console.log("Incident exported")}
+                onCancel={() => console.log("Export canceled")}
+              />
               <button
                 onClick={() => setShowNewIncident(true)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"

@@ -7,11 +7,9 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  ExternalLink,
   Search,
   Shield,
   Activity,
-  Download,
   Filter,
   Play,
   Pause,
@@ -19,6 +17,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import ConfirmDialogButton from "@/components/ConfirmButton";
 
 export default function SurfaceSentinel() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -104,10 +103,13 @@ export default function SurfaceSentinel() {
             )}
             <span>{isScanning ? "Scanning..." : "Start Scan"}</span>
           </button>
-          <button className="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white rounded-lg font-semibold flex items-center space-x-2">
-            <Download className="w-5 h-5" />
-            <span>Export</span>
-          </button>
+          <ConfirmDialogButton
+            buttonLabel="Export Report"
+            dialogTitle="Confirm Export"
+            extraContent="Are you sure you want to export the report?"
+            onConfirm={() => console.log("Report exported")}
+            onCancel={() => console.log("Export canceled")}
+          />
         </div>
       </div>
 
@@ -406,10 +408,13 @@ export default function SurfaceSentinel() {
                           </div>
                         </div>
                       </div>
-                      <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm flex items-center space-x-2">
-                        <span>Details</span>
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
+                      <ConfirmDialogButton
+                        buttonLabel="Export Report"
+                        dialogTitle="Confirm Export"
+                        extraContent="Are you sure you want to export the report?"
+                        onConfirm={() => console.log("Report exported")}
+                        onCancel={() => console.log("Export canceled")}
+                      />
                     </div>
                     {asset.risk === "critical" && (
                       <div className="mt-3 pt-3 border-t border-slate-700">
@@ -646,9 +651,6 @@ export default function SurfaceSentinel() {
                           </div>
                         </div>
                       </div>
-                      <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm">
-                        View Hosts
-                      </button>
                     </div>
                   </div>
                 ))}

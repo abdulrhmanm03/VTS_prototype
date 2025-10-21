@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ConfirmDialogButton from "@/components/ConfirmButton";
 
 const RedShift = () => {
   type LiveOutput = {
@@ -1239,10 +1240,15 @@ const RedShift = () => {
                       <span className="text-xs text-slate-500">
                         Audience: {report.audience}
                       </span>
-                      <button className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm rounded-lg flex items-center space-x-2">
-                        <Download className="w-4 h-4" />
-                        <span>Generate</span>
-                      </button>
+                      <ConfirmDialogButton
+                        buttonLabel="Generate Report"
+                        dialogTitle="Confirm Report Generation"
+                        extraContent="Are you sure you want to generate this report?"
+                        onConfirm={() => console.log("Report generated")}
+                        onCancel={() =>
+                          console.log("Report generation canceled")
+                        }
+                      />
                     </div>
                   </div>
                 ))}
