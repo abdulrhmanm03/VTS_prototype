@@ -4,7 +4,6 @@ import { Shield } from "lucide-react";
 import ThreatCategories from "@/components/dashboard/ThreatCategories";
 import LiveThreatFeed from "@/components/dashboard/ThreatFeed";
 import GlobalThreatHeatMap from "@/components/HeatMap";
-import MetricsBar from "@/components/dashboard/MetricBar";
 import StatsCards from "@/components/dashboard/StatsCards";
 import DashboardCharts from "@/components/dashboard/Charts";
 import CriticalAlerts from "@/components/dashboard/CriticalAlerts";
@@ -40,7 +39,9 @@ export default function DashboardPage() {
         <GlobalThreatHeatMap />
       </div>
 
-      <MetricsBar />
+      <CriticalAlerts />
+
+      <DashboardCharts />
 
       <div className="flex gap-6">
         <div className="w-7/12">
@@ -51,17 +52,13 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <DashboardCharts />
-
-      <StrategicInitiativesCard />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ThreatCategories />
         <LiveThreatFeed />
         <TrendingThreatActors />
       </div>
 
-      <CriticalAlerts />
+      <StrategicInitiativesCard />
     </div>
   );
 }
