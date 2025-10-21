@@ -60,7 +60,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
     { name: "Risk Register", icon: BarChart, path: "/risk-assessment-scores" },
     { name: "VulnMatrix", icon: Bug, path: "/vulnerabilities-exploits" },
     { name: "Red Shift", icon: Swords, path: "/offensive-security" },
-    { name: "Sentinel Analyst", icon: Brain, path: "/ai" },
+    { name: "Sentient Analyst", icon: Brain, path: "/ai" },
     {
       name: "Incident Management",
       icon: AlertTriangle,

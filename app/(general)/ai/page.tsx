@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import ProgressCard from "@/components/ai/PrograssCard";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -43,8 +44,8 @@ export default function SentinelAnalysisPage() {
   // Analysis run state
   const [analysisStarted, setAnalysisStarted] = useState(false);
   const [analysisCompleted, setAnalysisCompleted] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [currentStage, setCurrentStage] = useState("Idle");
+  const [, setProgress] = useState(0);
+  const [, setCurrentStage] = useState("Idle");
   const intervalRef = useRef<number | null>(null);
 
   // Chat state
@@ -55,11 +56,11 @@ export default function SentinelAnalysisPage() {
     time?: string;
   };
   const [messages, setMessages] = useState<Msg[]>([
-    { id: "m0", role: "system", text: "System: Sentinel offline" },
+    { id: "m0", role: "system", text: "System: Sentient offline" },
     {
       id: "m1",
       role: "ai",
-      text: "Hello — I'm Sentinel AI. I can summarize findings, propose containment actions, and generate a ready incident report.",
+      text: "Hello — I'm Sentient AI. I can summarize findings, propose containment actions, and generate a ready incident report.",
       time: new Date().toLocaleTimeString(),
     },
   ]);
@@ -305,7 +306,7 @@ export default function SentinelAnalysisPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-violet-400 to-pink-400 drop-shadow-lg">
-            Sentinel Analyst
+            Sentient Analyst
           </h1>
           <p className="text-sm text-gray-300 mt-2 max-w-xl">
             Interactive AI assistant
@@ -775,7 +776,7 @@ export default function SentinelAnalysisPage() {
                               {m.role === "user"
                                 ? "You"
                                 : m.role === "ai"
-                                ? "Sentinel AI"
+                                ? "Sentient AI"
                                 : "System"}
                             </div>
                             <div className="whitespace-pre-wrap text-sm">
@@ -943,31 +944,7 @@ export default function SentinelAnalysisPage() {
         {/* right column summary / live feed */}
         <div className="hidden lg:block">
           <div className="flex flex-col gap-4">
-            <Card className="p-4 rounded-2xl bg-white/6">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <div className="text-sm text-gray-300">Live Progress</div>
-                  <div className="text-2xl font-bold text-white mt-1">
-                    {progress}%
-                  </div>
-                </div>
-                <div className="text-xs text-gray-400">{currentStage}</div>
-              </div>
-              <div className="w-full bg-white/6 rounded-full h-3 overflow-hidden">
-                <motion.div
-                  className="h-3 bg-gradient-to-r from-indigo-600 to-cyan-400"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.6 }}
-                />
-              </div>
-
-              <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-gray-400">
-                <div className="bg-white/3 p-2 rounded">CPU: 64%</div>
-                <div className="bg-white/3 p-2 rounded">Memory: 72%</div>
-              </div>
-            </Card>
-
+            <ProgressCard />
             <Card className="p-4 rounded-2xl bg-white/6">
               <div className="flex items-center justify-between mb-2">
                 <div className="text-sm font-semibold">Top Alerts</div>
@@ -1005,7 +982,7 @@ export default function SentinelAnalysisPage() {
 
       {/* tiny footer */}
       <div className="mt-8 text-xs text-gray-500">
-        All actions are designed by Sentinel UI · v1.0
+        All actions are designed by Sentient UI · v1.0
       </div>
     </div>
   );
