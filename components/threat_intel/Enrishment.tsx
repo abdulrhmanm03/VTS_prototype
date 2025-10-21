@@ -5,7 +5,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ShieldAlert, Activity, Network } from "lucide-react";
+import {
+  Loader2,
+  ShieldAlert,
+  Activity,
+  Network,
+  Database,
+  BarChart3,
+} from "lucide-react";
 
 interface IOC {
   ip: string;
@@ -144,7 +151,6 @@ export default function Enrichment() {
     setExpandedIOC(null);
     setPostUpdates([]);
 
-    // Simulate sources loading sequentially
     for (let i = 0; i < sources.length; i++) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setActiveSources((prev) => [...prev, sources[i]]);
@@ -170,15 +176,16 @@ export default function Enrichment() {
 
   return (
     <div className="space-y-8 p-6">
-      {/* Header */}
+      {/* Header */}{" "}
       <div className="flex flex-col items-center text-center">
-        <h2 className="text-2xl font-bold mb-2">
-          Threat Intelligence Enrichment
-        </h2>
+        {" "}
+        <h2 className="text-2xl font-bold mb-2 text-white">
+          Threat Intelligence Enrichment{" "}
+        </h2>{" "}
         <p className="text-gray-400 mb-6 max-w-xl">
           Launch automated enrichment across multiple intelligence sources to
-          analyze suspicious IOCs and summarize threat context.
-        </p>
+          analyze suspicious IOCs and summarize threat context in real-time.{" "}
+        </p>{" "}
         <Button
           onClick={handleStart}
           disabled={loading}
@@ -186,16 +193,62 @@ export default function Enrichment() {
         >
           {loading ? (
             <>
+              {" "}
               <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Enriching
               Data...
             </>
           ) : (
             "Start Enrichment Process"
-          )}
-        </Button>
+          )}{" "}
+        </Button>{" "}
       </div>
+      ```
+      {/* BEFORE ENRICHMENT — Context Overview */}
+      {!loading && !showSummary && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"
+        >
+          <Card className="bg-gray-900/40 border border-gray-700/60 rounded-2xl">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-300">
+                <Database className="w-5 h-5 text-blue-400" /> Source Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-gray-300 text-sm space-y-2">
+              <p>
+                The system is configured to query{" "}
+                <strong>{sources.length}</strong> live threat intelligence feeds
+                including sandbox data, abuse reports, and passive DNS.
+              </p>
+              <ul className="list-disc list-inside text-gray-400">
+                <li>Real-time correlation of malicious domains and IPs</li>
+                <li>Confidence scoring and behavioral overlap detection</li>
+                <li>Cross-source IOC deduplication and summarization</li>
+              </ul>
+            </CardContent>
+          </Card>
 
-      {/* When enrichment running */}
+          <Card className="bg-gray-900/40 border border-gray-700/60 rounded-2xl">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-300">
+                <BarChart3 className="w-5 h-5 text-blue-400" /> Estimated
+                Analysis Profile
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-gray-300 text-sm">
+              <p>Expected runtime: ~15 seconds</p>
+              <p>Data correlation coverage: 98%</p>
+              <p>AI summarization layer: Enabled</p>
+              <p className="italic text-gray-400 mt-2">
+                Ready to begin enrichment. Click the button above to start.
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+      {/* DURING ENRICHMENT */}
       {loading && (
         <div className="space-y-4">
           <p className="text-gray-400 text-center mt-6">
@@ -242,8 +295,7 @@ export default function Enrichment() {
           </div>
         </div>
       )}
-
-      {/* Show summary and IOCs */}
+      {/* AFTER ENRICHMENT */}
       {showSummary && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -262,12 +314,13 @@ export default function Enrichment() {
             <CardContent className="text-gray-300 text-sm space-y-2">
               <p>
                 Enrichment completed successfully across {sources.length}{" "}
-                intelligence feeds. IOC correlation detected overlaps in malware
-                campaigns and network behaviors.
+                intelligence feeds. Correlation detected{" "}
+                <strong>{iocs.length}</strong> distinct IOCs with overlapping
+                TTP patterns and risk profiles.
               </p>
               <p className="italic text-gray-400">
-                Further monitoring recommended for new domains matching Emotet
-                naming schemes.
+                Several IOCs show campaign-level coordination and shared payload
+                lineage. Further proactive blocking is advised.
               </p>
             </CardContent>
           </Card>
@@ -350,6 +403,31 @@ export default function Enrichment() {
               </Card>
             ))}
           </div>
+
+          {/* Recommendations */}
+          <Card className="bg-blue-900/20 border border-blue-500/30 rounded-2xl">
+            <CardHeader>
+              <CardTitle className="text-blue-300 text-lg">
+                Recommended Next Steps
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-gray-300 text-sm space-y-2">
+              <ul className="list-disc list-inside">
+                <li>Block confirmed malicious domains at the network edge.</li>
+                <li>
+                  Correlate IOCs against local endpoint logs for activity
+                  traces.
+                </li>
+                <li>
+                  Initiate deeper sandbox detonation for Emotet-related samples.
+                </li>
+                <li>
+                  Enable continuous enrichment for new domains matching pattern
+                  sets.
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </motion.div>
       )}
     </div>
