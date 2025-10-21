@@ -530,163 +530,6 @@ const CommandNexus: React.FC<CommandNexusProps> = ({ region = "global" }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="col-span-2 bg-slate-900/50 backdrop-blur-lg rounded-2xl p-6 border border-slate-700/50">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-white">
-                  Business Risk Assessment
-                </h2>
-                <p className="text-sm text-slate-400">
-                  Financial impact and mitigation status
-                </p>
-              </div>
-              <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors">
-                View Full Report
-              </button>
-            </div>
-            <div className="space-y-4">
-              {businessRisks.map((risk, idx) => (
-                <div
-                  key={idx}
-                  className="bg-slate-800/50 rounded-xl p-5 border border-slate-700 hover:border-blue-500/50 transition-all"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-lg font-semibold text-white">
-                          {risk.category}
-                        </h3>
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            risk.level === "Low"
-                              ? "bg-green-500/20 text-green-400"
-                              : risk.level === "Medium"
-                              ? "bg-yellow-500/20 text-yellow-400"
-                              : "bg-red-500/20 text-red-400"
-                          }`}
-                        >
-                          {risk.level} Risk
-                        </span>
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400">
-                          {risk.mitigation}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <div className="text-slate-400 text-xs mb-1">
-                            Potential Impact
-                          </div>
-                          <div className="text-white font-bold">
-                            {risk.impact}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-slate-400 text-xs mb-1">
-                            Probability
-                          </div>
-                          <div className="text-white font-bold">
-                            {risk.probability}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-slate-400 text-xs mb-1">
-                            Trend
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            {risk.trend === "down" ? (
-                              <TrendingDown className="w-4 h-4 text-green-400" />
-                            ) : risk.trend === "up" ? (
-                              <TrendingUp className="w-4 h-4 text-red-400" />
-                            ) : (
-                              <Activity className="w-4 h-4 text-yellow-400" />
-                            )}
-                            <span className="text-white font-bold capitalize">
-                              {risk.trend}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${
-                        risk.level === "Low"
-                          ? "bg-gradient-to-r from-green-500 to-green-600"
-                          : risk.level === "Medium"
-                          ? "bg-gradient-to-r from-yellow-500 to-yellow-600"
-                          : "bg-gradient-to-r from-red-500 to-red-600"
-                      }`}
-                      style={{ width: `${Number.parseInt(risk.probability)}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-slate-900/50 backdrop-blur-lg rounded-2xl p-6 border border-slate-700/50">
-            <h2 className="text-xl font-bold text-white mb-6">
-              Compliance Frameworks
-            </h2>
-            <div className="space-y-4">
-              {complianceFrameworks.map((framework, idx) => (
-                <div
-                  key={idx}
-                  className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-purple-500/50 transition-all"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center space-x-2">
-                      <Award className="w-5 h-5 text-purple-400" />
-                      <span className="text-sm font-semibold text-white">
-                        {framework.name}
-                      </span>
-                    </div>
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-bold ${
-                        framework.status === "Compliant"
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-yellow-500/20 text-yellow-400"
-                      }`}
-                    >
-                      {framework.status}
-                    </span>
-                  </div>
-                  <div className="mb-3">
-                    <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
-                      <span>Compliance Score</span>
-                      <span className="text-white font-bold">
-                        {framework.score}%
-                      </span>
-                    </div>
-                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-purple-600"
-                        style={{ width: `${framework.score}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <div>
-                      <div className="text-slate-500">Last Audit</div>
-                      <div className="text-slate-300 font-semibold">
-                        {framework.lastAudit}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-slate-500">Next Audit</div>
-                      <div className="text-purple-400 font-semibold">
-                        {framework.nextAudit}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         <div className="grid grid-cols-2 gap-6 mb-8">
           <div className="bg-slate-900/50 backdrop-blur-lg rounded-2xl p-6 border border-slate-700/50">
             <div className="flex items-center justify-between mb-6">
@@ -980,6 +823,163 @@ const CommandNexus: React.FC<CommandNexusProps> = ({ region = "global" }) => {
                 </div>
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="col-span-2 bg-slate-900/50 backdrop-blur-lg rounded-2xl p-6 border border-slate-700/50">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-white">
+                  Business Risk Assessment
+                </h2>
+                <p className="text-sm text-slate-400">
+                  Financial impact and mitigation status
+                </p>
+              </div>
+              <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                View Full Report
+              </button>
+            </div>
+            <div className="space-y-4">
+              {businessRisks.map((risk, idx) => (
+                <div
+                  key={idx}
+                  className="bg-slate-800/50 rounded-xl p-5 border border-slate-700 hover:border-blue-500/50 transition-all"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <h3 className="text-lg font-semibold text-white">
+                          {risk.category}
+                        </h3>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            risk.level === "Low"
+                              ? "bg-green-500/20 text-green-400"
+                              : risk.level === "Medium"
+                              ? "bg-yellow-500/20 text-yellow-400"
+                              : "bg-red-500/20 text-red-400"
+                          }`}
+                        >
+                          {risk.level} Risk
+                        </span>
+                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400">
+                          {risk.mitigation}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <div className="text-slate-400 text-xs mb-1">
+                            Potential Impact
+                          </div>
+                          <div className="text-white font-bold">
+                            {risk.impact}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-slate-400 text-xs mb-1">
+                            Probability
+                          </div>
+                          <div className="text-white font-bold">
+                            {risk.probability}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-slate-400 text-xs mb-1">
+                            Trend
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            {risk.trend === "down" ? (
+                              <TrendingDown className="w-4 h-4 text-green-400" />
+                            ) : risk.trend === "up" ? (
+                              <TrendingUp className="w-4 h-4 text-red-400" />
+                            ) : (
+                              <Activity className="w-4 h-4 text-yellow-400" />
+                            )}
+                            <span className="text-white font-bold capitalize">
+                              {risk.trend}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full ${
+                        risk.level === "Low"
+                          ? "bg-gradient-to-r from-green-500 to-green-600"
+                          : risk.level === "Medium"
+                          ? "bg-gradient-to-r from-yellow-500 to-yellow-600"
+                          : "bg-gradient-to-r from-red-500 to-red-600"
+                      }`}
+                      style={{ width: `${Number.parseInt(risk.probability)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-slate-900/50 backdrop-blur-lg rounded-2xl p-6 border border-slate-700/50">
+            <h2 className="text-xl font-bold text-white mb-6">
+              Compliance Frameworks
+            </h2>
+            <div className="space-y-4">
+              {complianceFrameworks.map((framework, idx) => (
+                <div
+                  key={idx}
+                  className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-purple-500/50 transition-all"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-2">
+                      <Award className="w-5 h-5 text-purple-400" />
+                      <span className="text-sm font-semibold text-white">
+                        {framework.name}
+                      </span>
+                    </div>
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-bold ${
+                        framework.status === "Compliant"
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-yellow-500/20 text-yellow-400"
+                      }`}
+                    >
+                      {framework.status}
+                    </span>
+                  </div>
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
+                      <span>Compliance Score</span>
+                      <span className="text-white font-bold">
+                        {framework.score}%
+                      </span>
+                    </div>
+                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-purple-500 to-purple-600"
+                        style={{ width: `${framework.score}%` }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <div>
+                      <div className="text-slate-500">Last Audit</div>
+                      <div className="text-slate-300 font-semibold">
+                        {framework.lastAudit}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-slate-500">Next Audit</div>
+                      <div className="text-purple-400 font-semibold">
+                        {framework.nextAudit}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
