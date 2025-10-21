@@ -39,9 +39,9 @@ export default function DashboardPage() {
         <GlobalThreatHeatMap />
       </div>
 
-      <CriticalAlerts />
-
       <DashboardCharts />
+
+      <CriticalAlerts />
 
       <div className="flex gap-6">
         <div className="w-7/12">

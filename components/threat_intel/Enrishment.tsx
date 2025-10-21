@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ShieldAlert, Eye } from "lucide-react";
+import { Loader2, ShieldAlert, Activity, Network } from "lucide-react";
 
 interface IOC {
   ip: string;
@@ -15,7 +15,7 @@ interface IOC {
   date: string;
   source: string;
   risk: string;
-  details?: string; // new field for extra details
+  details?: string;
 }
 
 interface EnrichmentSource {
@@ -31,7 +31,8 @@ export default function Enrichment() {
   const [activeSources, setActiveSources] = useState<EnrichmentSource[]>([]);
   const [showSummary, setShowSummary] = useState(false);
   const [iocs, setIocs] = useState<IOC[]>([]);
-  const [expandedIOC, setExpandedIOC] = useState<string | null>(null); // track expanded IOC
+  const [expandedIOC, setExpandedIOC] = useState<string | null>(null);
+  const [postUpdates, setPostUpdates] = useState<string[]>([]);
 
   const sources: EnrichmentSource[] = [
     {
@@ -141,7 +142,9 @@ export default function Enrichment() {
     setShowSummary(false);
     setIocs([]);
     setExpandedIOC(null);
+    setPostUpdates([]);
 
+    // Simulate sources loading sequentially
     for (let i = 0; i < sources.length; i++) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setActiveSources((prev) => [...prev, sources[i]]);
@@ -151,6 +154,18 @@ export default function Enrichment() {
     setIocs(simulatedIocs);
     setLoading(false);
     setShowSummary(true);
+
+    const updates = [
+      "Detected domain overlaps with known credential phishing infrastructure.",
+      "Network telemetry confirms beaconing behavior from two Emotet nodes.",
+      "New threat cluster identified: probable operator 'Atlas Spider'.",
+      "Cross-referenced with sandbox analysis — samples show shared payload signature.",
+    ];
+
+    for (let i = 0; i < updates.length; i++) {
+      await new Promise((r) => setTimeout(r, 2500));
+      setPostUpdates((prev) => [...prev, updates[i]]);
+    }
   };
 
   return (
@@ -180,142 +195,158 @@ export default function Enrichment() {
         </Button>
       </div>
 
-      {/* Enrichment Sources */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {activeSources.map((src, idx) => (
-          <motion.div
-            key={src.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.2 }}
-          >
-            <Card className="bg-white/5 backdrop-blur-md rounded-2xl border border-gray-700 shadow-md">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span>{src.name}</span>
-                  <Badge
-                    variant="outline"
-                    className="text-blue-300 border-blue-400/30"
-                  >
-                    {src.confidence}% Confidence
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-gray-300">
-                <p className="text-sm font-semibold text-blue-300">
-                  {src.verdict}
-                </p>
-                <ul className="list-disc list-inside text-sm text-gray-400">
-                  {src.metrics.map((m, i) => (
-                    <li key={i}>{m}</li>
-                  ))}
-                </ul>
-                <div className="flex flex-wrap gap-2">
-                  {src.tags.map((tag) => (
-                    <Badge
-                      key={tag}
-                      className="bg-blue-500/20 border border-blue-400/20 text-xs"
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </div>
+      {/* When enrichment running */}
+      {loading && (
+        <div className="space-y-4">
+          <p className="text-gray-400 text-center mt-6">
+            Collecting intelligence from sources...
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <AnimatePresence>
+              {activeSources.map((src) => (
+                <motion.div
+                  key={src.name}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Card className="bg-gray-900/50 border border-gray-700 rounded-xl">
+                    <CardHeader>
+                      <CardTitle className="text-blue-300 flex items-center gap-2">
+                        <Network className="w-4 h-4 text-blue-400" />
+                        {src.name}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-gray-300 space-y-2">
+                      <p className="text-blue-400 font-medium">{src.verdict}</p>
+                      <ul className="list-disc list-inside text-gray-400">
+                        {src.metrics.map((m) => (
+                          <li key={m}>{m}</li>
+                        ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {src.tags.map((t) => (
+                          <Badge
+                            key={t}
+                            className="bg-blue-500/10 text-blue-300 border border-blue-400/30"
+                          >
+                            {t}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
 
-      {/* AI Threat Summary */}
+      {/* Show summary and IOCs */}
       {showSummary && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="p-6 bg-gradient-to-r from-gray-800/40 to-gray-900/40 border border-gray-700/50 rounded-2xl"
+          transition={{ duration: 0.6 }}
+          className="space-y-8"
         >
-          <h3 className="text-lg font-semibold mb-2 text-blue-300">
-            AI Threat Summary
-          </h3>
-          <p className="text-gray-300 text-sm leading-relaxed">
-            The enrichment process indicates a coordinated phishing campaign
-            utilizing multiple domains linked to Emotet infrastructure. Several
-            hosts show evidence of command-and-control activity, suggesting
-            active infection attempts in the wild.
-          </p>
-        </motion.div>
-      )}
+          {/* Summary */}
+          <Card className="bg-white/5 border border-gray-700/60 rounded-2xl">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-300">
+                <ShieldAlert className="w-5 h-5 text-blue-400" />
+                AI Enrichment Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-gray-300 text-sm space-y-2">
+              <p>
+                Enrichment completed successfully across {sources.length}{" "}
+                intelligence feeds. IOC correlation detected overlaps in malware
+                campaigns and network behaviors.
+              </p>
+              <p className="italic text-gray-400">
+                Further monitoring recommended for new domains matching Emotet
+                naming schemes.
+              </p>
+            </CardContent>
+          </Card>
 
-      {/* IOC Results */}
-      {showSummary && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          <h3 className="text-xl font-semibold mb-4">Results Summary</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {iocs.map((ioc, index) => (
-              <Card
-                key={index}
-                className="bg-white/5 border border-gray-700/50 hover:border-blue-400/40 transition rounded-2xl shadow-md"
-              >
+          {/* Post Updates */}
+          <AnimatePresence>
+            {postUpdates.length > 0 && (
+              <Card className="bg-gray-900/50 border border-gray-700/60 rounded-2xl">
                 <CardHeader>
-                  <CardTitle className="text-blue-200 flex items-center gap-2">
-                    <ShieldAlert className="w-5 h-5 text-blue-400" />{" "}
-                    {ioc.domain}
+                  <CardTitle className="flex items-center gap-2 text-blue-300">
+                    <Activity className="w-5 h-5 text-blue-400" />
+                    Live Analysis Feed
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-1 text-sm text-gray-300">
-                  <p>
-                    <strong>IP:</strong> {ioc.ip}
-                  </p>
-                  <p>
-                    <strong>Type:</strong> {ioc.type}
-                  </p>
-                  <p>
-                    <strong>Confidence:</strong> {ioc.confidence}
-                  </p>
-                  <p>
-                    <strong>Date:</strong> {ioc.date}
-                  </p>
-                  <p>
-                    <strong>Source:</strong> {ioc.source}
-                  </p>
-                  <p>
-                    <strong>Risk:</strong> {ioc.risk}
-                  </p>
-
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="w-full mt-3 bg-transparent border-blue-400/30 text-blue-300 hover:bg-blue-500/20"
-                    onClick={() =>
-                      setExpandedIOC(
-                        expandedIOC === ioc.domain ? null : ioc.domain
-                      )
-                    }
-                  >
-                    <Eye className="w-4 h-4 mr-2" />{" "}
-                    {expandedIOC === ioc.domain
-                      ? "Hide Details"
-                      : "View Details"}
-                  </Button>
-
-                  {/* Expanded Details */}
-                  <AnimatePresence>
-                    {expandedIOC === ioc.domain && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden mt-2 text-gray-300 text-sm bg-blue-900/20 p-3 rounded-lg"
-                      >
-                        {ioc.details}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <CardContent className="text-sm text-gray-300 space-y-2">
+                  {postUpdates.map((update, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.2 }}
+                      className="border-l-2 border-blue-400 pl-3"
+                    >
+                      {update}
+                    </motion.div>
+                  ))}
                 </CardContent>
+              </Card>
+            )}
+          </AnimatePresence>
+
+          {/* IOC Results */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {iocs.map((ioc) => (
+              <Card
+                key={ioc.ip}
+                onClick={() =>
+                  setExpandedIOC(expandedIOC === ioc.ip ? null : ioc.ip)
+                }
+                className="bg-white/5 border border-gray-700/60 rounded-2xl cursor-pointer hover:border-blue-500/40 transition-all"
+              >
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between text-blue-300">
+                    {ioc.domain}
+                    <Badge
+                      className={`${
+                        ioc.risk === "Critical"
+                          ? "bg-red-500/20 text-red-300 border border-red-400/40"
+                          : ioc.risk === "Severe"
+                          ? "bg-orange-500/20 text-orange-300 border border-orange-400/40"
+                          : "bg-green-500/20 text-green-300 border border-green-400/40"
+                      }`}
+                    >
+                      {ioc.risk}
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <AnimatePresence>
+                  {expandedIOC === ioc.ip && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                    >
+                      <CardContent className="text-sm text-gray-300 space-y-1">
+                        <p>
+                          <strong>Type:</strong> {ioc.type}
+                        </p>
+                        <p>
+                          <strong>Source:</strong> {ioc.source}
+                        </p>
+                        <p>
+                          <strong>Confidence:</strong> {ioc.confidence}
+                        </p>
+                        <p className="text-gray-400">{ioc.details}</p>
+                      </CardContent>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </Card>
             ))}
           </div>
