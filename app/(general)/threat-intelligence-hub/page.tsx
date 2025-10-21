@@ -27,6 +27,8 @@ export default function ThreatIntelPage() {
   const tabParam = searchParams.get("tab");
   const [defaultTab, setDefaultTab] = useState("overview");
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     setDefaultTab(tabParam || "overview");
   }, [tabParam]);
@@ -34,6 +36,13 @@ export default function ThreatIntelPage() {
   const handleTabChange = (tab: string) => {
     router.replace(`?tab=${tab}`);
     setDefaultTab(tab);
+  };
+
+  const handleGenerateReport = () => {
+    // Simulate report generation delay
+    setTimeout(() => {
+      setIsModalOpen(true);
+    }, 300); // optional delay to feel like processing
   };
 
   return (
@@ -48,10 +57,11 @@ export default function ThreatIntelPage() {
           </p>
         </div>
 
-        {/* Fake Generate Report button */}
+        {/* Generate Report button */}
         <Button
           variant="outline"
           className="bg-blue-500/10 border border-blue-400/30 text-blue-300 hover:bg-blue-500/20 hover:text-blue-200 transition-all duration-300 rounded-xl shadow-md hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+          onClick={handleGenerateReport}
         >
           <FileText className="w-4 h-4 mr-2" />
           Generate Report
@@ -548,6 +558,35 @@ export default function ThreatIntelPage() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-slate-900 rounded-xl p-6 w-96 shadow-lg border border-slate-700 text-white">
+            <h2 className="text-xl font-bold mb-4">Report Ready</h2>
+            <p className="mb-6">
+              Your threat intelligence report is ready to export.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <Button
+                className="bg-gray-700 hover:bg-gray-600 text-white"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Close
+              </Button>
+              <Button
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => {
+                  alert("Report downloaded!");
+                  setIsModalOpen(false);
+                }}
+              >
+                Download
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

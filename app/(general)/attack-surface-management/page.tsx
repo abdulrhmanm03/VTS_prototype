@@ -1,475 +1,1054 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useState } from "react";
 import {
-  AlertCircle,
   Globe,
-  Shield,
-  Loader2,
-  Play,
+  Server,
+  AlertTriangle,
   CheckCircle,
-  Zap,
+  Clock,
+  ExternalLink,
+  Search,
+  Shield,
+  Activity,
+  Download,
+  Filter,
+  Play,
+  Pause,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import AssetInventory from "@/components/asm/AssetInventory";
-import ExternalExposure from "@/components/asm/ExternalExposure";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 
-export default function AttackSurfacePage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const tabParam = searchParams.get("tab") || "inventory";
-  const [activeTab, setActiveTab] = useState(tabParam);
+export default function SurfaceSentinel() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTab, setSelectedTab] = useState("assets");
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [currentPhase, setCurrentPhase] = useState("");
 
-  const [scanStarted, setScanStarted] = useState(false);
-  const [scanCompleted, setScanCompleted] = useState(false);
-  const [globalProgress, setGlobalProgress] = useState(0);
-
-  // staging
-  const stages = [
+  const scanPhases = [
     {
-      id: "discovery",
-      title: "Discovery Tool",
-      desc: "Enumerating domains & subdomains",
+      name: "Asset Discovery",
+      duration: 3000,
+      description: "Discovering external assets...",
     },
     {
-      id: "portscan",
-      title: "Port Scanner",
-      desc: "Probing ports and services",
+      name: "Port Scanning",
+      duration: 4000,
+      description: "Scanning open ports and services...",
     },
     {
-      id: "fingerprinting",
-      title: "Asset Fingerprinting",
-      desc: "Identifying services and headers",
+      name: "Service Detection",
+      duration: 3500,
+      description: "Identifying running services...",
     },
     {
-      id: "tlscheck",
-      title: "TLS Check",
-      desc: "Analyzing SSL/TLS configurations",
+      name: "Vulnerability Assessment",
+      duration: 5000,
+      description: "Analyzing vulnerabilities...",
+    },
+    {
+      name: "Risk Analysis",
+      duration: 2500,
+      description: "Computing risk scores...",
+    },
+    {
+      name: "Report Generation",
+      duration: 2000,
+      description: "Generating findings report...",
     },
   ];
 
-  const [currentStage, setCurrentStage] = useState(0);
-  const [stageProgress, setStageProgress] = useState(0);
-  const stageIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startScan = async () => {
+    setIsScanning(true);
+    setScanProgress(0);
 
-  useEffect(() => {
-    setActiveTab(tabParam);
-  }, [tabParam]);
-
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    const params = new URLSearchParams(window.location.search);
-    params.set("tab", value);
-    router.replace(`?${params.toString()}`, { scroll: false });
-  };
-
-  const clearStageInterval = () => {
-    if (stageIntervalRef.current) {
-      clearInterval(stageIntervalRef.current);
-      stageIntervalRef.current = null;
+    for (let i = 0; i < scanPhases.length; i++) {
+      setCurrentPhase(scanPhases[i].name);
+      await new Promise((resolve) =>
+        setTimeout(resolve, scanPhases[i].duration)
+      );
+      setScanProgress(((i + 1) / scanPhases.length) * 100);
     }
+
+    setIsScanning(false);
+    setCurrentPhase("");
+    alert("Scan completed! New assets and vulnerabilities discovered.");
   };
-
-  const startStageLoop = (startIndex = 0) => {
-    setCurrentStage(startIndex);
-    setStageProgress(0);
-
-    // make each stage take a slightly different random-ish length to feel alive
-    const startNextStage = (nextIndex: number) => {
-      if (nextIndex >= stages.length) {
-        // finished all stages
-        setGlobalProgress(100);
-        setTimeout(() => {
-          setScanCompleted(true);
-          setScanStarted(false);
-        }, 600);
-        return;
-      }
-
-      setCurrentStage(nextIndex);
-      setStageProgress(0);
-
-      // choose a duration for this stage (in ms)
-      const durationMs = 1800 + Math.floor(Math.random() * 2000);
-      const tickMs = 150;
-      const steps = Math.max(1, Math.floor(durationMs / tickMs));
-      let step = 0;
-
-      clearStageInterval();
-      stageIntervalRef.current = setInterval(() => {
-        step += 1;
-        const percent = Math.min(100, Math.round((step / steps) * 100));
-        setStageProgress(percent);
-
-        // rough global progress mapping across stages
-        const overall = Math.min(
-          100,
-          Math.round(((nextIndex + percent / 100) / stages.length) * 100)
-        );
-        setGlobalProgress(overall);
-
-        if (percent >= 100) {
-          clearStageInterval();
-          // short pause between stages so UI shows completion
-          setTimeout(() => startNextStage(nextIndex + 1), 400);
-        }
-      }, tickMs);
-    };
-
-    startNextStage(startIndex);
-  };
-
-  const handleStartScan = () => {
-    setScanStarted(true);
-    setScanCompleted(false);
-    setGlobalProgress(0);
-    setCurrentStage(0);
-    setStageProgress(0);
-
-    startStageLoop(0);
-  };
-
-  // cleanup on unmount
-  useEffect(() => {
-    return () => clearStageInterval();
-  }, []);
 
   return (
-    <div className="flex flex-col gap-6 p-6 min-h-screen text-white">
-      {/* Header with Button */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
-            Attack Surface Management
-          </h1>
-          <p className="text-gray-400 mt-1">
-            Discover, assess, and monitor your external attack surface
-          </p>
+    <div className="min-h-screen p-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center space-x-3">
+          <div>
+            <h1 className="text-4xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.9)]">
+              SurfaceSentinel
+            </h1>
+            <p className="text-blue-300">
+              Attack Surface Management & External Asset Discovery
+            </p>
+          </div>
         </div>
-
-        <Button
-          disabled={scanStarted && !scanCompleted}
-          onClick={handleStartScan}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl flex items-center gap-2 shadow-lg"
-        >
-          {scanStarted && !scanCompleted ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Scanning...
-            </>
-          ) : (
-            <>
-              <Play className="w-4 h-4" />
-              Start Scan
-            </>
-          )}
-        </Button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={startScan}
+            disabled={isScanning}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 text-white rounded-lg font-semibold flex items-center space-x-2 shadow-lg shadow-blue-500/20"
+          >
+            {isScanning ? (
+              <Pause className="w-5 h-5 animate-pulse" />
+            ) : (
+              <Play className="w-5 h-5" />
+            )}
+            <span>{isScanning ? "Scanning..." : "Start Scan"}</span>
+          </button>
+          <button className="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white rounded-lg font-semibold flex items-center space-x-2">
+            <Download className="w-5 h-5" />
+            <span>Export</span>
+          </button>
+        </div>
       </div>
 
-      {/* Scan Progress (Staged Animation) */}
-      {scanStarted && !scanCompleted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="relative bg-white/6 border border-blue-500/10 rounded-2xl p-6 shadow-lg overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-blue-800/6 to-transparent pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col gap-4">
-            <div className="flex items-center gap-4">
-              <Loader2 className="w-10 h-10 animate-spin text-blue-400" />
-              <div>
-                <p className="text-lg font-medium">Live scan in progress</p>
-                <p className="text-sm text-gray-400">
-                  Stage:{" "}
-                  <span className="text-white font-medium">
-                    {stages[currentStage]?.title}
-                  </span>
-                </p>
+      {isScanning && (
+        <div className="bg-slate-900/50 backdrop-blur-lg rounded-2xl p-8 border border-slate-700/50 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="flex items-center space-x-3 mb-2">
+                <Activity className="w-8 h-8 text-blue-400 animate-pulse" />
+                <h2 className="text-2xl font-bold text-white">
+                  Active Scan in Progress
+                </h2>
               </div>
+              <p className="text-slate-400">
+                Scanning external attack surface...
+              </p>
             </div>
+            <div className="text-right">
+              <div className="text-4xl font-bold text-blue-400">
+                {Math.round(scanProgress)}%
+              </div>
+              <div className="text-sm text-slate-400">Complete</div>
+            </div>
+          </div>
 
-            {/* Stage progress bar */}
-            <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-              <motion.div
-                className="h-2 bg-blue-500 rounded-full"
-                style={{ width: `${stageProgress}%` }}
-                initial={{ width: 0 }}
-                animate={{ width: `${stageProgress}%` }}
-                transition={{ duration: 0.2 }}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-slate-400">
+                Phase: {currentPhase}
+              </span>
+              <span className="text-sm text-blue-400 font-semibold">
+                {scanPhases.find((p) => p.name === currentPhase)?.description}
+              </span>
+            </div>
+            <div className="h-3 bg-slate-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 transition-all duration-500"
+                style={{ width: `${scanProgress}%` }}
               />
             </div>
-            <div className="flex items-center justify-between text-sm text-gray-400">
-              <div>
-                {stageProgress}% — {stages[currentStage]?.desc}
-              </div>
-              <div>{globalProgress}% overall</div>
-            </div>
+          </div>
 
-            {/* Visual stage list */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {stages.map((s, i) => {
-                const done =
-                  i < currentStage ||
-                  (i === currentStage && stageProgress === 100);
-                const active = i === currentStage && stageProgress < 100;
-                return (
+          <div className="grid grid-cols-6 gap-4">
+            {scanPhases.map((phase, idx) => (
+              <div
+                key={idx}
+                className={`bg-slate-800/50 rounded-lg p-4 border transition-all ${
+                  currentPhase === phase.name
+                    ? "border-blue-500 shadow-lg shadow-blue-500/20"
+                    : (scanProgress / 100) * scanPhases.length > idx
+                    ? "border-green-500/50"
+                    : "border-slate-700"
+                }`}
+              >
+                <div className="text-center">
                   <div
-                    key={s.id}
-                    className={`flex items-center gap-3 p-3 rounded-lg border ${
-                      done
-                        ? "bg-white/5 border-white/10"
-                        : active
-                        ? "bg-white/6 border-blue-600"
-                        : "bg-transparent border-slate-700/30"
+                    className={`w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center ${
+                      (scanProgress / 100) * scanPhases.length > idx
+                        ? "bg-green-500/20"
+                        : currentPhase === phase.name
+                        ? "bg-blue-500/20"
+                        : "bg-slate-700/50"
                     }`}
                   >
-                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white/6">
-                      {done ? (
-                        <CheckCircle className="w-5 h-5 text-green-400" />
-                      ) : (
-                        <Zap className="w-5 h-5 text-yellow-400" />
-                      )}
-                    </div>
-                    <div className="flex-1 text-sm">
-                      <div
-                        className={`font-medium ${
-                          done ? "text-white" : "text-gray-200"
-                        }`}
-                      >
-                        {s.title}
-                      </div>
-                      <div className="text-xs text-gray-400 truncate">
-                        {s.desc}
-                      </div>
-                    </div>
+                    {(scanProgress / 100) * scanPhases.length > idx ? (
+                      <CheckCircle className="w-6 h-6 text-green-400" />
+                    ) : currentPhase === phase.name ? (
+                      <Activity className="w-6 h-6 text-blue-400 animate-pulse" />
+                    ) : (
+                      <Clock className="w-6 h-6 text-slate-600" />
+                    )}
                   </div>
-                );
-              })}
-            </div>
-
-            {/* small note */}
-            <p className="text-xs text-gray-500 italic">
-              This is a simulated scan for demo purposes — no network traffic is
-              performed.
-            </p>
+                  <div className="text-xs font-semibold text-white mb-1">
+                    {phase.name}
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    {(scanProgress / 100) * scanPhases.length > idx
+                      ? "✓ Done"
+                      : currentPhase === phase.name
+                      ? "Running..."
+                      : "Pending"}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </motion.div>
+        </div>
       )}
 
-      {/* Stats + Tabs appear only after scan */}
-      {scanCompleted && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Total Assets */}
-            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-blue-800/10 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">
-                    Total Assets
-                  </CardTitle>
-                  <Globe className="h-8 w-8 text-blue-400 drop-shadow-md" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold drop-shadow-lg">1,234</div>
-                  <p className="text-xs text-green-500">+12 discovered today</p>
-                </CardContent>
-              </div>
-            </Card>
-
-            {/* Critical Vulnerabilities */}
-            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-red-800/10 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">
-                    Critical Vulnerabilities
-                  </CardTitle>
-                  <AlertCircle className="h-8 w-8 text-red-500 drop-shadow-md" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold drop-shadow-lg">12</div>
-                  <p className="text-xs text-green-500">-3 from last week</p>
-                </CardContent>
-              </div>
-            </Card>
-
-            {/* Exposed Services */}
-            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 via-green-800/10 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">
-                    Exposed Services
-                  </CardTitle>
-                  <Globe className="h-8 w-8 text-green-400 drop-shadow-md" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold drop-shadow-lg">47</div>
-                  <p className="text-xs text-yellow-500">5 require attention</p>
-                </CardContent>
-              </div>
-            </Card>
-
-            {/* Risk Score */}
-            <Card className="relative border-none text-white overflow-hidden rounded-2xl bg-white/5 shadow-lg backdrop-blur-md hover:shadow-[0_0_30px_rgba(59,130,246,0.6)] transition-shadow duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-yellow-800/10 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">
-                    Risk Score
-                  </CardTitle>
-                  <Shield className="h-8 w-8 text-yellow-400 drop-shadow-md" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold drop-shadow-lg">
-                    68/100
-                  </div>
-                  <p className="text-xs text-green-500">Improving trend</p>
-                </CardContent>
-              </div>
-            </Card>
-          </div>
-
-          {/* Tabs */}
-          <Tabs
-            value={activeTab}
-            onValueChange={handleTabChange}
-            className="mt-8"
-          >
-            <TabsList className="bg-white/10 p-1 rounded-lg">
-              <TabsTrigger value="inventory">Asset Inventory</TabsTrigger>
-              <TabsTrigger value="exposure">External Exposure</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="inventory" className="mt-6">
-              <AssetInventory />
-            </TabsContent>
-
-            <TabsContent value="exposure" className="mt-6">
-              <ExternalExposure />
-            </TabsContent>
-          </Tabs>
-        </motion.div>
-      )}
-
-      {/* Default View Before Scan */}
-      {!scanStarted && !scanCompleted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-8"
-        >
-          {/* Last Scan Summary */}
-          <div className="bg-white/5 border border-slate-700/30 backdrop-blur-lg rounded-2xl p-6 shadow-lg">
-            <h2 className="text-2xl font-semibold text-blue-400 mb-2">
-              Last Scan Summary
-            </h2>
-            <p className="text-gray-400 mb-6">
-              Last external attack surface scan completed on{" "}
-              <span className="text-white font-medium">October 12, 2025</span>.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Total Assets */}
-              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm text-gray-400">
-                    Total Assets
-                  </CardTitle>
-                  <Globe className="h-6 w-6 text-blue-400" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">1,218</div>
-                  <p className="text-xs text-green-500">+32 since last month</p>
-                </CardContent>
-              </Card>
-
-              {/* Exposed Services */}
-              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm text-gray-400">
-                    Exposed Services
-                  </CardTitle>
-                  <Shield className="h-6 w-6 text-yellow-400" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">43</div>
-                  <p className="text-xs text-yellow-500">
-                    5 high-risk endpoints
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Vulnerabilities */}
-              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm text-gray-400">
-                    Critical Vulns
-                  </CardTitle>
-                  <AlertCircle className="h-6 w-6 text-red-500" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">14</div>
-                  <p className="text-xs text-green-500">-2 since last scan</p>
-                </CardContent>
-              </Card>
-
-              {/* Risk Score */}
-              <Card className="bg-white/5 border-none rounded-2xl backdrop-blur-md text-white">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm text-gray-400">
-                    Risk Score
-                  </CardTitle>
-                  <Shield className="h-6 w-6 text-green-400" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">72/100</div>
-                  <p className="text-xs text-green-500">Moderate risk level</p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Overview Section */}
-          <Card className="bg-white/5 border border-slate-700/30 rounded-2xl backdrop-blur-lg p-6">
-            <CardHeader>
-              <CardTitle className="text-xl text-blue-400">
-                External Exposure Overview
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-gray-400 space-y-4">
-              <p>
-                Your organization currently maintains{" "}
-                <span className="text-white font-medium">
-                  76 active internet-facing domains
+      {/* Stats Overview */}
+      <div className="grid grid-cols-6 gap-4 mb-8">
+        {[
+          {
+            label: "Total Assets",
+            value: "2,847",
+            icon: Server,
+            color: "blue",
+            trend: "+127",
+            change: "+4.7%",
+          },
+          {
+            label: "Exposed Services",
+            value: "234",
+            icon: Globe,
+            color: "orange",
+            trend: "+23",
+            change: "+10.9%",
+          },
+          {
+            label: "Critical Findings",
+            value: "34",
+            icon: AlertTriangle,
+            color: "red",
+            trend: "-8",
+            change: "-19.0%",
+          },
+          {
+            label: "Secure Assets",
+            value: "2,579",
+            icon: CheckCircle,
+            color: "green",
+            trend: "+135",
+            change: "+5.5%",
+          },
+          {
+            label: "Open Ports",
+            value: "1,456",
+            icon: Shield,
+            color: "purple",
+            trend: "+45",
+            change: "+3.2%",
+          },
+          {
+            label: "Last Scan",
+            value: "15m ago",
+            icon: Clock,
+            color: "cyan",
+            trend: "Active",
+            change: "Live",
+          },
+        ].map((stat, idx) => (
+          <Card key={idx} className="bg-slate-900/50 border-slate-700">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div
+                  className={`w-10 h-10 rounded-lg bg-${stat.color}-500/20 flex items-center justify-center`}
+                >
+                  <stat.icon className={`w-5 h-5 text-${stat.color}-400`} />
+                </div>
+                <span className="text-xs text-green-400 font-semibold">
+                  {stat.change}
                 </span>
-                , including cloud resources, SaaS services, and externally
-                hosted assets.
-              </p>
-              <p>
-                The previous scan revealed several outdated TLS configurations
-                and misconfigured DNS records that may increase your exposure
-                risk.
-              </p>
-              <p className="text-sm text-gray-500 italic">
-                Click “Start Scan” to perform a fresh discovery and risk
-                assessment.
-              </p>
+              </div>
+              <div className="text-3xl font-bold text-white mb-1">
+                {stat.value}
+              </div>
+              <div className="text-sm text-slate-400 mb-1">{stat.label}</div>
+              <div className="text-xs text-green-400">{stat.trend}</div>
             </CardContent>
           </Card>
-        </motion.div>
-      )}
+        ))}
+      </div>
+
+      <Tabs
+        value={selectedTab}
+        onValueChange={setSelectedTab}
+        className="space-y-6"
+      >
+        <TabsList className="bg-slate-900/50 border border-slate-700">
+          <TabsTrigger value="assets">Asset Inventory</TabsTrigger>
+          <TabsTrigger value="domains">Domains & Subdomains</TabsTrigger>
+          <TabsTrigger value="ports">Open Ports & Services</TabsTrigger>
+          <TabsTrigger value="certificates">SSL Certificates</TabsTrigger>
+          <TabsTrigger value="technologies">Technologies</TabsTrigger>
+          <TabsTrigger value="supply-chain">Supply Chain</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="assets" className="space-y-6">
+          {/* Search Bar */}
+          <Card className="bg-slate-900/50 border-slate-700">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2">
+                <Search className="w-5 h-5 text-slate-400" />
+                <Input
+                  placeholder="Search assets by domain, IP, or service..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 bg-slate-800 border-slate-700 text-white"
+                />
+                <button className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white rounded-lg flex items-center space-x-2">
+                  <Filter className="w-4 h-4" />
+                  <span>Filter</span>
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Asset List */}
+          <Card className="bg-slate-900/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white">Discovered Assets</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  {
+                    domain: "api.acmecorp.com",
+                    ip: "203.0.113.42",
+                    type: "API Server",
+                    status: "active",
+                    risk: "medium",
+                    ports: [80, 443, 8080],
+                    lastSeen: "2h ago",
+                  },
+                  {
+                    domain: "mail.acmecorp.com",
+                    ip: "203.0.113.43",
+                    type: "Mail Server",
+                    status: "active",
+                    risk: "low",
+                    ports: [25, 465, 587],
+                    lastSeen: "2h ago",
+                  },
+                  {
+                    domain: "dev.acmecorp.com",
+                    ip: "203.0.113.44",
+                    type: "Development",
+                    status: "active",
+                    risk: "critical",
+                    ports: [22, 80, 443, 3306],
+                    lastSeen: "2h ago",
+                  },
+                  {
+                    domain: "cdn.acmecorp.com",
+                    ip: "203.0.113.45",
+                    type: "CDN",
+                    status: "active",
+                    risk: "low",
+                    ports: [80, 443],
+                    lastSeen: "2h ago",
+                  },
+                  {
+                    domain: "admin.acmecorp.com",
+                    ip: "203.0.113.46",
+                    type: "Admin Panel",
+                    status: "active",
+                    risk: "high",
+                    ports: [443, 8443],
+                    lastSeen: "2h ago",
+                  },
+                ].map((asset, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-blue-500/50 transition-all"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <span className="text-lg font-semibold text-white">
+                            {asset.domain}
+                          </span>
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-bold ${
+                              asset.risk === "critical"
+                                ? "bg-red-500/20 text-red-400"
+                                : asset.risk === "high"
+                                ? "bg-orange-500/20 text-orange-400"
+                                : asset.risk === "medium"
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : "bg-green-500/20 text-green-400"
+                            }`}
+                          >
+                            {asset.risk}
+                          </span>
+                          <span className="px-2 py-1 rounded text-xs bg-blue-500/20 text-blue-400">
+                            {asset.type}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <span className="text-slate-400">IP Address: </span>
+                            <span className="text-white font-mono">
+                              {asset.ip}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400">Open Ports: </span>
+                            <span className="text-white font-mono">
+                              {asset.ports.join(", ")}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400">Last Seen: </span>
+                            <span className="text-white">{asset.lastSeen}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm flex items-center space-x-2">
+                        <span>Details</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </button>
+                    </div>
+                    {asset.risk === "critical" && (
+                      <div className="mt-3 pt-3 border-t border-slate-700">
+                        <div className="flex items-center space-x-2 text-sm text-red-400">
+                          <AlertTriangle className="w-4 h-4" />
+                          <span>
+                            Database port exposed to internet (3306/MySQL)
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {asset.risk === "high" && (
+                      <div className="mt-3 pt-3 border-t border-slate-700">
+                        <div className="flex items-center space-x-2 text-sm text-orange-400">
+                          <AlertTriangle className="w-4 h-4" />
+                          <span>
+                            Admin panel accessible without IP restriction
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="domains" className="space-y-6">
+          <div className="grid grid-cols-2 gap-6">
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Domain Hierarchy</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {[
+                    {
+                      domain: "acmecorp.com",
+                      subdomains: 47,
+                      status: "verified",
+                    },
+                    {
+                      domain: "acme-tech.io",
+                      subdomains: 23,
+                      status: "verified",
+                    },
+                    {
+                      domain: "acmeproducts.net",
+                      subdomains: 12,
+                      status: "unverified",
+                    },
+                  ].map((domain, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-white font-semibold">
+                          {domain.domain}
+                        </span>
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-bold ${
+                            domain.status === "verified"
+                              ? "bg-green-500/20 text-green-400"
+                              : "bg-yellow-500/20 text-yellow-400"
+                          }`}
+                        >
+                          {domain.status}
+                        </span>
+                      </div>
+                      <div className="text-sm text-slate-400">
+                        {domain.subdomains} subdomains discovered
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Recent Discoveries</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {[
+                    {
+                      subdomain: "staging.acmecorp.com",
+                      discovered: "2h ago",
+                      risk: "high",
+                    },
+                    {
+                      subdomain: "test-api.acmecorp.com",
+                      discovered: "5h ago",
+                      risk: "medium",
+                    },
+                    {
+                      subdomain: "backup.acmecorp.com",
+                      discovered: "1d ago",
+                      risk: "critical",
+                    },
+                    {
+                      subdomain: "vpn.acmecorp.com",
+                      discovered: "2d ago",
+                      risk: "low",
+                    },
+                  ].map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-slate-800/50 rounded-lg p-3 border border-slate-700"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-semibold text-white">
+                          {item.subdomain}
+                        </span>
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-bold ${
+                            item.risk === "critical"
+                              ? "bg-red-500/20 text-red-400"
+                              : item.risk === "high"
+                              ? "bg-orange-500/20 text-orange-400"
+                              : item.risk === "medium"
+                              ? "bg-yellow-500/20 text-yellow-400"
+                              : "bg-green-500/20 text-green-400"
+                          }`}
+                        >
+                          {item.risk}
+                        </span>
+                      </div>
+                      <span className="text-xs text-slate-400">
+                        Discovered {item.discovered}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="ports" className="space-y-6">
+          <Card className="bg-slate-900/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white">
+                Open Ports & Services
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  {
+                    port: 22,
+                    service: "SSH",
+                    hosts: 12,
+                    risk: "medium",
+                    version: "OpenSSH 8.2",
+                  },
+                  {
+                    port: 80,
+                    service: "HTTP",
+                    hosts: 89,
+                    risk: "low",
+                    version: "nginx 1.21.0",
+                  },
+                  {
+                    port: 443,
+                    service: "HTTPS",
+                    hosts: 156,
+                    risk: "low",
+                    version: "nginx 1.21.0",
+                  },
+                  {
+                    port: 3306,
+                    service: "MySQL",
+                    hosts: 3,
+                    risk: "critical",
+                    version: "MySQL 8.0.28",
+                  },
+                  {
+                    port: 8080,
+                    service: "HTTP-Alt",
+                    hosts: 23,
+                    risk: "medium",
+                    version: "Apache 2.4.52",
+                  },
+                  {
+                    port: 8443,
+                    service: "HTTPS-Alt",
+                    hosts: 8,
+                    risk: "medium",
+                    version: "Tomcat 9.0",
+                  },
+                ].map((port, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <span className="text-2xl font-bold text-white">
+                            {port.port}
+                          </span>
+                          <span className="text-white font-semibold">
+                            {port.service}
+                          </span>
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-bold ${
+                              port.risk === "critical"
+                                ? "bg-red-500/20 text-red-400"
+                                : port.risk === "medium"
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : "bg-green-500/20 text-green-400"
+                            }`}
+                          >
+                            {port.risk}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-slate-400">
+                              Exposed Hosts:{" "}
+                            </span>
+                            <span className="text-white font-semibold">
+                              {port.hosts}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400">Version: </span>
+                            <span className="text-white font-mono text-xs">
+                              {port.version}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm">
+                        View Hosts
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="certificates" className="space-y-6">
+          <Card className="bg-slate-900/50 border-slate-700">
+            <CardHeader>
+              <CardTitle className="text-white">SSL/TLS Certificates</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  {
+                    domain: "*.acmecorp.com",
+                    issuer: "Let's Encrypt",
+                    expires: "2025-12-31",
+                    daysLeft: 287,
+                    status: "valid",
+                  },
+                  {
+                    domain: "api.acmecorp.com",
+                    issuer: "DigiCert",
+                    expires: "2025-06-15",
+                    daysLeft: 89,
+                    status: "expiring",
+                  },
+                  {
+                    domain: "old.acmecorp.com",
+                    issuer: "Let's Encrypt",
+                    expires: "2024-01-15",
+                    daysLeft: -90,
+                    status: "expired",
+                  },
+                  {
+                    domain: "mail.acmecorp.com",
+                    issuer: "Sectigo",
+                    expires: "2026-03-20",
+                    daysLeft: 456,
+                    status: "valid",
+                  },
+                ].map((cert, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <span className="text-white font-semibold">
+                            {cert.domain}
+                          </span>
+                          <span
+                            className={`px-2 py-1 rounded text-xs font-bold ${
+                              cert.status === "expired"
+                                ? "bg-red-500/20 text-red-400"
+                                : cert.status === "expiring"
+                                ? "bg-yellow-500/20 text-yellow-400"
+                                : "bg-green-500/20 text-green-400"
+                            }`}
+                          >
+                            {cert.status}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <span className="text-slate-400">Issuer: </span>
+                            <span className="text-white">{cert.issuer}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400">Expires: </span>
+                            <span className="text-white">{cert.expires}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400">Days Left: </span>
+                            <span
+                              className={`font-semibold ${
+                                cert.daysLeft < 0
+                                  ? "text-red-400"
+                                  : cert.daysLeft < 90
+                                  ? "text-yellow-400"
+                                  : "text-green-400"
+                              }`}
+                            >
+                              {cert.daysLeft}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="technologies" className="space-y-6">
+          <div className="grid grid-cols-3 gap-6">
+            {[
+              {
+                category: "Web Servers",
+                items: ["nginx", "Apache", "IIS"],
+                count: 156,
+              },
+              {
+                category: "Frameworks",
+                items: ["React", "Next.js", "Django"],
+                count: 89,
+              },
+              {
+                category: "Databases",
+                items: ["MySQL", "PostgreSQL", "MongoDB"],
+                count: 34,
+              },
+              {
+                category: "CDN",
+                items: ["Cloudflare", "Akamai", "Fastly"],
+                count: 67,
+              },
+              {
+                category: "Analytics",
+                items: ["Google Analytics", "Mixpanel"],
+                count: 45,
+              },
+              {
+                category: "Security",
+                items: ["WAF", "DDoS Protection"],
+                count: 23,
+              },
+            ].map((tech, idx) => (
+              <Card key={idx} className="bg-slate-900/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white text-lg">
+                    {tech.category}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 mb-4">
+                    {tech.items.map((item, i) => (
+                      <div
+                        key={i}
+                        className="bg-slate-800/50 rounded px-3 py-2 text-sm text-white"
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-sm text-slate-400">
+                    {tech.count} instances detected
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
+
+        {/* Supply Chain Tab */}
+        <TabsContent value="supply-chain" className="space-y-6">
+          <div className="grid grid-cols-2 gap-6">
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">
+                  Third-Party Services
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {[
+                  {
+                    service: "AWS CloudFront",
+                    risk: "Low",
+                    assets: 234,
+                    status: "Monitored",
+                  },
+                  {
+                    service: "Cloudflare CDN",
+                    risk: "Low",
+                    assets: 189,
+                    status: "Monitored",
+                  },
+                  {
+                    service: "SendGrid Email",
+                    risk: "Medium",
+                    assets: 12,
+                    status: "Review Required",
+                  },
+                  {
+                    service: "Stripe Payment",
+                    risk: "Low",
+                    assets: 8,
+                    status: "Compliant",
+                  },
+                ].map((service, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <h4 className="text-sm font-semibold text-white mb-1">
+                          {service.service}
+                        </h4>
+                        <div className="text-xs text-slate-400">
+                          {service.assets} assets
+                        </div>
+                      </div>
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-bold ${
+                          service.risk === "Low"
+                            ? "bg-green-500/20 text-green-400"
+                            : service.risk === "Medium"
+                            ? "bg-yellow-500/20 text-yellow-400"
+                            : "bg-red-500/20 text-red-400"
+                        }`}
+                      >
+                        {service.risk} Risk
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-400">
+                      {service.status}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">
+                  External Dependencies
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  {
+                    dependency: "Google Analytics",
+                    type: "Analytics",
+                    exposure: "Public",
+                  },
+                  {
+                    dependency: "Intercom Chat",
+                    type: "Support",
+                    exposure: "Public",
+                  },
+                  {
+                    dependency: "Auth0",
+                    type: "Authentication",
+                    exposure: "Protected",
+                  },
+                  {
+                    dependency: "Datadog",
+                    type: "Monitoring",
+                    exposure: "Internal",
+                  },
+                ].map((dep, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-slate-800/50 rounded-lg p-3 border border-slate-700"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-white">
+                        {dep.dependency}
+                      </span>
+                      <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">
+                        {dep.type}
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-400">
+                      Exposure: {dep.exposure}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Analytics Tab */}
+        <TabsContent value="analytics" className="space-y-6">
+          <div className="grid grid-cols-3 gap-6">
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">
+                  Asset Growth (6 Months)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { month: "May", assets: 2234, change: "+89" },
+                  { month: "Jun", assets: 2389, change: "+155" },
+                  { month: "Jul", assets: 2512, change: "+123" },
+                  { month: "Aug", assets: 2678, change: "+166" },
+                  { month: "Sep", assets: 2756, change: "+78" },
+                  { month: "Oct", assets: 2847, change: "+91" },
+                ].map((data, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg"
+                  >
+                    <span className="text-sm text-slate-300">{data.month}</span>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-lg font-bold text-white">
+                        {data.assets}
+                      </span>
+                      <span className="text-xs text-green-400">
+                        {data.change}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Risk Distribution</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {[
+                  {
+                    level: "Critical",
+                    count: 34,
+                    percentage: 1.2,
+                    color: "red",
+                  },
+                  {
+                    level: "High",
+                    count: 89,
+                    percentage: 3.1,
+                    color: "orange",
+                  },
+                  {
+                    level: "Medium",
+                    count: 145,
+                    percentage: 5.1,
+                    color: "yellow",
+                  },
+                  {
+                    level: "Low",
+                    count: 2579,
+                    percentage: 90.6,
+                    color: "green",
+                  },
+                ].map((risk, idx) => (
+                  <div key={idx}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-slate-300">
+                        {risk.level}
+                      </span>
+                      <span className="text-sm font-semibold text-white">
+                        {risk.count} ({risk.percentage}%)
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-800 rounded-full h-2">
+                      <div
+                        className={`bg-${risk.color}-500 h-2 rounded-full transition-all`}
+                        style={{ width: `${risk.percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Discovery Metrics</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {[
+                  { label: "New Assets (30d)", value: "347", trend: "+12%" },
+                  { label: "Decommissioned", value: "89", trend: "+5%" },
+                  { label: "Scan Coverage", value: "98.7%", trend: "+0.3%" },
+                  { label: "Avg Scan Time", value: "4.2h", trend: "-0.8h" },
+                ].map((metric, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg"
+                  >
+                    <div>
+                      <div className="text-xs text-slate-400 mb-1">
+                        {metric.label}
+                      </div>
+                      <div className="text-xl font-bold text-white">
+                        {metric.value}
+                      </div>
+                    </div>
+                    <span className="text-sm font-semibold text-green-400">
+                      {metric.trend}
+                    </span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
